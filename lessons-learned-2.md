@@ -6,3 +6,5 @@ _organized: true
 # Lessons Learned
 
 Review weekly
+
+¿Qué se espera del equipo técnico cuando participa en un proceso de ventas?

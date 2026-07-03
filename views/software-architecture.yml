@@ -1,0 +1,9 @@
+name: Software Architecture
+icon: buildings
+color: null
+sort: null
+filters:
+  all:
+  - field: belongs_to
+    op: equals
+    value: '[[software-architecture]]'

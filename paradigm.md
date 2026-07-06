@@ -9,7 +9,7 @@ Here are all the challenges we faced at Paradigm:
 
 ## Business context
 
-- Their core business was very similar: clients buy a set of reports that are built based on answers to demographic and bias questionnaires.
+- Their core business was very similar: clients buy a set of reports that are built based on answers to demographic and personality questionnaires.
 - There were many types of reports, some focused on personality, others on leadership, others on team building.
 
 ## Legacy modernization
@@ -20,7 +20,7 @@ Here are all the challenges we faced at Paradigm:
 ## Features we built
 
 - We created and implemented a shopping cart where end-clients can create customized report packages by their own.
-- We rewrote the score engine to be an isolated module that, given a set of answers of a test, produced a result \(no UI\). We configured it to support parameters because demographic scores changed based on their client population 
+- We rewrote the score engine to be an isolated module that, given a set of answers of a test, produced a result \(no UI\). We configured it to support parameters because demographic scores changed based on their client population
 - We implemented a serverless and async process to render reports in the client language.
 
 ## Architecture & scale

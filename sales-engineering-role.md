@@ -34,6 +34,14 @@ As a Sales Engineer, you will primarily operate in **Phases III and IV**. You ar
 
 **2. Scoping, Estimating, and Prototypes \(Phase IV\):** When a BD determines that technical input is required to build a proposal, they will go to the `#commercial-office-inbound` Slack channel and submit a formal ticket. Operating under the rule *"If a request is not on the board, it doesn’t exist,"* this centralized ticketing system ensures your time is protected and prioritized
 
+Here is exactly what you'll be doing when you receive a ticket:
+
+**Technical Validation & Estimation:** You will review the request \(which is routed to a specialized `[Client]-dealteam-ops` Slack channel\) to translate business problems into technical boundaries. You will determine the project hours, the required roles, and identify "Nice-to-Haves" for the proposal. You have a **48-hour SLA** to complete scoping once all information is provided.
+
+**Building Sales Prototypes:** Sometimes, we need a Proof of Concept \(POC\) to win the deal. If a BD requests a sales prototype, you will have a **5-business-day SLA** \(capped at 8 hours of total development work\) to deliver it.
+
+**Owning the "Effort" Score:** We prioritize all internal tickets using a RICE framework \(Reach, Impact, Confidence, Effort\). While BDs own the deal's Impact, **you own the Effort dimension**. You will calculate the total person-days required to complete the ticket, which dynamically ranks your workload priority
+
 ## Basic team structure
 
 | Role | FTE | Tasks |

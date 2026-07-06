@@ -2,4 +2,4 @@
 type: Project
 _organized: true
 ---
-# TAG \(The Aldridge Group\)
+# TAG (The Aldridge Group)

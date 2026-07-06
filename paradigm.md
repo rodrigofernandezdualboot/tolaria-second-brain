@@ -1,5 +1,7 @@
 ---
 type: Note
+related_to: "[[tag]]"
+_organized: true
 ---
 # Paradigm
 
@@ -18,7 +20,7 @@ Here are all the challenges we faced at Paradigm:
 ## Features we built
 
 - We created and implemented a shopping cart where end-clients can create customized report packages by their own.
-- We rewrote the score engine to be an isolated module that, given a set of answers of a test, produced a result (no UI).
+- We rewrote the score engine to be an isolated module that, given a set of answers of a test, produced a result \(no UI\). We configured it to support parameters because demographic scores changed based on their client population 
 - We implemented a serverless and async process to render reports in the client language.
 
 ## Architecture & scale
@@ -29,9 +31,9 @@ Here are all the challenges we faced at Paradigm:
 ## Compliance & security
 
 - Because their clients were all over the world, we had to be compliant with GDPR and HIPAA.
-- Once, somebody filed a complaint against GDPR, and because of the tracing system we built, plus the implemented constraints to the PII (encryption in transit and at rest) plus the rotation of keys, it was easily proven there was no leak of any kind of information.
+- Once, somebody filed a complaint against GDPR, and because of the tracing system we built, plus the implemented constraints to the PII \(encryption in transit and at rest\) plus the rotation of keys, it was easily proven there was no leak of any kind of information.
 
 ## Data & experimentation
 
-- Another important challenge was how data was stored and retained. We used Azure SQL because of its point-in-time restore capabilities and backup strategies, where we backed up incremental backups (daily, weekly, monthly) with different retention policies.
-- We also learned how questions are presented to the client made a significant difference to their score, because the layout we built was less distracting than the previous one. This was implemented using A/B testing.
+- Another important challenge was how data was stored and retained. We used Azure SQL because of its point-in-time restore capabilities and backup strategies, where we backed up incremental backups \(daily, weekly, monthly\) with different retention policies.
+- We also learned that how questions are presented to the client made a significant difference to their score, because the layout we built was less distracting than the previous one. This was implemented using A/B testing.

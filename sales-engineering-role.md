@@ -14,6 +14,18 @@ This [Notebook](https://notebooklm.google.com/notebook/4e2979d9-99d5-434b-9ad8-0
 
 ### Full Funnel Process
 
+Our sales process is strictly sequenced in HubSpot into five phases, and we cannot skip stages. Here is the path every lead must follow:
+
+**Phase I: Lead Generation & Qualification:** Leads come in via marketing, events, or our outbound efforts. Our Sales Development Representatives \(SDRs\) act as the first human touchpoint, conducting discovery to document "BANT" \(Budget, Authority, Need, and Timing\). If qualified, the lead moves to Sales.
+
+**Phase II: Sales Engagement & Deal Initiation:** A Business Development \(BD\) representative takes over and validates the BANT criteria. If the prospect is engaged and BANT holds up, the BD creates an official HubSpot Deal in the "Qualification" stage.
+
+**Phase III: Internal Mobilization & Documentation:** The internal Deal Team is assembled. A dedicated Slack channel is created for the deal \(e.g., `[Client]-dealteam-sales`\), and a centralized NotebookLM repository is set up by the Commercial Office to host all transcripts and client documents.
+
+**Phase IV: Proposal & Scoping:** This is where we define the project boundaries, estimate the effort, and draft the proposal.
+
+**Phase V: Closing & Contracting:** Once an estimate is approved internally, the BD sends the proposal. Once we get a verbal agreement, we enter the Contracting stage with our Legal and Finance teams. Finally, upon signature, it is marked Closed Won and transitioned to the Delivery team.
+
 ## Basic team structure
 
 | Role | FTE | Tasks |

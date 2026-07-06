@@ -4,8 +4,6 @@ _organized: true
 ---
 # Sales Engineering Role
 
-Record any meaningful document process that might help future onboarding team members
-
 I'm starting this role, so what we need to build first is a shared knowledge base to be used in other proposals. This is what the [[lessons-learned-2]] is about.
 
 ## Sales Engineer as part of the Sales team

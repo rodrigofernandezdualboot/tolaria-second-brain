@@ -41,50 +41,8 @@ Here is exactly what you'll be doing when you receive a ticket:
 **Owning the "Effort" Score:** We prioritize all internal tickets using a RICE framework \(Reach, Impact, Confidence, Effort\). While BDs own the deal's Impact, **you own the Effort dimension**. You will calculate the total person-days required to complete the ticket, which dynamically ranks your workload priority
 
 ### In action
-```mermaid
-flowchart TD
-    %% Phase 1
-    subgraph Phase 1: Lead Generation & Qualification
-        A[Lead Created] --> B[SDR Discovery]
-        B --> C{BANT Qualified?}
-        C -- No --> D[Return to Marketing Nurture]
-    end
 
-    %% Phase 2
-    subgraph Phase 2: Sales Engagement & Deal Initiation
-        C -- Yes --> E[BD Validates BANT]
-        E --> F{BANT Validated?}
-        F -- No --> G[Return to SDR / Re-engage in 6 Mos]
-        F -- Yes --> H[Deal Created in HubSpot]
-    end
-
-    %% Phase 3
-    subgraph Phase 3: Internal Mobilization & Documentation
-        H --> I[Setup Deal Team Slack Channel]
-        I --> J[NotebookLM Setup & Transcripts Uploaded]
-    end
-
-    %% Phase 4 (SE Heavily Involved)
-    subgraph Phase 4: Proposal & Scoping
-        J --> K{Technical Input Needed?}
-        K -- Yes --> L[BD Submits Ticket via Slack Form]
-        L --> M[SE: Triage & Determine 'Effort' for RICE Score]
-        M --> N[SE: Tech Validation, Estimations & Sales Prototypes]
-        N --> O[BD Drafts Proposal]
-        K -- No --> O
-    end
-
-    %% Phase 5
-    subgraph Phase 5: Closing & Contracting
-        O --> P[Proposal Sent / Negotiation]
-        P --> Q{Verbal Agreement Reached?}
-        Q -- No --> P
-        Q -- Yes --> R[Contracting Stage with Legal]
-        R --> S{Contracts Signed?}
-        S -- No --> R
-        S -- Yes --> T[Closed Won & Handoff to Delivery]
-    end
-```
+![sales-pipeline-flowchart.svg](./attachments/1783361181715-sales-pipeline-flowchart.svg)
 
 ## Basic team structure
 

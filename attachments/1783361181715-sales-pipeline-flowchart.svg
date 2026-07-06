@@ -1,0 +1,123 @@
+<svg viewBox="0 0 800 2100" width="800" height="2100" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4.5 L0,9 Z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="2100" fill="#ffffff"/>
+
+  <!-- ============ Phase containers ============ -->
+  <g stroke="#9ca3af" stroke-dasharray="6 5" fill="#f8fafc">
+    <rect x="50" y="50" width="720" height="310" rx="12"/>
+    <rect x="50" y="390" width="720" height="310" rx="12"/>
+    <rect x="50" y="730" width="720" height="200" rx="12"/>
+    <rect x="50" y="960" width="720" height="500" rx="12"/>
+    <rect x="50" y="1520" width="720" height="540" rx="12"/>
+  </g>
+  <g fill="#374151" font-size="13" font-weight="bold">
+    <text x="66" y="74">Phase 1 &#183; Lead Generation &amp; Qualification</text>
+    <text x="66" y="414">Phase 2 &#183; Sales Engagement &amp; Deal Initiation</text>
+    <text x="66" y="754">Phase 3 &#183; Internal Mobilization &amp; Documentation</text>
+    <text x="66" y="984">Phase 4 &#183; Proposal &amp; Scoping <tspan font-weight="normal" fill="#6b7280">(SE heavily involved)</tspan></text>
+    <text x="66" y="1544">Phase 5 &#183; Closing &amp; Contracting</text>
+  </g>
+
+  <!-- ============ Edges ============ -->
+  <g stroke="#6b7280" stroke-width="1.5" fill="none" marker-end="url(#arr)">
+    <line x1="320" y1="134" x2="320" y2="168"/>
+    <line x1="320" y1="219" x2="320" y2="247"/>
+    <line x1="425" y1="295" x2="512" y2="295"/>
+    <line x1="320" y1="340" x2="320" y2="413"/>
+    <line x1="320" y1="464" x2="320" y2="497"/>
+    <line x1="425" y1="545" x2="512" y2="545"/>
+    <line x1="320" y1="590" x2="320" y2="623"/>
+    <line x1="320" y1="674" x2="320" y2="772"/>
+    <line x1="320" y1="823" x2="320" y2="852"/>
+    <line x1="320" y1="911" x2="320" y2="967"/>
+    <line x1="320" y1="1060" x2="320" y2="1089"/>
+    <line x1="320" y1="1148" x2="320" y2="1184"/>
+    <line x1="320" y1="1243" x2="320" y2="1279"/>
+    <line x1="320" y1="1338" x2="320" y2="1383"/>
+    <path d="M425,1015 L560,1015 L560,1410 L448,1410"/>
+    <line x1="320" y1="1434" x2="320" y2="1548"/>
+    <line x1="320" y1="1599" x2="320" y2="1637"/>
+    <path d="M215,1685 L120,1685 L120,1575 L192,1575"/>
+    <line x1="320" y1="1730" x2="320" y2="1768"/>
+    <line x1="320" y1="1819" x2="320" y2="1857"/>
+    <path d="M215,1905 L120,1905 L120,1795 L192,1795"/>
+    <line x1="320" y1="1950" x2="320" y2="1979"/>
+  </g>
+
+  <!-- Edge labels -->
+  <g fill="#4b5563" font-size="12">
+    <text x="463" y="288" text-anchor="middle">No</text>
+    <text x="330" y="380">Yes</text>
+    <text x="463" y="538" text-anchor="middle">No</text>
+    <text x="330" y="610">Yes</text>
+    <text x="330" y="1080">Yes</text>
+    <text x="497" y="1008" text-anchor="middle">No</text>
+    <text x="108" y="1636" text-anchor="end">No</text>
+    <text x="330" y="1753">Yes</text>
+    <text x="108" y="1856" text-anchor="end">No</text>
+    <text x="330" y="1970">Yes</text>
+  </g>
+
+  <!-- ============ Process nodes ============ -->
+  <g fill="#eef2ff" stroke="#6366f1" stroke-width="1.5">
+    <rect x="200" y="86"   width="240" height="48" rx="8"/>
+    <rect x="200" y="171"  width="240" height="48" rx="8"/>
+    <rect x="200" y="416"  width="240" height="48" rx="8"/>
+    <rect x="200" y="626"  width="240" height="48" rx="8"/>
+    <rect x="200" y="775"  width="240" height="48" rx="8"/>
+    <rect x="200" y="855"  width="240" height="56" rx="8"/>
+    <rect x="200" y="1092" width="240" height="56" rx="8"/>
+    <rect x="200" y="1187" width="240" height="56" rx="8"/>
+    <rect x="200" y="1282" width="240" height="56" rx="8"/>
+    <rect x="200" y="1386" width="240" height="48" rx="8"/>
+    <rect x="200" y="1551" width="240" height="48" rx="8"/>
+    <rect x="200" y="1771" width="240" height="48" rx="8"/>
+  </g>
+
+  <!-- Exit nodes -->
+  <g fill="#fef2f2" stroke="#ef4444" stroke-width="1.5">
+    <rect x="515" y="271" width="230" height="48" rx="8"/>
+    <rect x="515" y="517" width="230" height="56" rx="8"/>
+  </g>
+
+  <!-- Terminal node -->
+  <rect x="200" y="1982" width="240" height="56" rx="28" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+
+  <!-- ============ Decision diamonds ============ -->
+  <g fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5">
+    <polygon points="320,250 425,295 320,340 215,295"/>
+    <polygon points="320,500 425,545 320,590 215,545"/>
+    <polygon points="320,970 425,1015 320,1060 215,1015"/>
+    <polygon points="320,1640 425,1685 320,1730 215,1685"/>
+    <polygon points="320,1860 425,1905 320,1950 215,1905"/>
+  </g>
+
+  <!-- ============ Node labels ============ -->
+  <g fill="#1f2937" font-size="13" text-anchor="middle">
+    <text x="320" y="114">Lead Created</text>
+    <text x="320" y="199">SDR Discovery</text>
+    <text x="320" y="291">BANT</text><text x="320" y="308">Qualified?</text>
+    <text x="630" y="299">Return to Marketing Nurture</text>
+    <text x="320" y="444">BD Validates BANT</text>
+    <text x="320" y="541">BANT</text><text x="320" y="558">Validated?</text>
+    <text x="630" y="540">Return to SDR /</text><text x="630" y="557">Re-engage in 6 Mos</text>
+    <text x="320" y="654">Deal Created in HubSpot</text>
+    <text x="320" y="803">Setup Deal Team Slack Channel</text>
+    <text x="320" y="878">NotebookLM Setup &amp;</text><text x="320" y="895">Transcripts Uploaded</text>
+    <text x="320" y="1011">Technical Input</text><text x="320" y="1028">Needed?</text>
+    <text x="320" y="1115">BD Submits Ticket</text><text x="320" y="1132">via Slack Form</text>
+    <text x="320" y="1210">SE: Triage &amp; Determine</text><text x="320" y="1227">'Effort' for RICE Score</text>
+    <text x="320" y="1305">SE: Tech Validation,</text><text x="320" y="1322">Estimations &amp; Sales Prototypes</text>
+    <text x="320" y="1414">BD Drafts Proposal</text>
+    <text x="320" y="1579">Proposal Sent / Negotiation</text>
+    <text x="320" y="1681">Verbal Agreement</text><text x="320" y="1698">Reached?</text>
+    <text x="320" y="1799">Contracting Stage with Legal</text>
+    <text x="320" y="1901">Contracts</text><text x="320" y="1918">Signed?</text>
+    <text x="320" y="2005" font-weight="bold">Closed Won &amp;</text><text x="320" y="2022" font-weight="bold">Handoff to Delivery</text>
+  </g>
+</svg>

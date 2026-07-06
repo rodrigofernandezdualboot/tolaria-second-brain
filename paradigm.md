@@ -26,7 +26,7 @@ Here are all the challenges we faced at Paradigm:
 ## Architecture & scale
 
 - A big challenge was that reports must be delivered all at once, so the architecture we designed with queues has to support hundreds of reports being rendered at the same time to be zipped and sent to the end-client.
-- The system supported more than 10 languages, not only the web but also the reports. This came with the challenge of building a responsive design for the PDF to support different lengths of text.
+- The system supported more than 10 languages, not only the web but also the reports. This came with the challenge of building a responsive design for the PDF to support different lengths of text and writing directions.
 
 ## Compliance & security
 

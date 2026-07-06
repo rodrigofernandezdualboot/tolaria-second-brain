@@ -8,6 +8,10 @@ Record any meaningful document process that might help future onboarding team me
 
 I'm starting this role, so what we need to build first is a shared knowledge base to be used in other proposals. This is what the [[lessons-learned-2]] is about.
 
+## Sales Engineer as part of the Sales team
+
+This [Notebook](https://notebooklm.google.com/notebook/4e2979d9-99d5-434b-9ad8-0a0bdc775dc8) contains all the documents that rule the sales process
+
 ## Basic team structure
 
 | Role | FTE | Tasks |

@@ -10,6 +10,7 @@ Here are all the challenges we faced at Paradigm:
 ## Business context
 
 - Their core business was very similar: clients buy a set of reports that are built based on answers to demographic and personality questionnaires.
+- There were B2B integrations that allowed assessments to be created from other systems
 - There were many types of reports, some focused on personality, others on leadership, others on team building.
 
 ## Legacy modernization

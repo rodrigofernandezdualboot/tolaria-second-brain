@@ -26,6 +26,14 @@ Our sales process is strictly sequenced in HubSpot into five phases, and we cann
 
 **Phase V: Closing & Contracting:** Once an estimate is approved internally, the BD sends the proposal. Once we get a verbal agreement, we enter the Contracting stage with our Legal and Finance teams. Finally, upon signature, it is marked Closed Won and transitioned to the Delivery team.
 
+**Where and When You \(The SE\) Come In**
+
+As a Sales Engineer, you will primarily operate in **Phases III and IV**. You are our technical anchor.
+
+**1. Joining the Deal Team \(Phase III\)** When a deal involves complex technical requirements, AI, or specific project builds, you will be added to the Deal Team's Slack channels. You will review the transcripts and documents in the internal NotebookLM to get up to speed on the client's business problem.
+
+**2. Scoping, Estimating, and Prototypes \(Phase IV\)** When a BD determines that technical input is required to build a proposal, they will go to the `#commercial-office-inbound` Slack channel and submit a formal ticket. Operating under the rule *"If a request is not on the board, it doesn’t exist,"* this centralized ticketing system ensures your time is protected and prioritized
+
 ## Basic team structure
 
 | Role | FTE | Tasks |

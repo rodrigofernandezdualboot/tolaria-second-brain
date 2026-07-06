@@ -30,7 +30,6 @@ This is a generic team-size reference for building estimates. The size varies fr
 - **Surface the landmines the client hasn't.** Name unknowns as unknowns and log them as open questions with an owner: scope ambiguity \(e.g. "Entry Level" undefined\), wrap-vs-rebuild feasibility, no client-side sandbox, golden test cases that don't exist yet.
 - **Tag every inference** `[ASSUMPTION]`**; never fabricate a technical detail to look complete.** An honest gap beats a confidently wrong intake — it costs far more downstream.
 - **Right-size the architecture to the client's operating capacity, not to what's impressive.** Modular monolith over microservices for a team with no ops function / a retiring developer. Say what should *not* be built yet.
-- **Recommend wrap-over-rebuild where it preserves IP fidelity and cuts risk** — and hold an explicit effort reserve for the case it turns out not to be feasible.
 - **Build tangible artifacts to raise authority.** Diagrams, sequence flows, and a working prototype / visual refresh move a deal more than prose. Show, don't tell.
 - **Estimate honestly against the budget.** If a fixed fee is risky or insufficient, say so and quantify the drivers \(hours + unknowns\). Never under-bid to win.
 - **Separate what the buyer** ***said*** **they need from what the system** ***actually*** **requires**, and frame Phase 1 as proof-of-partnership toward the multi-phase roadmap and the ongoing support the client will need.

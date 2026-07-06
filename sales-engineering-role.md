@@ -12,6 +12,8 @@ I'm starting this role, so what we need to build first is a shared knowledge bas
 
 This [Notebook](https://notebooklm.google.com/notebook/4e2979d9-99d5-434b-9ad8-0a0bdc775dc8) contains all the documents that rule the sales process
 
+### Full Funnel Process
+
 ## Basic team structure
 
 | Role | FTE | Tasks |

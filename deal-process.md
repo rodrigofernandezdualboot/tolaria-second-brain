@@ -1,5 +1,7 @@
 ---
 type: Note
+related_to: "[[sales-engineering-role]]"
+_organized: true
 ---
 # Deal Process
 

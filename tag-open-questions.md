@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[tag]]"
 status: Open
+_organized: true
 ---
 
 # TAG — Open Questions

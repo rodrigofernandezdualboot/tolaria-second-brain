@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[tag]]"
 related_to: "[[ryan-mcmican]]"
+_organized: true
 ---
 # TAG - Call with Ryan McMican
 

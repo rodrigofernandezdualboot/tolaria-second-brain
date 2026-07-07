@@ -57,3 +57,5 @@ _organized: true
 **8 · Technical advantages vs. other engineering firms.** **.NET / Azure / SQL is one of our strongest stacks**, with senior solution architects \(15+ years\) involved on every project. A psychometric scoring-and-report-engine takeover already in our portfolio \(Paradigm\). Proven scoring-engine isolation and parity discipline. Secret-IP isolation via a client-controlled Azure Key Vault with client-led validation \(Mossa\). Security that survived a regulatory complaint. **HIPAA experience proven** \(GDPR as needed depending on their client base\). Multilingual assessment + responsive PDF. A design system plus UX-that-respects-validity. Proprietary test-automation tooling. And a **prototype already built** — a tangible "we've started" that commodity firms won't match.
 
 **Open decisions for leadership:** \(a\) how much of Paradigm we can name vs. present anonymized; \(b\) whether to share the prototype with the client; \(c\) pricing/margin posture.
+
+[[tag-open-questions]]

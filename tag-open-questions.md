@@ -33,3 +33,24 @@ Running log of open questions for the TAG Assessment Core Modernization RFP. Eac
 - Map the `test_id` values (4, 117, 119) against `assessment_tests` once the sandbox/schema is available under NDA.
 
 Related: [[tag]]
+
+## OQ-02 — Honorlock integration: credentials, browser dependency, and embedding
+
+**Status:** Open · raised 2026-07-06
+
+**Question:** What are the confirmed constraints for integrating Honorlock into the rebuilt Test Delivery app, specifically: (a) how/when do we obtain API credentials, (b) is the candidate-side Chrome extension acceptable to TAG and the primary client, and (c) what are the iframe/CSP/domain-allowlist and SDK-distribution requirements?
+
+**Why it matters:** Honorlock is the catalyst for the whole RFP. The Phase 1 requirement is a vendor-agnostic proctoring integration point, stub-verified at acceptance (live connection in Phase 3). These constraints govern how far we can build and validate the adapter before a Honorlock contract exists.
+
+**What we know (from public docs, de-risk research 2026-07-06):**
+- Honorlock supports a **custom/standalone path — no LMS or LTI required**: a public **REST API + "Elements" JS library + Exam-Taker SDK + signed webhooks** (`docs.honorlock.com`). Auth is OAuth2 client-credentials; platform IDs map via `external_id`; results via 13 webhook events or a Sessions API. This maps cleanly to a vendor-agnostic `IProctoringProvider` adapter.
+- Confirms our Phase 1 design: **build the adapter + webhook receiver, stub the live connection** (T-24), connect the real vendor in Phase 3.
+
+**Residual unknowns to confirm:**
+- **API credentials (`client_id`/`secret`) are almost certainly gated behind a signed contract** — full live validation likely waits for Phase 3 / contract.
+- **Mandatory candidate-side Chrome extension** (webcam/mic; Chromium constraint) — UX and support implications that intersect the Test Delivery rebuild and the design refresh.
+- **Iframe/CSP embedding + Elements/SDK distribution** (npm vs CDN, `frame-ancestors`, domain allowlist) not published — confirm during 1A design.
+
+**Owner / how to resolve:** confirm with Honorlock (via TAG's committed relationship) and validate embedding/CSP details in Phase 1A architecture design. Sources: honorlock.com/custom-integrations, docs.honorlock.com (enablement / exam-taker / webhooks / api).
+
+Related: [[tag]]

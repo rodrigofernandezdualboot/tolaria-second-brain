@@ -1,8 +1,8 @@
 ---
 type: Note
-belongs_to: "[[net-new]]"
+belongs_to: "[[park-avenue-partners]]"
 ---
-# Net-new estimate
+# Park Avenue Partners estimate
 
 Tue, 07 Jul 26 · [peter.klayman@dualbootpartners.com](mailto:peter.klayman@dualbootpartners.com)
 

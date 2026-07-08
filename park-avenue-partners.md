@@ -50,7 +50,7 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 **Integration surface:**
 
-- **Ingestion in:** 3 meter systems \(separate handler per system\), ~12 utility portals \(scrape\), ~12 utility inboxes \(email parse\).
+- **Ingestion in:** 3 meter systems \(separate handler per system\), ~12 utility portals have bills as HTML, ~12 utility portals have bills as PD. [ASSUMPTION]
 - **Compute:** AWS pipeline, Bedrock for the narrow model/OCR needs, cost-capped per run.
 - **Write out:** Rent Manager REST API \(rates, fixed-charge line items, tenant email/SMS notifications\).
 - **Alerts out:** email to role-based recipient lists, per property.

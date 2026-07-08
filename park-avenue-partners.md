@@ -93,10 +93,10 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 ### Assumptions
 
-- `[ASSUMPTION]` Rent Manager REST API \(rmAPI\) supports **write** of rate line items and fixed charges, **and** tenant SMS/email notifications, at the needed granularity. Rent Manager exposes both legacy SOAP and a newer REST API with documented read/write; which endpoints cover our three needs \(write rates, write notifications, read community/pad structure\) is unverified. *This is the single most load-bearing assumption.*
+- `[ASSUMPTION]` Rent Manager REST API supports **write** of rate line items and fixed charges, **and** tenant SMS/email notifications, at the needed granularity. Rent Manager exposes both legacy SOAP and a newer REST API with documented read/write; which endpoints cover our three needs \(write rates, write notifications, read community/pad structure\) is unverified. *This is the single most load-bearing assumption.*
 - `[ASSUMPTION]` All three meter systems expose a usable API \(not dashboard-only\) for automated daily/near-real-time pulls; separate handler per system is sufficient.
 - `[ASSUMPTION]` Utility portals allow read-only credential scoping and permit automated login without MFA that blocks headless access.
-- `[ASSUMPTION]` The ~50/50 email/portal split holds and every utility uses at least one of the two channels with retrievable bill history.
+- `[ASSUMPTION]` The ~50/50 HTML/DPF split holds and every utility uses at least one of the two channels with retrievable bill history.
 - `[ASSUMPTION]` Bill-format variance across municipalities is bounded enough that a finite set of parsers \(built after a format audit\) covers the portfolio.
 - `[ASSUMPTION]` ~100 submeters/park and ~2,400 pads total is representative for sizing compute and parsing effort.
 

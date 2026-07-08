@@ -123,14 +123,6 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 - **Budget vs. scope** — which module has priority ROI for the client?
 - **Notification channels** — is SMS in scope for tenant alerts, or email only \(affects Rent Manager notification path\)?
 
-## Technical Champion
-
-Not yet identified on the client side — likely the **VP of Operations** \(recipient of most alerts, owns the operational pain\). *[ASSUMPTION]* To equip them: their internal narrative is "this pays for itself by recovering underbilled revenue and catching leaks we currently eat," and the objection they'll face is "why not just have staff check portals manually" \(answer: 24 portals × monthly × changing rates doesn't scale, and it's already failing\). Confirm the champion on the Wed/Thu call.
-
-## Evidence Status
-
-None delivered. No demo/PoC planned yet. The highest-value early evidence would be a **bill-parsing spike** on a small sample across both channels — it retires the top scope risk \(format variance\) and the Rent Manager write assumption in one artifact. Consider proposing it as a paid discovery/build-phase step.
-
 ## Handoff Notes for Planning
 
 Pick up first: **\(1\)** confirm Rent Manager REST API coverage — it gates the whole write path; **\(2\)** get sample bills and lock the ~12/12 split for the format audit; **\(3\)** decide phasing against the budget ceiling. Do not lose downstream: this is a **deterministic ML/data pipeline, not agentic** — PRD and architecture language must reflect that. Onboarding, portal maintenance, and monitoring are **recurring**, not one-time, and should be modeled as T&M outside the fixed fee. The two modules share one foundation but are separable — keep that seam intact so planning can phase if the budget requires.

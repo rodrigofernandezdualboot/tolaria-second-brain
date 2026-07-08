@@ -28,7 +28,7 @@ If this works, the owner recovers underbilled revenue, catches leaks before they
 
 ## Current Technical Landscape
 
-**Tenant / billing platform: Rent Manager** \(vendor: London Computer Systems\). *Conflict resolved:* the meeting note said "RentCafe" \(a Yardi product\); the client's real platform is Rent Manager. This distinction is load-bearing — RentCafe and Rent Manager are different products with different APIs. All integration below assumes Rent Manager.
+**Tenant / billing platform: Rent Manager**. All integration below assumes Rent Manager.
 
 **Metering — three tiers:**
 
@@ -36,17 +36,17 @@ If this works, the owner recovers underbilled revenue, catches leaks before they
 - **Tier 2 — Owner-owned master meter** immediately downstream, near-real-time reads.
 - **Tier 3 — Pad-level submeters** from three systems: **Metron/WaterScope, NES, and Dune**. Metron and Dune provide daily reads. All three confirmed to have API or dashboard access. WaterScope \(Metron\) already has some native leak alerting.
 
-**Utility billing delivery — mixed.** *Conflict resolved:* the Estimation Brief claimed all 24 utilities have web portals; the meeting note says some email bills, others require portal login. Working split is **~50/50 — roughly 12 portal, 12 email-only** \(source: user direction\). Bill formats vary by municipality \(HTML and/or PDF\) regardless of delivery channel.
+**Utility billing delivery — mixed.** Bill formats vary by municipality \(HTML and/or PDF\) regardless of delivery channel. **~50/50 — roughly 12 portal, 12 email-only** 
 
 **Data flows today:** utility → owner \(bill, monthly\) → manual rate entry into Rent Manager → tenant charges. Master and submeter data sits in three vendor systems, uncorrelated. No automated pipeline exists.
 
-**Verified vs. described:** meter-system and Rent Manager API *availability* is asserted in the source brief but not independently verified by us. Portal/email split, pad counts, and budget come from discovery, not from system inspection. `[ASSUMPTION]` tags below mark the ones that would break the estimate.
+**Verified vs. described:** meter-system and Rent Manager API *availability* is asserted in the source brief but not independently verified by us. Portal/email split, pad counts, and budget come from discovery, not from system inspection. 
 
 ## Where the Solution Fits
 
 A headless, scheduled ML pipeline on AWS that sits between the client's data sources \(utility bills, three meter systems\) and Rent Manager. It reads from the sources, applies deterministic threshold/pattern logic, and writes results back into Rent Manager \(rates, charges, tenant notifications\) plus email alerts. No custom UI — output surfaces through Rent Manager and email, which fits the "turnkey, low-maintenance" requirement and keeps cost down.
 
-It fits better than a bespoke agentic build \(the alternative the "AI" framing implied\) because the logic is deterministic and auditable, which lowers risk, cost, and maintenance — the right profile for the budget and for a client with no AI infrastructure.
+The logic is deterministic and auditable, which lowers risk, cost, and maintenance — the right profile for the budget and for a client with no AI infrastructure.
 
 **Integration surface:**
 

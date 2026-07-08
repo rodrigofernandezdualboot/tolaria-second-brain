@@ -77,7 +77,7 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 ### Module A — Billing Engine \(UC1\)
 
-**In scope:** monthly retrieval of each utility bill via **two ingestion paths** — portal scrape \(~12\) and email/attachment parse \(~12\) — feeding one shared bill-parsing layer \(HTML + PDF, OCR where needed\); detect rate and fee/assessment changes against stored baselines; apportion fixed/improvement fees across units; apply current per-gallon rate; write updated rates and fixed-charge line items to Rent Manager; alert Owner/VP on detected rate changes.
+**In scope:** monthly retrieval of each utility bill via **two ingestion paths** — portal scrape \(~12\) and HTML download and portal scrape and PDF download \(~12\) — feeding one shared bill-parsing layer \(HTML + PDF, OCR where needed\); detect rate and fee/assessment changes against stored baselines; apportion fixed/improvement fees across units; apply current per-gallon rate; write updated rates and fixed-charge line items to Rent Manager; alert Owner/VP on detected rate changes.
 
 **Out of scope:** reconciling historical underbilling retroactively \(unless explicitly added\); handling utilities that neither email nor expose a portal \(none identified — flag if found\).
 
@@ -91,7 +91,7 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 **Out of scope / open:** whether Layer 3 **supplements or replaces** WaterScope's native alerting \(determines Layer 3 build scope — see Open Questions\).
 
-### Assumptions \(load-bearing — each one breaks the estimate or design if wrong\)
+### Assumptions
 
 - `[ASSUMPTION]` Rent Manager REST API \(rmAPI\) supports **write** of rate line items and fixed charges, **and** tenant SMS/email notifications, at the needed granularity. Rent Manager exposes both legacy SOAP and a newer REST API with documented read/write; which endpoints cover our three needs \(write rates, write notifications, read community/pad structure\) is unverified. *This is the single most load-bearing assumption.*
 - `[ASSUMPTION]` All three meter systems expose a usable API \(not dashboard-only\) for automated daily/near-real-time pulls; separate handler per system is sufficient.

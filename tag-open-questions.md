@@ -55,3 +55,28 @@ Related: [[tag]]
 **Owner / how to resolve:** confirm with Honorlock (via TAG's committed relationship) and validate embedding/CSP details in Phase 1A architecture design. Sources: honorlock.com/custom-integrations, docs.honorlock.com (enablement / exam-taker / webhooks / api).
 
 Related: [[tag]]
+
+## Assumptions register
+
+Tagged `[ASSUMPTION]` items from the Phase 1 scope boundary (see `TAG-Technical-Intake-Brief.md`). Each must be confirmed or it changes scope, cost, or timeline.
+
+| # | Assumption | Impact if wrong | Owner | Resolve by |
+|---|---|---|---|---|
+| A1 | WCF `TAGScoringService` wraps cleanly (rehostable, not rebuild) | +4–8 backend weeks; median → conservative (~$189K) | Vendor | 1A source review (re-baseline checkpoint) |
+| A2 | Scoring module already isolated with buildable parity/unit tests | Parity effort grows; golden-case approach shifts | Vendor + Bernie | 1A KT + source review |
+| A3 | "Entry Level" = the 7 documented band types; instrument subset TBD | Test Delivery + parity scope changes | TAG + Bernie | 1A (OQ-01) |
+| A4 | "Personality Questionnaire (C)" = internal PQ16, not 16PF | If 16PF, it's deferred (out of 1B) | TAG + Bernie | 1A (OQ-01) |
+| A5 | Single shared Azure SQL + ABP TenantId isolation acceptable for P1 | If DB-per-tenant required, more infra + ABP Commercial | TAG / Leadership | Proposal / 1A |
+| A6 | ABP open-source (shared-DB tenancy) sufficient; Commercial SaaS module not needed in P1 | Licensing cost + disclosure change | Leadership + Vendor | Proposal / 1A |
+| A7 | TAG provides cloud-to-legacy connectivity (VPN / whitelist / replication) | Parallel run blocked | TAG | 1A |
+| A8 | TAG completes pre-conditions before kickoff (Logic App migration, credential remediation) | 1A start slips | TAG | Pre-kickoff |
+| A9 | Bernie available for committed KT hours in 1A | Parity confidence + fixed-fee realism drop | TAG | Proposal (your Q6) |
+| A10 | Source code + sandbox provided post-award under NDA; fee re-baselined after 1A | Estimate is provisional | TAG / Vendor | Award → 1A |
+| A11 | Only band score (1–6) returns to SF; no PDF/doc assets | Report engine would enter scope (XL) | TAG | Confirmed Q&A #3 (monitor) |
+| A12 | Stubbed proctoring adapter acceptable at P1 acceptance; live Honorlock in Phase 3 | Phase 3 pulled forward; credentials needed early | TAG + Honorlock | 1A (OQ-02) |
+| A13 | Staffing includes a 2nd backend dev; 14-week schedule | 1B slips ~4–5 weeks | Leadership | Proposal decision |
+| A14 | Spanish-language Entry Level path deferred (out) | Adds bilingual build + QA | TAG | 1A |
+| A15 | Light UI/UX refresh is an optional value-add, not baseline | Effort/price change if made baseline | TAG / Leadership | Proposal |
+| A16 | Admin functionality limited to Entry Level config needs | Broader admin rebuild expands scope | TAG + Bernie | 1A |
+
+Related: [[tag]]

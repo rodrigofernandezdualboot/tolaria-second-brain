@@ -2,7 +2,7 @@
 type: Project
 _organized: true
 ---
-# TAG \(The Aldridge Group\)
+# TAG (The Aldridge Group)
 
 ## Value proposition — response to Ryan \(walks his 8 questions\)
 

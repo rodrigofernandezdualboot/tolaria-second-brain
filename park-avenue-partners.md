@@ -9,15 +9,13 @@ type: Project
 
 Net-new client, no prior relationship with Dual Boot. Park Avenue Partners operates ~24 mobile-home-park communities \(~2,400 pads total, ~100 submeters per park\) and expects the portfolio to grow through acquisition. They have no existing AI infrastructure and no enterprise relationships with cloud providers or model makers — this is a greenfield build on an AWS account they will create.
 
-**Commercial frame:** budget is under $100K, ideally under $50K \(source: meeting note; the Estimation Brief omits budget entirely\). The client wants a low-maintenance, turnkey system. This ceiling is the dominant design constraint and is the reason the two modules are kept separable — it may force phasing rather than a single fixed-fee build.
-
-**People / roles:** Owner and VP of Operations are the primary alert recipients and decision-makers; Regional Managers and Community Managers receive property-specific leak alerts. On the Dual Boot side, Peter Klayman is driving; Rodrigo owns technical validation, architecture, and proposed approach \(not the final number for now\); a separate estimator assigned by Maddie runs in parallel for the first ~6 weeks. A joint call \(Rodrigo, Peter, estimator\) is targeted for Wed/Thu 8–9 July.
+**People / roles:** Owner and VP of Operations are the primary alert recipients and decision-makers; Regional Managers and Community Managers receive property-specific leak alerts. 
 
 **Why now:** the client is losing money today. Utility rate changes go undetected, causing months-to-years of tenant underbilling; distribution leaks in owner-owned pipes are billed to the owner with no automated way to catch them. Clear, quantifiable ROI is the buying trigger.
 
 ## Business Problem
 
-Park Avenue is running a portfolio-scale metering-and-billing operation on manual process. Two jobs to be done:
+Park Avenue is running a portfolio-scale metering-and-billing operation on a manual process. Two jobs to be done:
 
 1. **Stop revenue leakage from stale rates.** Communities are master-metered; the owner receives one utility bill per property and re-bills tenants using per-gallon rates and fixed assessments entered by hand into Rent Manager. When a utility changes its rate or adds a fee, nothing flags it, so tenants are underbilled until someone happens to notice. The job: detect rate/fee changes monthly and keep tenant billing current automatically.
 2. **Stop paying for water that leaks.** Three metering tiers \(city master → owner master → pad submeters\) are never cross-referenced, so distribution leaks, city-meter faults, and anomalous tenant usage go undetected. The job: reconcile the tiers monthly/daily and alert the right people early, while the fix is still cheap.
@@ -36,7 +34,7 @@ If this works, the owner recovers underbilled revenue, catches leaks before they
 - **Tier 2 — Owner-owned master meter** immediately downstream, near-real-time reads.
 - **Tier 3 — Pad-level submeters** from three systems: **Metron/WaterScope, NES, and Dune**. Metron and Dune provide daily reads. All three confirmed to have API or dashboard access. WaterScope \(Metron\) already has some native leak alerting.
 
-**Utility billing delivery — mixed.** Bill formats vary by municipality \(HTML and/or PDF\) regardless of delivery channel. **~50/50 — roughly 12 portal, 12 email-only** 
+**Utility billing delivery — mixed.** Bill formats vary by municipality \(HTML and/or PDF\) regardless of delivery channel. **~50/50 [ASSUMPTION]** 
 
 **Data flows today:** utility → owner \(bill, monthly\) → manual rate entry into Rent Manager → tenant charges. Master and submeter data sits in three vendor systems, uncorrelated. No automated pipeline exists.
 
@@ -57,7 +55,7 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 ## Scope and Assumptions
 
-### Platform Foundations \(shared — built once, serves both modules\)
+### Platform Foundations
 
 **In scope:**
 
@@ -104,36 +102,26 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 **Architecture \(high level\):** scheduled AWS pipeline, deterministic. Ingestion layer \(3 meter handlers + portal-scrape + email-parse\) → shared parsing/normalization \(Bedrock for OCR/parse assist only\) → detection/comparison logic \(rate-change diff for A; three-layer threshold/baseline comparison for B\) → write-back \(Rent Manager\) + alerting \(email, role-based\). Secrets Manager for credentials, CloudWatch for observability, per-run cost caps.
 
-**Delivery model — options, with the budget in mind:**
-
-- **Option 1 — Both modules, single fixed-fee build.** Cleanest for the client; highest risk of colliding with the sub-$100K ceiling given the dual-ingestion UC1 surface.
-- **Option 2 — Phase by ROI \(recommended to consider\).** Ship Leak Detection Layer 2 \(owner-master vs. submeters — the biggest direct dollar leak\) or the Billing Engine first, whichever the client values most, then add the rest. Fits the budget and proves value early. Trade-off: two mobilizations, slightly higher total.
-- **Option 3 — Foundations + Module A first, Module B second.** Billing recovers underbilled revenue fast and reuses the same Rent Manager write layer B needs. Trade-off: leak savings deferred.
-
-Recommend presenting Option 2/3 framing rather than forcing one — the estimator's numbers against the ceiling should decide.
-
-**Team composition** `[ASSUMPTION]`**:** cloud/data engineer \(AWS pipeline, ingestion\), integration engineer \(Rent Manager + meter APIs\), part-time ML/data specialist \(parsing, anomaly baselines\), TL/architect oversight. Right-sized for a deterministic pipeline, not an ML research team.
+**Team composition** `[ASSUMPTION]`**:** part-time data engineer \(AWS pipeline, ingestion\), integration engineer \(Rent Manager + meter APIs\), part-time ML/data specialist \(parsing, anomaly baselines\), TL/architect oversight. 
 
 ## Risks and Dependencies
 
-- **Bill-format variance \(High\) — primary UC1 scope risk.** Formats differ by municipality across *both* channels \(portal HTML and emailed PDF\). Retire with a **bill-format audit during build**, before finalizing the parsing layer.
-- **Portal login reliability \(Medium, ongoing\).** Portals change session/structure; scrapers break. ~12 portals to maintain. Flag as a **T&M support line**, not fixed-fee.
-- **Rent Manager API coverage \(High until verified\).** If REST can't write rates/notifications as needed, the core write path changes. Retire by confirming against rmAPI docs / a sandbox before the estimate hardens.
+- **Bill-format variance \(High, accepted\) — primary UC1 scope risk.** Formats differ by municipality across *both* channels \(portal HTML and emailed PDF\). Retire with a **bill-format audit during build**, before finalizing the parsing layer.
+- **Portal login reliability \(Medium, accepted\).** Portals change session/structure; scrapers break. ~24 portals to maintain. Flag as a **T&M support line**, not fixed-fee.
+- **Rent Manager API coverage \(High, accepted until verified\).** If REST can't write rates/notifications as needed, the core write path changes. Retire by confirming against rmAPI docs / a sandbox before the estimate hardens.
 - **Credentials security \(Medium, accepted\).** Pipeline needs read-level access to portals tied to auto-pay accounts. Scope read-only, document exposure. Client acknowledged and accepted the tradeoff.
 - **WaterScope overlap \(Medium\).** Native Metron alerting overlaps Layer 3 — supplement vs. replace determines build scope. Resolve before scoping Layer 3.
 - **Property-acquisition onboarding \(Medium, recurring\).** Not one-time — every acquisition needs portal/meter/Rent Manager setup. Define as a **documented T&M line item** separate from the fixed fee to avoid scope disputes.
-- **Model drift / pipeline monitoring \(Low-Medium, ongoing\).** Anomaly baselines and pipelines need periodic review. Offer a **light managed-service or T&M retainer** for post-launch governance.
-- **Budget ceiling \(High, commercial\).** Sub-$100K / ideally sub-$50K against a dual-ingestion, three-layer, multi-system scope. Phasing is the main lever — see Solution Shape.
+- **Model drift / pipeline monitoring \(Low-Medium, ongoing\).** Anomaly baselines and pipelines need periodic review. 
 
 ## Open Questions
 
-- **Rent Manager REST API coverage** — does it support write of rate line items, fixed charges, and tenant SMS/email? *Owner: Rodrigo, before estimate hardens.*
-- **Exact email/portal split and per-utility bill formats** — confirm the ~12/12 assumption and gather sample bills for the audit. *Owner: client / Peter.*
-- **Layer 3 vs. WaterScope** — supplement or replace native Metron alerting? *Owner: client \(Ops\).*
-- **Meter APIs vs. dashboard-only** — is each of Metron/NES/Dune truly API-accessible for automated pulls? *Owner: Rodrigo \(vendor-doc research\).*
-- **Budget vs. scope** — one build or phased? Which module has priority ROI for the client? *Owner: Peter / estimator / client.*
-- **Fixed vs. T&M boundary** — which items \(portal maintenance, onboarding, monitoring\) sit outside the fixed fee? *Owner: Peter / estimator.*
-- **Notification channels** — is SMS in scope for tenant alerts, or email only \(affects Rent Manager notification path\)? *Owner: client.*
+- **Rent Manager REST API coverage** — does it support write of rate line items, fixed charges, and tenant SMS/email? 
+- **Exact email/portal split and per-utility bill formats** — confirm the ~12/12 assumption and gather sample bills for the audit. 
+- **Layer 3 vs. WaterScope** — supplement or replace native Metron alerting? 
+- **Meter APIs vs. dashboard-only** — is each of Metron/NES/Dune truly API-accessible for automated pulls? 
+- **Budget vs. scope** — which module has priority ROI for the client?
+- **Notification channels** — is SMS in scope for tenant alerts, or email only \(affects Rent Manager notification path\)?
 
 ## Technical Champion
 

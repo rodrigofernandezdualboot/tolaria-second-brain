@@ -118,3 +118,65 @@ The FDC has no FR/NFR numbering. IDs below \(FR-A\#, NFR-A\#\) are **my labels f
 | Performance/scale | NFR-02.1–02.3 \(500K, p95 \<200ms\) | — | No scale targets; minimal-use regime |
 | Availability/DR | NFR-03/03.1/03.2 \(RPO/RTO, 99.9%\) | NFR-A7 \(fault/safe-state\) | Enterprise DR → basic fault tolerance |
 | Extensibility | — | NFR-A5, NFR-A8, NFR-A9 | New: modular groundwork for Beta |
+
+### Data flow — old scope (Scope v2)
+
+Device → Cloud → App. Devices upload nightly in batch; the cloud is the system of record; the patient app only queries the API.
+
+```mermaid
+flowchart TD
+  D["Device fleet up to 500K units"]
+  ING["Ingestion: MQTT plus HTTPS presigned S3, X.509 auth, SQS, Protobuf"]
+  RAW["S3 raw landing zone"]
+  VAULT["DynamoDB PII vault"]
+  LAKE["S3 Tables Parquet clinical data lake"]
+  ML["SageMaker private VPC plus Feature Store"]
+  REG["Model registry, SaMD lineage"]
+  API["AppSync GraphQL API plus Cognito"]
+  GL["Glacier after 7 days, crypto-shred"]
+  APP["Patient iOS / Android app"]
+
+  D -->|"nightly batch upload"| ING
+  ING --> RAW
+  RAW -->|"Glue ETL de-identify"| VAULT
+  RAW --> LAKE
+  RAW -.->|"after 7 days"| GL
+  LAKE --> ML --> REG
+  LAKE --> API
+  VAULT -.->|"identity resolve at query"| API
+  API -->|"summary stats query"| APP
+  API -.->|"WebSocket risk alerts"| APP
+```
+
+### Data flow — new scope (FDC Alpha 2.0)
+
+Real-time closed loop on a local gateway. Wearables stream to the Raspberry Pi, which runs analytics and therapy control on-site and fires the device before deep sleep; the cloud pipeline and internal portal sit alongside, not in the control path.
+
+```mermaid
+flowchart TD
+  W["Wearables: Garmin VivoActive 5 and Muse EEG"]
+  RPI["Raspberry Pi 4 app server and Web-API, BLE acquisition"]
+  AN["Analytics: filter, features, sleep-stage, COTS Garmin-first"]
+  TDE["Therapy decision: ON before deep sleep"]
+  TC["Therapy controller: commands and status"]
+  MC["Arduino microcontroller"]
+  DEV["Restiv wellness device"]
+  HOT["Local hot store"]
+  PIPE["Cloud patient data pipeline and insights"]
+  WARM["Warm store"]
+  COLD["Cold store"]
+  OPS["Operations Portal, internal Web UI"]
+
+  W -->|"real-time biometric stream, BLE"| RPI
+  RPI --> AN --> TDE --> TC
+  TC -->|"therapy ON / OFF"| MC --> DEV
+  DEV -.->|"emerging deep sleep"| AN
+  RPI --> HOT
+  RPI --> PIPE
+  PIPE --> WARM
+  PIPE --> COLD
+  OPS -->|"configure, export"| RPI
+  PIPE -->|"review, reports"| OPS
+```
+
+The contrast the diagrams make visible: in v2 all intelligence and the therapy-relevant loop live in the cloud, reached only after a nightly batch. In Alpha 2.0 the sensing → analytics → therapy loop is fully local and real-time, with the cloud demoted to storage and review — which is what the pre-deep-sleep timing constraint (NFR-A2) forces.

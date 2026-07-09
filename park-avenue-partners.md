@@ -10,7 +10,7 @@ _organized: true
 
 Net-new client, no prior relationship with Dual Boot. Park Avenue Partners operates ~24 mobile-home-park communities \(~2,400 pads total, ~100 submeters per park\) and expects the portfolio to grow through acquisition. They have no existing AI infrastructure and no enterprise relationships with cloud providers or model makers — this is a greenfield build on an AWS account they will create.
 
-**People / roles:** Owner and VP of Operations are the primary alert recipients and decision-makers; Regional Managers and Community Managers receive property-specific leak alerts. 
+**People / roles:** Owner and VP of Operations are the primary alert recipients and decision-makers; Regional Managers and Community Managers receive property-specific leak alerts.
 
 **Why now:** the client is losing money today. Utility rate changes go undetected, causing months-to-years of tenant underbilling; distribution leaks in owner-owned pipes are billed to the owner with no automated way to catch them. Clear, quantifiable ROI is the buying trigger.
 
@@ -35,7 +35,7 @@ If this works, the owner recovers underbilled revenue, catches leaks before they
 - **Tier 2 — Owner-owned master meter** immediately downstream, near-real-time reads.
 - **Tier 3 — Pad-level submeters** from three systems: **Metron/WaterScope, NES, and Dune**. Metron and Dune provide daily reads. All three confirmed to have API or dashboard access. WaterScope \(Metron\) already has some native leak alerting.
 
-**Utility billing delivery — mixed.** Bill formats vary by municipality \(HTML and/or PDF\) regardless of delivery channel. **~50/50 [ASSUMPTION]** 
+**Utility billing delivery — mixed.** Bill formats vary by municipality \(HTML and/or PDF\) regardless of delivery channel. **~50/50 [ASSUMPTION]**
 
 **Data flows today:** utility → owner \(bill, monthly\) → manual rate entry into Rent Manager → tenant charges. Master and submeter data sits in three vendor systems, uncorrelated. No automated pipeline exists.
 
@@ -103,7 +103,7 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 
 **Architecture \(high level\):** scheduled AWS pipeline, deterministic. Ingestion layer \(3 meter handlers + portal-scrape + email-parse\) → shared parsing/normalization \(Bedrock for OCR/parse assist only\) → detection/comparison logic \(rate-change diff for A; three-layer threshold/baseline comparison for B\) → write-back \(Rent Manager\) + alerting \(email, role-based\). Secrets Manager for credentials, CloudWatch for observability, per-run cost caps.
 
-**Team composition** `[ASSUMPTION]`**:** part-time data engineer \(AWS pipeline, ingestion\), integration engineer \(Rent Manager + meter APIs\), part-time ML/data specialist \(parsing, anomaly baselines\), TL/architect oversight. 
+**Team composition** `[ASSUMPTION]`**:** part-time data engineer \(AWS pipeline, ingestion\), integration engineer \(Rent Manager + meter APIs\), part-time ML/data specialist \(parsing, anomaly baselines\), TL/architect oversight.
 
 ## Risks and Dependencies
 
@@ -113,7 +113,7 @@ The logic is deterministic and auditable, which lowers risk, cost, and maintenan
 - **Credentials security \(Medium, accepted\).** Pipeline needs read-level access to portals tied to auto-pay accounts. Scope read-only, document exposure. Client acknowledged and accepted the tradeoff.
 - **WaterScope overlap \(Medium\).** Native Metron alerting overlaps Layer 3 — supplement vs. replace determines build scope. Resolve before scoping Layer 3.
 - **Property-acquisition onboarding \(Medium, recurring\).** Not one-time — every acquisition needs portal/meter/Rent Manager setup. Define as a **documented T&M line item** separate from the fixed fee to avoid scope disputes.
-- **Model drift / pipeline monitoring \(Low-Medium, ongoing\).** Anomaly baselines and pipelines need periodic review. 
+- **Model drift / pipeline monitoring \(Low-Medium, ongoing\).** Anomaly baselines and pipelines need periodic review.
 
 ## Open Questions
 

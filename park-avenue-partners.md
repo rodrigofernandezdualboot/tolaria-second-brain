@@ -1,5 +1,6 @@
 ---
 type: Project
+_organized: true
 ---
 # Park Avenue Partners
 

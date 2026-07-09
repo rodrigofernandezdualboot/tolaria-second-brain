@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[software-architecture]]"
 url: https://learn.microsoft.com/en-us/azure/databricks/lakehouse/medallion
+_organized: true
 ---
 
 # Medallion Lakehouse Architecture

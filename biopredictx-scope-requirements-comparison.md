@@ -119,7 +119,7 @@ The FDC has no FR/NFR numbering. IDs below \(FR-A\#, NFR-A\#\) are **my labels f
 | Availability/DR | NFR-03/03.1/03.2 \(RPO/RTO, 99.9%\) | NFR-A7 \(fault/safe-state\) | Enterprise DR → basic fault tolerance |
 | Extensibility | — | NFR-A5, NFR-A8, NFR-A9 | New: modular groundwork for Beta |
 
-### Data flow — old scope (Scope v2)
+### Data flow — old scope \(Scope v2\)
 
 Device → Cloud → App. Devices upload nightly in batch; the cloud is the system of record; the patient app only queries the API.
 
@@ -148,7 +148,7 @@ flowchart TD
   API -.->|"WebSocket risk alerts"| APP
 ```
 
-### Data flow — new scope (FDC Alpha 2.0)
+### Data flow — new scope \(FDC Alpha 2.0\)
 
 Real-time closed loop on a local gateway. Wearables stream to the Raspberry Pi, which runs analytics and therapy control on-site and fires the device before deep sleep; the cloud pipeline and internal portal sit alongside, not in the control path.
 
@@ -179,4 +179,4 @@ flowchart TD
   PIPE -->|"review, reports"| OPS
 ```
 
-The contrast the diagrams make visible: in v2 all intelligence and the therapy-relevant loop live in the cloud, reached only after a nightly batch. In Alpha 2.0 the sensing → analytics → therapy loop is fully local and real-time, with the cloud demoted to storage and review — which is what the pre-deep-sleep timing constraint (NFR-A2) forces.
+The contrast the diagrams make visible: in v2 all intelligence and the therapy-relevant loop live in the cloud, reached only after a nightly batch. In Alpha 2.0 the sensing → analytics → therapy loop is fully local and real-time, with the cloud demoted to storage and review — which is what the pre-deep-sleep timing constraint \(NFR-A2\) forces.

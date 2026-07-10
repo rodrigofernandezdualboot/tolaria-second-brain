@@ -1,7 +1,6 @@
 ---
 type: Note
 belongs_to: "[[park-avenue-partners]]"
-_organized: true
 ---
 # Park Avenue Partners estimate
 

@@ -16,15 +16,15 @@ A three-phase plan to build Alpha 2.0. Two principles drive it: **every phase sh
 
 ---
 
-## Phase 1 — Algorithm definition & validation on a Raspberry Pi simulator
+## Phase 1 — Algorithm definition & validation on a Raspberry Pi simulation
 
 **Objective.** Prove the core premise before committing to the full build: that the system can detect the onset of deep sleep from wearable signals in real time and trigger therapy within the required window. Define and validate the sleep-staging and therapy-decision algorithm.
 
-**Tangible asset delivered.** A working Raspberry Pi feasibility simulator that ingests sensor data (recorded replay and/or live), runs the candidate sleep-staging algorithm, applies the therapy-trigger logic, *simulates* the therapy device (no live magnet hardware yet), and logs detection timing against ground-truth sleep stages. Plus a validated algorithm definition and a written feasibility + wearable decision. This is demonstrable end-to-end on a bench.
+**Tangible asset delivered.** A Raspberry Pi simulation — the candidate sleep-staging algorithm running on the Pi against sensor data (recorded replay and/or live), applying the therapy-trigger logic and logging each therapy ON/OFF decision with its timing against ground-truth sleep stages. No live magnet hardware; the value is the algorithm executing and the logs it produces. Plus a validated algorithm definition and a written feasibility + wearable decision. This is demonstrable end-to-end on a bench.
 
 **Requirements addressed.** FR-A7 (analytics / sleep staging — the core); FR-A8 therapy ON/OFF *decision logic* validated in simulation; FR-A6 ingestion in simulated/replayed form; resolves NFR-A1 (real-time loop) and NFR-A2 (timing); settles NFR-A3 (COTS-first vs. custom). Runs the feasibility spikes for FR-A12 (Garmin capture) and FR-A13 (watch→Pi transport).
 
-**Key activities.** Select candidate signals and algorithm (COTS/Garmin staging vs. EEG-based); implement on the Pi; build the simulator to replay recorded sleep data and optionally live-stream from both Garmin and Muse; instrument detection latency vs. expert-scored ground truth; test therapy parameters and thresholds; run the transport/capture spikes (Pi-as-BLE-peripheral or Wi‑Fi HTTP; Connect IQ sensor sampling).
+**Key activities.** Select candidate signals and algorithm (COTS/Garmin staging vs. EEG-based); implement on the Pi; run the simulation over recorded sleep data (replay) and optionally live streams from Garmin and Muse; instrument detection latency vs. expert-scored ground truth; test therapy parameters and thresholds; run the transport/capture spikes (Pi-as-BLE-peripheral or Wi‑Fi HTTP; Connect IQ sensor sampling).
 
 **Objection it retires.** "You can't detect deep sleep fast enough to trigger therapy in time — and the Garmin data path may not even work."
 
@@ -102,7 +102,7 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 
 | Phase | Focus | Tangible asset | Risk retired | Size |
 | :-- | :-- | :-- | :-- | :-: |
-| 1 | Algorithm + feasibility simulator | Pi simulator proving the real-time loop; validated algorithm; wearable decision | Can we detect + trigger in time? | L–XL |
+| 1 | Algorithm + feasibility simulation | Pi simulation proving the real-time loop; validated algorithm; wearable decision | Can we detect + trigger in time? | L–XL |
 | 2 | Capture, configuration, ingestion | Live watch→Pi data stream; device config; portal UX | Can we get real live data in? | M–L |
 | 3 | Controller, portal, backend | Full integrated system running a study session | Do the pieces form a usable whole? | M–L |
 
@@ -114,7 +114,7 @@ Order-of-magnitude estimate at a **$85/hour blended rate** (Dualboot standard, p
 
 | Phase | Weeks | Team (allocation) | Hours | Cost |
 | :-- | :-: | :-- | :-: | :-- |
-| 1 — Algorithm + feasibility simulator | 5 | ML/algorithm eng (full), embedded/IoT eng (full), PM (½) | 500 | $42,500 |
+| 1 — Algorithm + feasibility simulation | 5 | ML/algorithm eng (full), embedded/IoT eng (full), PM (½) | 500 | $42,500 |
 | 2 — Capture, configuration, ingestion | 6 | Connect IQ/device eng (full), backend/data eng (full), UX designer (½), PM (¼) | 660 | $56,100 |
 | 3 — Controller, portal, backend | 7 | Backend/full-stack eng (full), full-stack/portal eng (full), QA (½), PM (¼) | 770 | $65,450 |
 | **Total** | **~18** | | **~1,930** | **≈ $165,000** |

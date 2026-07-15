@@ -13,21 +13,23 @@ All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/esti
 
 ## Functional requirements
 
-| ID | Definition | Source | Risk | Comments |
-| :-- | :-- | :-- | :-- | :-- |
-| FR-A1 | Operations Portal — User Configuration: register new test user; assign Restiv device. | FDC 3.1 | Low | Standard CRUD web UI; no hardware or real-time dependency. |
-| FR-A2 | Operations Portal — Device Configuration: set Restiv therapy settings (magnet rotation angles, motor acceleration, rotational frequency). | FDC 3.1 | Medium | Depends on the existing Restiv firmware exposing these parameters over the RPi–Arduino interface; if not exposed, the interface must be defined or extended. |
-| FR-A3 | Operations Portal — Device Status: device list; network status. | FDC 3.1 | Low | Conventional status display over device metadata. |
-| FR-A4 | Operations Portal — Data Retrieval: wearable raw-data reports; sleep-stage timestamps; therapy reports (start, stop, interrupted). | FDC 3.1 | Low | Reporting over stored data; depends only on the Data Storage Layer being in place. |
-| FR-A5 | API & Services Layer — standardized interfaces across UIs, backend, analytics, devices (auth, authorization, device commands, data access, session management). | FDC 3.2 | Medium | Conventional API backbone but must carry real-time device commands and session state; foundational, so defects propagate widely. |
-| FR-A6 | Data Acquisition Layer — acquire biometric/telemetry over Bluetooth LE; validation; time-stamping; buffering; streaming (Pi-side ingestion). | FDC 3.2 (DAL) | High | Pi-side of the wearable link; real-time streaming is unproven here and depends entirely on the watch-side path below (FR-A12 / FR-A13). |
-| FR-A12 | Garmin on-device data-capture app (Connect IQ) — sample the watch sensors during a session and package measurements for real-time delivery to the Raspberry Pi. | Added (SE) | High | Not in the FDC. Real-time sleep staging needs raw measurements off the watch; a Connect IQ app is the only way to sample sensors on-device during a session. Effort depends on which signals Garmin exposes and at what cadence. `[ASSUMPTION: VivoActive 5 + Connect IQ can expose the needed signals at usable rate — validate with a spike.]` |
-| FR-A13 | Wearable→gateway transport — establish the real-time link carrying measurements from the Garmin app to the Raspberry Pi; pairing/onboarding and session time-sync. | Added (SE) | High | Not in the FDC and the dominant unknown for the whole system. Connect IQ apps normally communicate through a paired phone (Connect Mobile); direct watch→Pi BLE is not a standard capability, so a companion/bridge may be required. Garmin Connect cloud sync would violate NFR-A2 timing. Needs a feasibility spike before it can be estimated; if infeasible on Garmin this reopens the FDC wearable-selection item (e.g. Muse EEG). |
-| FR-A7 | Analytics Layer — signal filtering; feature extraction; sleep-stage determination; outputs six timestamped stages; COTS/Garmin-first staging. | FDC 3.3 | High | COTS/Garmin staging may not surface emerging-deep-sleep in real time; the FDC open item admits custom software may be required. |
-| FR-A8 | Therapy Control Layer — device command transmission; status monitoring; therapy ON/OFF logic. | FDC 3.4 | High | ON logic must satisfy the pre-deep-sleep timing constraint (NFR-A2); the command path depends on the existing firmware accepting live commands at low latency. |
-| FR-A9 | Data Storage Layer — persist raw sensor data; processed data; sleep-stage outputs; therapy on/off logs; device status logs. | FDC 3.5 | Low | Conventional tiered storage; hot/warm/cold model already sketched. |
-| FR-A10 | Access control — internal vs external user permissions matrix; de-identified User Record and Device Record. | FDC 2 | Low | Standard role-based access; de-identification is lightweight (a de-identified User ID). |
-| FR-A11 | Operational state machine — Initialization, Idle, Device Pairing, Ready, Monitoring, Therapy Active, Session Complete, Fault, Recovery; sleep-stage loop repeats 3–6× per session. | FDC 4 | Medium | Well specified but must coordinate real-time transitions; fault-from-any-state and safe therapy shutdown add complexity. |
+| ID | Definition | Risk | Size | Low | Avg | High | Notes |
+| :-- | :-- | :-- | :-- | --: | --: | --: | :-- |
+| FR-A1 | Operations Portal — User Configuration: register new test user; assign Restiv device. | Low | S | 11 | 13 | 14 | FDC 3.1. Standard CRUD web UI. |
+| FR-A2 | Operations Portal — Device Configuration: set Restiv therapy settings (magnet rotation angles, motor acceleration, rotational frequency). | Low | S | 10 | 12 | 13 | FDC 3.1. UI + parameter plumbing to the device. |
+| FR-A3 | Operations Portal — Device Status: device list; network status. | Low | S | 8 | 9 | 10 | FDC 3.1. Conventional status display. |
+| FR-A4 | Operations Portal — Data Retrieval: wearable raw-data reports; sleep-stage timestamps; therapy reports (start, stop, interrupted). | Low | M | 20 | 23 | 26 | FDC 3.1. Reporting over stored data. |
+| FR-A5 | API & Services Layer — standardized interfaces across UIs, backend, analytics, devices (auth, authorization, device commands, data access, session management). | Low | M | 20 | 23 | 26 | FDC 3.2. Conventional API backbone. |
+| FR-A6 | Data Acquisition Layer — acquire biometric/telemetry over Bluetooth LE; validation; time-stamping; buffering; streaming (Pi-side ingestion). | High | M? | 26 | 52 | 78 | FDC 3.2. Pi-side of the wearable link; wide spread reflects real-time streaming uncertainty and dependence on FR-A12/A13. |
+| FR-A7 | Analytics Layer — signal filtering; feature extraction; sleep-stage determination; outputs six timestamped stages; COTS/Garmin-first staging. | Low | XL? | 65 | 75 | 85 | FDC 3.3. Largest single item but well-scoped (narrow spread). The hard part it depends on — timing therapy before deep-sleep onset — is tracked under NFR-A1/A2, not here. |
+| FR-A8 | Therapy Control Layer — device command transmission; status monitoring; therapy ON/OFF logic. | High | M | 16 | 32 | 48 | FDC 3.4. Command path + ON/OFF logic; spread reflects firmware-interface and timing uncertainty. |
+| FR-A9 | Data Storage Layer — persist raw sensor data; processed data; sleep-stage outputs; therapy on/off logs; device status logs. | Low | S | 10 | 12 | 13 | FDC 3.5. Conventional tiered storage. |
+| FR-A10 | Access control — internal vs external user permissions matrix; de-identified User Record and Device Record. | Low | XS | 3 | 3 | 4 | FDC 2. Light RBAC + de-identified IDs. |
+| FR-A11 | Operational state machine — Initialization, Idle, Device Pairing, Ready, Monitoring, Therapy Active, Session Complete, Fault, Recovery; sleep-stage loop repeats 3–6× per session. | Medium | M | 16 | 24 | 32 | FDC 4. Coordinates real-time transitions; fault-from-any-state and safe therapy shutdown. |
+| FR-A12 | Garmin on-device data-capture app (Connect IQ) — sample the watch sensors during a session and package measurements for real-time delivery to the Raspberry Pi. | Medium | L | 32 | 48 | 64 | SE-added (not in FDC). Connect IQ capture app; foreground-only, limited signals; sized after derisking. |
+| FR-A13 | Wearable→gateway transport — establish the real-time link carrying measurements from the Garmin app to the Raspberry Pi; pairing/onboarding and session time-sync. | Medium | L | 32 | 48 | 64 | SE-added (not in FDC). BLE (Pi-as-peripheral) or Wi‑Fi HTTP path — both viable per derisking; bench spike still recommended. |
+| Infrastructure | Environments, CI/CD, Raspberry Pi + device provisioning, developer tooling. | Low | S | 5 | 6 | 7 | Cross-cutting setup not tied to a single FR. |
+| **Total** | | | | **274** | **379** | **484** | Engineering-hour estimate (3-point). |
 
 ## Non-functional requirements
 
@@ -45,4 +47,6 @@ All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/esti
 
 ## Estimation note
 
-The three High-risk items on the critical path — FR-A6, FR-A12, FR-A13 (the Garmin→Pi data path) — cannot be reliably estimated until a time-boxed feasibility spike proves a real-time watch→Pi path exists on the VivoActive 5. If it does not, the FDC's wearable-selection open item reopens (e.g. Muse EEG), which changes the shape of the build. Recommend scoping that spike as an explicit first task before committing numbers.
+Total engineering estimate: **274 / 379 / 484 hours** (Low / Avg / High) — about **$23K / $32K / $41K** at the $85/hr blended rate, engineering effort only (PM, QA, design, and contingency not included).
+
+Risk now sits with the two widest-spread items, **FR-A6** (real-time ingestion) and **FR-A8** (therapy control), both High. FR-A7 is the largest single line (65–85h) but low-variance — a big but predictable build; the genuinely hard part it depends on, timing therapy before deep-sleep onset, lives in **NFR-A1/A2** and remains the open question the Phase 1 gate must answer. The Garmin path (FR-A12/A13) is now Medium after the derisking, which found viable BLE and Wi‑Fi transport options. This estimate supersedes the earlier rough sizing; the phased-proposal budget is being reconciled to it.

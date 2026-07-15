@@ -47,31 +47,36 @@ Relative effort sizing of the functional requirements for both scopes. Source li
 
 ## Alpha 2.0 (FDC — constrained clinical feasibility)
 
-| ID | Requirement (short) | Size | Rationale |
-| :-- | :-- | :-: | :-- |
-| FR-A1 | Ops Portal — user configuration | S | Standard CRUD web UI. |
-| FR-A2 | Ops Portal — device configuration (therapy params) | M | UI plus parameter plumbing to the device; depends on the firmware interface. |
-| FR-A3 | Ops Portal — device status | S | Conventional status display. |
-| FR-A4 | Ops Portal — data retrieval / reports | S | Reporting over stored data. |
-| FR-A5 | API & Services Layer | M | Backbone: auth, device commands, session management. |
-| FR-A6 | Data Acquisition Layer — real-time BLE ingest (Pi-side) | L ? | Real-time streaming + validation + time-sync; size hinges on the transport spike (FR-A13). |
-| FR-A7 | Analytics Layer — real-time sleep staging / pre-onset detection | XL ? | The hard one. Real-time staging isn't COTS; "before deep sleep" is a forecasting problem likely needing custom EEG work. Could grow if the requirement isn't relaxed. |
-| FR-A8 | Therapy Control Layer — command tx, status, ON/OFF logic | L | Carries the pre-deep-sleep timing and the firmware command-path dependency. |
-| FR-A9 | Data Storage Layer | S | Conventional tiered storage. |
-| FR-A10 | Access control — permissions matrix, light de-id | S | Standard RBAC; de-id is a single de-identified User ID. |
-| FR-A11 | Operational state machine | M | Real-time transitions, fault-from-any-state, safe therapy shutdown. |
+Hours are 3-point engineering estimates (Low / Avg / High), matching the estimation note [[biopredictx-alpha2-requirements-estimation]].
+
+| ID | Requirement (short) | Risk | Size | Low | Avg | High |
+| :-- | :-- | :-- | :-: | --: | --: | --: |
+| FR-A1 | Ops Portal — user configuration | Low | S | 11 | 13 | 14 |
+| FR-A2 | Ops Portal — device configuration (therapy params) | Low | S | 10 | 12 | 13 |
+| FR-A3 | Ops Portal — device status | Low | S | 8 | 9 | 10 |
+| FR-A4 | Ops Portal — data retrieval / reports | Low | M | 20 | 23 | 26 |
+| FR-A5 | API & Services Layer | Low | M | 20 | 23 | 26 |
+| FR-A6 | Data Acquisition Layer — real-time BLE ingest (Pi-side) | High | M? | 26 | 52 | 78 |
+| FR-A7 | Analytics Layer — sleep-stage determination (COTS/Garmin-first) | Low | XL? | 65 | 75 | 85 |
+| FR-A8 | Therapy Control Layer — command tx, status, ON/OFF logic | High | M | 16 | 32 | 48 |
+| FR-A9 | Data Storage Layer | Low | S | 10 | 12 | 13 |
+| FR-A10 | Access control — permissions matrix, light de-id | Low | XS | 3 | 3 | 4 |
+| FR-A11 | Operational state machine | Medium | M | 16 | 24 | 32 |
+| Infrastructure | Environments, CI/CD, Pi + device provisioning | Low | S | 5 | 6 | 7 |
 
 ### SE-added functional requirements (from derisking — not in the FDC)
 
-| ID | Requirement (short) | Size | Rationale |
-| :-- | :-- | :-: | :-- |
-| FR-A12 | Garmin on-device capture app (Connect IQ) | L ? | New custom watch app; foreground-only capture, limited signals; size confirmed only after a capability spike. |
-| FR-A13 | Watch→Pi real-time transport | L ? | BLE (Pi-as-peripheral) or Wi‑Fi HTTP path, both unproven; jumps to XL if infeasible on Garmin and the wearable must change (Muse EEG). |
+| ID | Requirement (short) | Risk | Size | Low | Avg | High |
+| :-- | :-- | :-- | :-: | --: | --: | --: |
+| FR-A12 | Garmin on-device capture app (Connect IQ) | Medium | L | 32 | 48 | 64 |
+| FR-A13 | Watch→Pi real-time transport | Medium | L | 32 | 48 | 64 |
+
+**Alpha 2.0 total (functional + infrastructure): 274 / 379 / 484 engineering-hours (Low / Avg / High).**
 
 ---
 
 ## Read
 
-The two scopes size very differently. **Scope v2 is front-loaded with XL/L items** — ingestion, de-identification ETL, and the SageMaker platform — because enterprise compliance and 500K-device scale make even routine capabilities heavy. **Alpha 2.0 is mostly S/M** (an internal portal over conventional storage and access control), with the effort concentrated in a small cluster of hard, uncertain items: **FR-A6, FR-A7, FR-A8, and the added FR-A12/A13** — the real-time sensing-to-therapy loop.
+The two scopes size very differently. **Scope v2 is front-loaded with XL/L items** — ingestion, de-identification ETL, and the SageMaker platform — because enterprise compliance and 500K-device scale make even routine capabilities heavy. **Alpha 2.0 is mostly S/M** (an internal portal over conventional storage and access control), totalling **274 / 379 / 484 engineering-hours** (Low / Avg / High).
 
-The practical implication for estimating: Alpha 2.0's total is dominated by four-to-five requirements whose sizes carry a `?`. Until the feasibility spikes resolve (real-time staging timing, and watch→Pi transport), the Alpha 2.0 number has a wide error bar — the S/M majority is predictable, but the XL/L cluster is where the range lives. If NFR-A2 ("before deep sleep") holds and Garmin can't deliver real-time stages, FR-A7 plus a wearable switch could dominate the whole estimate.
+After the refined estimate, the range is driven by two things: the sheer size of **FR-A7** (65–85h, the largest single line, but now *low*-variance — treated as a well-scoped build), and the wide spreads on the two remaining High-risk items, **FR-A6** (26–78h) and **FR-A8** (16–48h) — real-time ingestion and therapy control. The Garmin path (FR-A12/A13) settled to Medium/L after the derisking. The open feasibility question is no longer "can we build FR-A7" but the timing constraint it serves (NFR-A1/A2) — whether therapy can fire before deep-sleep onset — which is what the Phase 1 gate exists to answer.

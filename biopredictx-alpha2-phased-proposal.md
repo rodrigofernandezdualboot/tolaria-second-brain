@@ -108,16 +108,19 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 
 ## Budget & schedule
 
-Order-of-magnitude estimate at a **$85/hour blended rate** (Dualboot standard, per the v2 SOW framework). Hours follow the per-phase team allocation below. These are planning figures, not a fixed quote — the Phase 1 gate can move Phase 2–3 scope, so treat the total as a target with a wide band on the real-time cluster.
+Built up from the refined per-requirement figures in [[biopredictx-alpha2-requirements-estimation]], which are in **person-days**. Day rate assumed at **$680/day** ($85/hr × 8h — adjust if your blended day rate differs). Engineering effort is loaded **+25%** for PM/QA/design and **+10%** contingency, giving an all-in day rate of ≈ **$935**. Planning figures, not a fixed quote — the Phase 1 gate can still move Phase 2–3 scope.
 
-**Duration: ~18 weeks · ~1,930 hours · round total ≈ $165,000.**
+**Engineering effort: 274 / 379 / 484 person-days (Low / Avg / High).**
+**All-in cost: ≈ $256K / $355K / $453K — round total ≈ $355K (average case).**
 
-| Phase | Weeks | Team (allocation) | Hours | Cost |
+| Phase | Weeks | Team | Eng. days (avg) | All-in cost |
 | :-- | :-: | :-- | :-: | :-- |
-| 1 — Algorithm + feasibility simulation | 5 | ML/algorithm eng (full), embedded/IoT eng (full), PM (½) | 500 | $42,500 |
-| 2 — Capture, configuration, ingestion | 6 | Connect IQ/device eng (full), backend/data eng (full), UX designer (½), PM (¼) | 660 | $56,100 |
-| 3 — Controller, portal, backend | 7 | Backend/full-stack eng (full), full-stack/portal eng (full), QA (½), PM (¼) | 770 | $65,450 |
-| **Total** | **~18** | | **~1,930** | **≈ $165,000** |
+| 1 — Algorithm + feasibility simulation | 5 | ML/algorithm eng, embedded/IoT eng, PM (½) | 75 | ~$70K |
+| 2 — Capture, configuration, ingestion | 6 | Two parallel tracks (~4–5): capture+ingestion, UX+device config, PM | 160 | ~$150K |
+| 3 — Controller, portal, backend | 7 | 2 full-stack eng, QA (½), PM (¼) | 145 | ~$136K |
+| **Total** | **~18** | | **~380** | **≈ $355K** |
+
+Per-phase days map FR-A7 to Phase 1; FR-A6/A12/A13 plus device configuration to Phase 2; the portal, API, controller, storage, access control, state machine, and infrastructure to Phase 3. The Low/High span (274–484 days) is what drives the ≈ $256K–$453K all-in range.
 
 ### Week-by-week
 

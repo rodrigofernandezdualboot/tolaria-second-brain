@@ -9,12 +9,6 @@ status: Active
 ---
 # BioPredictX Alpha 2.0 — Phased Implementation Proposal
 
-A three-phase plan to build Alpha 2.0. Two principles drive it: **every phase ships a tangible, demonstrable asset** \(not just a document\), and **risk is front-loaded** — the uncertain real-time loop is proven before the predictable build begins. Requirement IDs map to [[biopredictx-alpha2-requirements-estimation]]; sizes to [[biopredictx-tshirt-sizing]]; feasibility reasoning comes from the FR-A7/A12/A13 derisking.
-
-**Sequencing logic:** our derisking showed the cost and risk of Alpha 2.0 sit almost entirely in one cluster — real-time sleep detection and the wearable→Pi data path. So Phase 1 retires that risk on a cheap testbed before anyone builds a portal or a controller. Phases 2 and 3 are progressively lower-risk. Each phase stands on its own as something the client can see and touch.
-
----
-
 ## Phase 1 — Algorithm definition & validation on a Raspberry Pi simulation
 
 **Objective.** Prove the core premise before committing to the full build: that the system can detect the onset of deep sleep from wearable signals in real time and trigger therapy within the required window. Define and validate the sleep-staging and therapy-decision algorithm.
@@ -109,24 +103,20 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 
 | Phase | Duration | Estimated hours | Est. Cost \($85/hr\) |
 | --- | --- | --- | --- |
-| 1 — Algorithm + feasibility simulation | 2–3 wks | 80 | ~$70K |
-| 2 — Capture, configuration, ingestion | 6-7 wks | 800 | ~$150K |
-| 3 — Controller, portal, backend | 7-15 wks | 1450 | ~$136K |
-| **Total** | **~27 weeks** | **2330** | **≈ $355K** |
-
-Per-phase days map FR-A7 to Phase 1; FR-A6/A12/A13 plus device configuration to Phase 2; the portal, API, controller, storage, access control, state machine, and infrastructure to Phase 3. The Low/High span \(274–484 days\) is what drives the ≈ $256K–$453K all-in range.
+| 1 — Algorithm + feasibility simulation | 2–3 wks | 80 | ~$7K |
+| 2 — Capture, configuration, ingestion | 6-7 wks | 800 | ~$70K |
+| 3 — Controller, portal, backend | 7-10 wks | 1450 | ~$123K |
+| **Total** | **~22 weeks** | **2330** | **≈ $200K** |
 
 ### Week-by-week
 
-**Phase 1 — Algorithm & feasibility \(5 weeks\)**
+**Phase 1 — Algorithm & feasibility \(3 weeks\)**
 
 - Wk 1 — Select signals/algorithm; stand up the Pi testbed; ingest recorded sleep datasets; set up Garmin + Muse dev environments.
 - Wk 2 — Implement candidate sleep-staging on the Pi; build the replay pipeline; define therapy-trigger logic and parameters.
-- Wk 3 — Run the transport/capture spikes \(Pi-as-BLE-peripheral / Wi‑Fi HTTP; Connect IQ sampling\); live-stream trials from Garmin and Muse.
-- Wk 4 — Measure detection latency vs. ground truth; test parameters and thresholds; before-vs-at-onset analysis.
-- Wk 5 — Lock the wearable decision; finalize the validated algorithm spec; feasibility report and **gate review**.
+- Wk 3 — Lock the wearable decision; finalize the validated algorithm spec; feasibility report and **gate review**.
 
-**Phase 2 — Capture, configuration, ingestion \(6 weeks\)**
+**Phase 2 — Capture, configuration, ingestion \(7 weeks\)**
 
 - Wk 1 — Confirm architecture from Phase 1; scaffold the capture app and the Pi ingestion service; UX discovery for the portal.
 - Wk 2 — Build the minimal wearable capture app \(sensor sampling\); ingestion validation and time-stamping; portal wireframes.
@@ -134,7 +124,9 @@ Per-phase days map FR-A7 to Phase 1; FR-A6/A12/A13 plus device configuration to 
 - Wk 4 — Live end-to-end watch→Pi stream; device-config write path to the controller; UX review.
 - Wk 5 — Overnight streaming trials \(cadence, battery, latency\); parameter round-trip; UX sign-off.
 - Wk 6 — Harden ingestion; API groundwork; demo the live data path; phase review.
-
+- Wk 7 — Run the transport/capture spikes \(Pi-as-BLE-peripheral / Wi‑Fi HTTP; Connect IQ sampling\); live-stream trials from Garmin and Muse.
+- Wk 7 — Measure detection latency vs. ground truth; test parameters and thresholds; before-vs-at-onset analysis.
+  
 **Phase 3 — Controller, portal, backend \(7 weeks\)**
 
 - Wk 1 — Backend/API scaffolding; data model and storage tiers; portal app shell.
@@ -144,7 +136,3 @@ Per-phase days map FR-A7 to Phase 1; FR-A6/A12/A13 plus device configuration to 
 - Wk 5 — Operational state machine: sessions, fault/recovery, safe therapy shutdown.
 - Wk 6 — End-to-end integration; run a full study session on the real device.
 - Wk 7 — QA, fault-path testing, de-identification checks, export validation; final demo and handoff.
-
-## Notes for the client
-
-Phase 1 is a **gate**, not just a start: its outcome can reshape Phases 2–3 \(a Garmin→Muse switch, or relaxing "before onset" to "at onset"\). That is the point — you buy down the largest uncertainty first, for the price of a bench testbed, before funding the larger build. Deferred to a future Beta \(per the FDC\): the consumer mobile app and the proprietary predictive algorithm \(NFR-A8/A9\). Phase 3's portal is built on a single codebase to make the eventual mobile transition cheaper.

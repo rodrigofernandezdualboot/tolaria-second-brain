@@ -34,15 +34,15 @@ A plain-language view of how the scope changed between the original production p
 
 | Feature (what it does) | Status | Size | What it means for you |
 | :-- | :-- | :-: | :-- |
-| Real-time therapy trigger — switch therapy on before deep sleep | New | L ? | The heart of the whole test, and the riskiest piece. Depends on detecting the sleep transition fast enough. |
-| Real-time sleep detection / analytics | New | XL ? | Replaces after-the-fact analysis. Hardest technical item; may require the EEG headband (Muse) rather than Garmin to work in real time. |
-| Live sensor streaming from the wearable to the local box | New | L ? | Replaces the nightly bulk upload. Needs a proven live link from the watch to the Raspberry Pi. |
-| Garmin watch app + watch→gateway link | New | L ? | Not written into the spec, but required to get live data off the watch. We flagged it; feasibility is not yet proven. |
-| Local hardware gateway integration (Raspberry Pi + Arduino + device) | New | M–L | Wiring the named hardware together. The device's own firmware already exists, so this is integration, not rebuilding it. |
+| Real-time therapy trigger — switch therapy on before deep sleep | New | M | The heart of the whole test, and one of the two higher-risk items — it depends on detecting the sleep transition fast enough. |
+| Real-time sleep detection / analytics | New | XL | The largest single piece of work. The detection build itself is now well understood; the hard part is the *timing* it serves — firing before deep sleep — which we track separately. |
+| Live sensor streaming from the wearable to the local box | New | M | Replaces the nightly bulk upload. Higher-risk — needs a proven live link from the watch to the Raspberry Pi. |
+| Garmin watch app + watch→gateway link | New | L | Not written into the spec, but required to get live data off the watch. After our review, viable BLE and Wi‑Fi paths exist — medium risk, with a short bench test recommended. |
+| Local hardware gateway integration (Raspberry Pi + Arduino + device) | New | M | Wiring the named hardware together. The device's own firmware already exists, so this is integration, not rebuilding it. |
 | Internal Operations Portal (staff web dashboard) | New | M | Where your team registers test users, sets therapy parameters (magnet angle, motor speed, frequency), and exports data. |
 | API / services backbone | New | M | The plumbing tying the portal, analytics, storage, and device together. |
 | Data storage (raw + processed data, sleep stages, therapy logs) | Reshaped | S | Kept, but simplified — tiered local/cloud storage, without the original's heavy compliance vault. |
-| Privacy & access control | Reshaped | S | De-identified user IDs plus manual admin controls, instead of the automated HIPAA/GDPR machine. |
+| Privacy & access control | Reshaped | XS | De-identified user IDs plus manual admin controls, instead of the automated HIPAA/GDPR machine. |
 | Restiv wellness device + firmware | Existing | — | Reused as-is. You already have it; we integrate with it rather than rebuild it. |
 | Therapy mechanism (magnetic-field sleep therapy) | Existing | — | Unchanged from the original product concept. |
 
@@ -58,4 +58,4 @@ Worth being explicit, so there's no surprise about what this phase is *not* deli
 
 ## Where the cost and risk concentrate
 
-Most of Alpha 2.0 is small-to-medium, predictable work: the staff portal, storage, access control, and hardware integration. The budget's uncertainty lives almost entirely in one cluster — the **real-time sense-to-therapy loop** (live streaming, real-time sleep detection, the therapy trigger, and the Garmin data path). Those carry a **?** because their size depends on two feasibility checks we recommend running first: whether the therapy can realistically fire *before* deep sleep, and whether a real-time link from the Garmin watch to the Raspberry Pi is achievable. If the answers push you toward the EEG headband, that one decision reshapes the estimate more than anything else on this list.
+Most of Alpha 2.0 is small-to-medium, predictable work: the staff portal, storage, access control, and hardware integration. On the refined estimate, the whole functional build lands at roughly **380 engineering-hours on average (range 274–484)**. The remaining uncertainty concentrates in two items — **live sensor streaming** and the **therapy trigger/control** — whose estimates carry the widest ranges. Real-time sleep detection is the single largest chunk of work but is now a fairly predictable build; the genuinely open question is the *timing* it serves — whether therapy can fire before deep sleep — plus confirming the watch→Pi link on a bench. If those push you toward the EEG headband, that one decision reshapes the estimate more than anything else here.

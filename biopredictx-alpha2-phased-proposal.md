@@ -111,7 +111,7 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 | --- | --- | --- | --- |
 | 1 — Algorithm + feasibility simulation | 2–3 wks | 80 | ~$70K |
 | 2 — Capture, configuration, ingestion | 6-7 wks | 800 | ~$150K |
-| 3 — Controller, portal, backend | 35-40 wks | 1450 | ~$136K |
+| 3 — Controller, portal, backend | 25-30 wks | 1450 | ~$136K |
 | **Total** | **~18** | **2330** | **≈ $355K** |
 
 Per-phase days map FR-A7 to Phase 1; FR-A6/A12/A13 plus device configuration to Phase 2; the portal, API, controller, storage, access control, state machine, and infrastructure to Phase 3. The Low/High span \(274–484 days\) is what drives the ≈ $256K–$453K all-in range.

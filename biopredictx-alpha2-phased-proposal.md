@@ -107,12 +107,12 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 
 ## Budget & schedule
 
-| Phase | Weeks | Team | Estimated hours | Est. Cost \($85/hr\) |
-| --- | --- | --- | --- | --- |
-| 1 — Algorithm + feasibility simulation | ~5 | ML/algorithm eng, embedded/IoT eng, PM \(½\) | 80 | ~$70K |
-| 2 — Capture, configuration, ingestion | 6 | Two parallel tracks \(~4–5\): capture+ingestion, UX+device config, PM | 160 | ~$150K |
-| 3 — Controller, portal, backend | 7 | 2 full-stack eng, QA \(½\), PM \(¼\) | 145 | ~$136K |
-| **Total** | **~18** |  | **~380** | **≈ $355K** |
+| Phase | Duration | Estimated hours | Est. Cost \($85/hr\) |
+| --- | --- | --- | --- |
+| 1 — Algorithm + feasibility simulation | 2–3 wks | 80 | ~$70K |
+| 2 — Capture, configuration, ingestion | 6 | 160 | ~$150K |
+| 3 — Controller, portal, backend | 7 | 145 | ~$136K |
+| **Total** | **~18** | **~380** | **≈ $355K** |
 
 Per-phase days map FR-A7 to Phase 1; FR-A6/A12/A13 plus device configuration to Phase 2; the portal, API, controller, storage, access control, state machine, and infrastructure to Phase 3. The Low/High span \(274–484 days\) is what drives the ≈ $256K–$453K all-in range.
 

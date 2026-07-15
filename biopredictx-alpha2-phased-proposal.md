@@ -106,6 +106,48 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 | 2 | Capture, configuration, ingestion | Live watch→Pi data stream; device config; portal UX | Can we get real live data in? | M–L |
 | 3 | Controller, portal, backend | Full integrated system running a study session | Do the pieces form a usable whole? | M–L |
 
+## Budget & schedule
+
+Order-of-magnitude estimate at a **$85/hour blended rate** (Dualboot standard, per the v2 SOW framework). Hours follow the per-phase team allocation below. These are planning figures, not a fixed quote — the Phase 1 gate can move Phase 2–3 scope, so treat the total as a target with a wide band on the real-time cluster.
+
+**Duration: ~18 weeks · ~1,930 hours · round total ≈ $165,000.**
+
+| Phase | Weeks | Team (allocation) | Hours | Cost |
+| :-- | :-: | :-- | :-: | :-- |
+| 1 — Algorithm + feasibility simulator | 5 | ML/algorithm eng (full), embedded/IoT eng (full), PM (½) | 500 | $42,500 |
+| 2 — Capture, configuration, ingestion | 6 | Connect IQ/device eng (full), backend/data eng (full), UX designer (½), PM (¼) | 660 | $56,100 |
+| 3 — Controller, portal, backend | 7 | Backend/full-stack eng (full), full-stack/portal eng (full), QA (½), PM (¼) | 770 | $65,450 |
+| **Total** | **~18** | | **~1,930** | **≈ $165,000** |
+
+### Week-by-week
+
+**Phase 1 — Algorithm & feasibility (5 weeks)**
+
+- Wk 1 — Select signals/algorithm; stand up the Pi testbed; ingest recorded sleep datasets; set up Garmin + Muse dev environments.
+- Wk 2 — Implement candidate sleep-staging on the Pi; build the replay pipeline; define therapy-trigger logic and parameters.
+- Wk 3 — Run the transport/capture spikes (Pi-as-BLE-peripheral / Wi‑Fi HTTP; Connect IQ sampling); live-stream trials from Garmin and Muse.
+- Wk 4 — Measure detection latency vs. ground truth; test parameters and thresholds; before-vs-at-onset analysis.
+- Wk 5 — Lock the wearable decision; finalize the validated algorithm spec; feasibility report and **gate review**.
+
+**Phase 2 — Capture, configuration, ingestion (6 weeks)**
+
+- Wk 1 — Confirm architecture from Phase 1; scaffold the capture app and the Pi ingestion service; UX discovery for the portal.
+- Wk 2 — Build the minimal wearable capture app (sensor sampling); ingestion validation and time-stamping; portal wireframes.
+- Wk 3 — Implement the proven transport; buffering/streaming; device-configuration parameter plumbing; high-fidelity UX.
+- Wk 4 — Live end-to-end watch→Pi stream; device-config write path to the controller; UX review.
+- Wk 5 — Overnight streaming trials (cadence, battery, latency); parameter round-trip; UX sign-off.
+- Wk 6 — Harden ingestion; API groundwork; demo the live data path; phase review.
+
+**Phase 3 — Controller, portal, backend (7 weeks)**
+
+- Wk 1 — Backend/API scaffolding; data model and storage tiers; portal app shell.
+- Wk 2 — Therapy controller: command transmission to the Arduino/device; status monitoring.
+- Wk 3 — Operations Portal: user configuration and device status; access control/permissions.
+- Wk 4 — Portal data retrieval/reports; storage integration (raw, processed, logs).
+- Wk 5 — Operational state machine: sessions, fault/recovery, safe therapy shutdown.
+- Wk 6 — End-to-end integration; run a full study session on the real device.
+- Wk 7 — QA, fault-path testing, de-identification checks, export validation; final demo and handoff.
+
 ## Notes for the client
 
 Phase 1 is a **gate**, not just a start: its outcome can reshape Phases 2–3 (a Garmin→Muse switch, or relaxing "before onset" to "at onset"). That is the point — you buy down the largest uncertainty first, for the price of a bench testbed, before funding the larger build. Deferred to a future Beta (per the FDC): the consumer mobile app and the proprietary predictive algorithm (NFR-A8/A9). Phase 3's portal is built on a single codebase to make the eventual mobile transition cheaper.

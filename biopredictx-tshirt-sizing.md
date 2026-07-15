@@ -47,7 +47,7 @@ Relative effort sizing of the functional requirements for both scopes. Source li
 
 ## Alpha 2.0 (FDC — constrained clinical feasibility)
 
-Hours are 3-point engineering estimates (Low / Avg / High), matching the estimation note [[biopredictx-alpha2-requirements-estimation]].
+Low / Avg / High are 3-point estimates in **person-days**, matching the estimation note [[biopredictx-alpha2-requirements-estimation]].
 
 | ID | Requirement (short) | Risk | Size | Low | Avg | High |
 | :-- | :-- | :-- | :-: | --: | --: | --: |
@@ -71,12 +71,12 @@ Hours are 3-point engineering estimates (Low / Avg / High), matching the estimat
 | FR-A12 | Garmin on-device capture app (Connect IQ) | Medium | L | 32 | 48 | 64 |
 | FR-A13 | Watch→Pi real-time transport | Medium | L | 32 | 48 | 64 |
 
-**Alpha 2.0 total (functional + infrastructure): 274 / 379 / 484 engineering-hours (Low / Avg / High).**
+**Alpha 2.0 total (functional + infrastructure): 274 / 379 / 484 person-days (Low / Avg / High).**
 
 ---
 
 ## Read
 
-The two scopes size very differently. **Scope v2 is front-loaded with XL/L items** — ingestion, de-identification ETL, and the SageMaker platform — because enterprise compliance and 500K-device scale make even routine capabilities heavy. **Alpha 2.0 is mostly S/M** (an internal portal over conventional storage and access control), totalling **274 / 379 / 484 engineering-hours** (Low / Avg / High).
+The two scopes size very differently. **Scope v2 is front-loaded with XL/L items** — ingestion, de-identification ETL, and the SageMaker platform — because enterprise compliance and 500K-device scale make even routine capabilities heavy. **Alpha 2.0 is mostly S/M** (an internal portal over conventional storage and access control), totalling **274 / 379 / 484 person-days** (Low / Avg / High).
 
-After the refined estimate, the range is driven by two things: the sheer size of **FR-A7** (65–85h, the largest single line, but now *low*-variance — treated as a well-scoped build), and the wide spreads on the two remaining High-risk items, **FR-A6** (26–78h) and **FR-A8** (16–48h) — real-time ingestion and therapy control. The Garmin path (FR-A12/A13) settled to Medium/L after the derisking. The open feasibility question is no longer "can we build FR-A7" but the timing constraint it serves (NFR-A1/A2) — whether therapy can fire before deep-sleep onset — which is what the Phase 1 gate exists to answer.
+After the refined estimate, the range is driven by two things: the sheer size of **FR-A7** (65–85 days, the largest single line, but now *low*-variance — treated as a well-scoped build), and the wide spreads on the two remaining High-risk items, **FR-A6** (26–78 days) and **FR-A8** (16–48 days) — real-time ingestion and therapy control. The Garmin path (FR-A12/A13) settled to Medium/L after the derisking. The open feasibility question is no longer "can we build FR-A7" but the timing constraint it serves (NFR-A1/A2) — whether therapy can fire before deep-sleep onset — which is what the Phase 1 gate exists to answer.

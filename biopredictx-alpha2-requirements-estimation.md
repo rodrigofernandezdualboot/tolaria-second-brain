@@ -9,7 +9,7 @@ _organized: true
 
 # BioPredictX Alpha 2.0 — Requirements for Estimation
 
-All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/estimate-confidence rating — wider Low→High hour spreads carry more risk. **Size** is a relative t-shirt size. **Low / Avg / High** are 3-point engineering-hour estimates. Notes carry provenance (`FDC` = stated in the Functional Design Criteria; `SE-added` = surfaced during review, not in the FDC) plus rationale. Parent: [[biopredictx-fdc-alpha-2-0]].
+All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/estimate-confidence rating — wider Low→High hour spreads carry more risk. **Size** is a relative t-shirt size. **Low / Avg / High** are 3-point estimates in **person-days** (working days of effort). Notes carry provenance (`FDC` = stated in the Functional Design Criteria; `SE-added` = surfaced during review, not in the FDC) plus rationale. Parent: [[biopredictx-fdc-alpha-2-0]].
 
 ## Functional requirements
 
@@ -29,7 +29,7 @@ All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/esti
 | FR-A12 | Garmin on-device data-capture app (Connect IQ) — sample the watch sensors during a session and package measurements for real-time delivery to the Raspberry Pi. | Medium | L | 32 | 48 | 64 | SE-added (not in FDC). Connect IQ capture app; foreground-only, limited signals; sized after derisking. |
 | FR-A13 | Wearable→gateway transport — establish the real-time link carrying measurements from the Garmin app to the Raspberry Pi; pairing/onboarding and session time-sync. | Medium | L | 32 | 48 | 64 | SE-added (not in FDC). BLE (Pi-as-peripheral) or Wi‑Fi HTTP path — both viable per derisking; bench spike still recommended. |
 | Infrastructure | Environments, CI/CD, Raspberry Pi + device provisioning, developer tooling. | Low | S | 5 | 6 | 7 | Cross-cutting setup not tied to a single FR. |
-| **Total** | | | | **274** | **379** | **484** | Engineering-hour estimate (3-point). |
+| **Total** | | | | **274** | **379** | **484** | Person-days (3-point engineering estimate). |
 
 ## Non-functional requirements
 
@@ -47,6 +47,6 @@ All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/esti
 
 ## Estimation note
 
-Total engineering estimate: **274 / 379 / 484 hours** (Low / Avg / High) — about **$23K / $32K / $41K** at the $85/hr blended rate, engineering effort only (PM, QA, design, and contingency not included).
+Total engineering estimate: **274 / 379 / 484 person-days** (Low / Avg / High) — about **$186K / $258K / $329K** engineering-only at $680/day ($85/hr × 8h). Loaded with PM/QA/design (+25%) and contingency (+10%), the all-in lands near **$355K** in the average case; the full per-phase breakdown is in [[biopredictx-alpha2-phased-proposal]].
 
-Risk now sits with the two widest-spread items, **FR-A6** (real-time ingestion) and **FR-A8** (therapy control), both High. FR-A7 is the largest single line (65–85h) but low-variance — a big but predictable build; the genuinely hard part it depends on, timing therapy before deep-sleep onset, lives in **NFR-A1/A2** and remains the open question the Phase 1 gate must answer. The Garmin path (FR-A12/A13) is now Medium after the derisking, which found viable BLE and Wi‑Fi transport options. This estimate supersedes the earlier rough sizing; the phased-proposal budget is being reconciled to it.
+Risk now sits with the two widest-spread items, **FR-A6** (real-time ingestion, 26–78 days) and **FR-A8** (therapy control, 16–48 days), both High. FR-A7 is the largest single line (65–85 days) but low-variance — a big but predictable build; the genuinely hard part it depends on, timing therapy before deep-sleep onset, lives in **NFR-A1/A2** and remains the open question the Phase 1 gate must answer. The Garmin path (FR-A12/A13) is now Medium after the derisking, which found viable BLE and Wi‑Fi transport options.

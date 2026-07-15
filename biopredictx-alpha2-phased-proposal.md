@@ -99,17 +99,17 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 
 ## Phase summary
 
-| Phase | Focus | Tangible asset | Risk retired | Size |
-| --- | --- | --- | --- | --- |
-| 1 | Algorithm + feasibility simulation | Pi simulation proving the real-time loop; validated algorithm; wearable decision | Can we detect + trigger in time? | L–XL |
-| 2 | Capture, configuration, ingestion | Live watch→Pi data stream; device config; portal UX | Can we get real live data in? | M–L |
-| 3 | Controller, portal, backend | Full integrated system running a study session | Do the pieces form a usable whole? | M–L |
+| Phase | Focus | Tangible asset | Risk retired |
+| --- | --- | --- | --- |
+| 1 | Algorithm + feasibility simulation | Pi simulation proving the real-time loop; validated algorithm; wearable decision | Can we detect + trigger in time? |
+| 2 | Capture, configuration, ingestion | Live watch→Pi data stream; device config; portal UX | Can we get real live data in? |
+| 3 | Controller, portal, backend | Full integrated system running a study session | Do the pieces form a usable whole? |
 
 ## Budget & schedule
 
 | Phase | Weeks | Team | Estimated hours | Est. Cost \($85/hr\) |
 | --- | --- | --- | --- | --- |
-| 1 — Algorithm + feasibility simulation | 5 | ML/algorithm eng, embedded/IoT eng, PM \(½\) | 75 | ~$70K |
+| 1 — Algorithm + feasibility simulation | ~5 | ML/algorithm eng, embedded/IoT eng, PM \(½\) | 80 | ~$70K |
 | 2 — Capture, configuration, ingestion | 6 | Two parallel tracks \(~4–5\): capture+ingestion, UX+device config, PM | 160 | ~$150K |
 | 3 — Controller, portal, backend | 7 | 2 full-stack eng, QA \(½\), PM \(¼\) | 145 | ~$136K |
 | **Total** | **~18** |  | **~380** | **≈ $355K** |

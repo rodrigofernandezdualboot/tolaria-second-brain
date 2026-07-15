@@ -9,7 +9,7 @@ _organized: true
 
 # BioPredictX Alpha 2.0 — Requirements for Estimation
 
-All Alpha 2.0 requirements consolidated for estimation. The **Source** column marks provenance: `FDC` = stated in the Functional Design Criteria; `Added (SE)` = surfaced during review as a latent dependency the FDC does not state. Risk is a build/feasibility rating; Comments justify it. Parent: [[biopredictx-fdc-alpha-2-0]].
+All Alpha 2.0 requirements consolidated for estimation. **Risk** is a build/estimate-confidence rating — wider Low→High hour spreads carry more risk. **Size** is a relative t-shirt size. **Low / Avg / High** are 3-point engineering-hour estimates. Notes carry provenance (`FDC` = stated in the Functional Design Criteria; `SE-added` = surfaced during review, not in the FDC) plus rationale. Parent: [[biopredictx-fdc-alpha-2-0]].
 
 ## Functional requirements
 

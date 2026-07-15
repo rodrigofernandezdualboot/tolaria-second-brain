@@ -5,6 +5,7 @@ related_to:
   - "[[biopredictx-scope-requirements-comparison]]"
   - "[[biopredictx-alpha2-requirements-estimation]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX — Functional Requirements T-Shirt Sizing

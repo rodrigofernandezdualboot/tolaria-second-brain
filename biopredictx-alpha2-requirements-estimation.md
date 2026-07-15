@@ -4,6 +4,7 @@ belongs_to: "[[biopredictx-fdc-alpha-2-0]]"
 related_to:
   - "[[biopredictx-alpha-2-0]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Requirements for Estimation

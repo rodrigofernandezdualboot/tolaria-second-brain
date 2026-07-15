@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[biopredictx-alpha-2-0]]"
 status: Superseded
+_organized: true
 ---
 
 # BioPredictX Scope v2 (Old Scope)

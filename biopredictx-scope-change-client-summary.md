@@ -5,6 +5,7 @@ related_to:
   - "[[biopredictx-scope-requirements-comparison]]"
   - "[[biopredictx-tshirt-sizing]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX — Scope Change Summary (Original → Alpha 2.0)

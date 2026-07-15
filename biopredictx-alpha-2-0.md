@@ -1,5 +1,6 @@
 ---
 type: Project
+_organized: true
 ---
 # BioPredictx Alpha 2.0
 

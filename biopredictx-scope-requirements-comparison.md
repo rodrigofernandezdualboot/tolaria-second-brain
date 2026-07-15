@@ -5,6 +5,7 @@ related_to:
   - "[[biopredictx-scope-v2]]"
   - "[[biopredictx-fdc-alpha-2-0]]"
 status: Active
+_organized: true
 ---
 # BioPredictX Scope Requirements — Validation & Comparison
 

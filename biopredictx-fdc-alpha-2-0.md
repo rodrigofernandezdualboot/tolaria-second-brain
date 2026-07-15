@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[biopredictx-alpha-2-0]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX FDC — Alpha 2.0 (New Scope)

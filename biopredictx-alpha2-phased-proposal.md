@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[biopredictx-alpha-2-0]]"
 related_to:
+  - "[[biopredictx-alpha2-risks]]"
   - "[[biopredictx-alpha2-requirements-estimation]]"
   - "[[biopredictx-tshirt-sizing]]"
   - "[[biopredictx-scope-change-client-summary]]"

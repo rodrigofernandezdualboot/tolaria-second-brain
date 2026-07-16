@@ -103,10 +103,10 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 
 | Phase | Duration | Estimated hours | Est. Cost \($85/hr\) |
 | --- | --- | --- | --- |
-| 1 — Algorithm + feasibility simulation | 2–3 wks | 80 | ~$7K |
-| 2 — Capture, configuration, ingestion | 6-7 wks | 800 | ~$70K |
-| 3 — Controller, portal, backend | 7-10 wks | 1450 | ~$123K |
-| **Total** | **~22 weeks** | **2330** | **≈ $200K** |
+| 1 — Algorithm + feasibility simulation | 3–4 wks | 140 | ~$10K |
+| 2 — Capture, configuration, ingestion | 7-8 wks | 880 | ~$75K |
+| 3 — Controller, portal, backend | 8-11 wks | 1450 | ~$125K |
+| **Total** | **~23 weeks** | **2470** | **≈ $210K** |
 
 ### Week-by-week
 

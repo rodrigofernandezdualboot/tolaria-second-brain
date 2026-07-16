@@ -137,3 +137,15 @@ Confirms the plan covers the full Alpha 2.0 scope with nothing orphaned.
 - Wk 5 — Operational state machine: sessions, fault/recovery, safe therapy shutdown.
 - Wk 6 — End-to-end integration; run a full study session on the real device.
 - Wk 7 — QA, fault-path testing, de-identification checks, export validation; final demo and handoff.
+
+## Risks
+
+| \# | Risk | Mitigation / validation |
+| --- | --- | --- |
+| R1 | **Therapy timing \(NFR-A2\)** — COTS/Garmin sleep staging may not detect emerging deep sleep early enough to fire therapy *before* onset. The FDC itself flags this: the assumption that "on"-signal logic can be derived from simple alterations to standard COTS staging may fail, forcing custom algorithm development in this phase. | Phase 1 Pi simulation measures detection latency against expert-scored ground truth. Contingency: relax NFR-A2 to "at onset" with client sign-off. |
+| R2 | **Algorithm expertise gap** — we don't have in-house sleep-science expertise. Whatever algorithm we select needs someone on the client's side with that knowledge to validate it is clinically viable for the product. | Name a client-side clinical/algorithm reviewer up front; make their sign-off part of the Phase 1 gate review \(validated algorithm spec\). |
+| R3 | **Garmin signal availability** — we may not be able to get the parameters/signals we need from the Garmin devices. Connect IQ capture is foreground-only with limited sensor access. | Phase 1 Connect IQ sensor-sampling spike \(FR-A12 feasibility\). |
+| R4 | **Garmin app must stay in the foreground overnight** — the capture app running foreground all night \(likely with backlight/CPU active\) may drain the watch battery before the session ends. | Validate in the Phase 1/2 spikes; Phase 2 overnight streaming trials explicitly measure cadence, battery, and latency. |
+| R5 | **Watch→Pi real-time transport \(FR-A13\)** — Garmin may not be able to stream in real time; BLE \(Pi-as-peripheral\) and Wi‑Fi HTTP both look viable per derisking, but neither is proven on the bench. | Bench transport spike in Phase 1; lock the approach before Phase 2 builds on it. |
+| R6 | **Wearable selection may change** — Garmin lacks the EEG needed for continued deep-sleep testing; Muse EEG has all sensors in one device. If Garmin can't deliver \(R3/R5\), the switch to Muse reshapes the Phase 2 capture work. | Phase 1 runs both Garmin and Muse dev environments and locks the wearable decision at the gate review. |
+| R7 | **Ground-truth data availability** — the algorithm validation depends on recorded sleep datasets with expert-scored sleep stages to replay and score against. | Confirm dataset sourcing \(and who does expert scoring\) in Wk 1 of Phase 1; ties back to R2. |

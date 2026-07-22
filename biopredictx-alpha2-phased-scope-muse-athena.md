@@ -37,7 +37,7 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 
 ---
 
-## Phase 0 — Muse Athena technical spike + commercial/architecture lock (NEW, ~1 week)
+## Phase 0 — Muse Athena technical spike + commercial/architecture lock (NEW, ~2–3 weeks)
 
 **Objective.** De-risk the pivot before any build commitment and produce the inputs needed to re-estimate Phases 1–3. Explicitly requested in the handoff's "next steps."
 
@@ -51,7 +51,7 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 
 **Exit gate.** Live Athena connect + raw recording + valid timestamps + battery reporting + replay + packet-loss characterization demonstrated; streaming `bandpower`/`sw_detect` producing delta-power + slow-wave events in near-real-time with measured latency and frontal-tuned thresholds; licensing/rights confirmed sufficient; gateway platform chosen.
 
-**Relative size:** S (time-boxed spike). Blocks firm estimation of everything downstream.
+**Relative size:** S–M (~2–3-week time-boxed spike). The wider window reflects the real work here — SDK licensing, the frontal-montage threshold tuning, the streaming wrapper, and latency characterization are more than a week. Blocks firm estimation of everything downstream.
 
 **Risks (Phase 0).**
 

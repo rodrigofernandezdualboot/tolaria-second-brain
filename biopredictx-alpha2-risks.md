@@ -8,6 +8,7 @@ relationships:
     - "[[biopredictx-alpha2-phased-proposal]]"
     - "[[biopredictx-alpha2-requirements-estimation]]"
     - "[[biopredictx-fdc-alpha-2-0]]"
+_organized: true
 ---
 # BioPredictX Alpha 2.0 — Risk Register
 

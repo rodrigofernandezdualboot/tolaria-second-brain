@@ -5,6 +5,7 @@ related_to:
   - "[[biopredictx-alpha2-huggingface-model-approach]]"
   - "[[biopredictx-alpha2-risks]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Sleep-Staging Algorithm Selection (Garmin Vivoactive 5)

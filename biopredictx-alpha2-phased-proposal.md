@@ -7,6 +7,7 @@ related_to:
   - "[[biopredictx-tshirt-sizing]]"
   - "[[biopredictx-scope-change-client-summary]]"
 status: Active
+_organized: true
 ---
 # BioPredictX Alpha 2.0 — Phased Implementation Proposal
 

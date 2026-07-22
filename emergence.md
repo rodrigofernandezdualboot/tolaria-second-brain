@@ -6,6 +6,7 @@ hubspot: https://app.hubspot.com/contacts/49713046/record/0-2/56495715703
 notebooklm: https://notebooklm.google.com/notebook/38ef173e-189c-463e-941c-7ca73725a14d
 sales_folder: https://drive.google.com/drive/u/0/folders/1e6ghldv0H9z8yzRelb5JYb4RY7wS6G82
 slack_channel: https://dualbootpartners.slack.com/archives/C0BHH17F7SS
+_organized: true
 ---
 
 # Emergence

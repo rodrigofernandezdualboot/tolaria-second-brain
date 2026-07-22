@@ -5,6 +5,7 @@ related_to:
   - "[[biopredictx-alpha2-sleep-algorithm-selection]]"
   - "[[biopredictx-alpha2-risks]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Hugging Face Model Approach for Sleep Staging

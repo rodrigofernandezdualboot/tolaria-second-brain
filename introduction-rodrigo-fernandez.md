@@ -1,5 +1,8 @@
 ---
-type: Project
+_organized: true
+type: Note
+belongs_to: "[[sales-engineering-role]]"
+related_to: "[[sales-engineering-role]]"
 ---
 
 # Introduction — Rodrigo Fernandez

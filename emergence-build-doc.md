@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[Emergence]]"
 source: Emergence Build Doc.docx (Slack file F0BH3LA6HJB)
+_organized: true
 ---
 
 # Emergence Build Doc — Module Requirements

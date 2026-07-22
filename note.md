@@ -3,6 +3,7 @@ type: Type
 icon: file-text
 color: "#64748b"
 order: 5
+_sort: "modified:desc"
 ---
 
 # Note

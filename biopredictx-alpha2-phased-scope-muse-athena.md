@@ -49,6 +49,12 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 
 **Relative size:** S (time-boxed spike). Blocks firm estimation of everything downstream.
 
+**Risks (Phase 0).**
+
+- **P0-R1 — No / late access to the Muse SDK.** Athena's real-time streams require the licensed Muse SDK (Interaxon partner/developer access). If access isn't granted, or is delayed, the entire spike is blocked and nothing downstream can be estimated. *Mitigation: initiate the SDK/licence request immediately and confirm access is in hand **before** committing the spike window; use the Muse Direct desktop tool as an interim path to characterize the signal while SDK access is pending; confirm derived-data/IP rights at the same time (links to R2').*
+- **P0-R2 — Unknown implementation language / tech stack, dependent on team familiarity.** The SDK dictates which languages and platforms are viable (e.g. iOS/Android vs desktop bindings). If the only supported path is a stack the team isn't fluent in, ramp-up time and delivery risk increase. *Mitigation: confirm the SDK's supported languages/bindings in week 1; choose the stack the team knows best **among those the SDK supports**; if a less-familiar stack is forced, budget explicit ramp-up and reflect it in the re-estimate.*
+- **P0-R3 — Gateway hardware undecided (mini-PC vs Raspberry Pi), OS and capabilities unknown.** We don't yet know which OS to run, what compute is needed for real-time processing/replay, or whether the required BLE version/stack is supported on the candidate hardware. Choosing wrong forces rework in Phase 2. *Mitigation: derive the hardware requirements from the SDK/OS support matrix (supported OS, BLE version, continuous-power need, CPU for processing + replay); verify BLE + OS compatibility on the candidate device during the spike; recommend the platform at the exit gate.*
+
 ---
 
 ## Phase 1 — EEG acquisition, sleep-state engine & therapy-decision logic (shadow) — highest risk
@@ -67,6 +73,16 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 
 **Relative size:** L–XL (the scientific + real-time risk lives here). Staging-engine fork (YASA vs custom vs YASA-as-validation) must be decided at or before this phase — see Open Decisions.
 
+**Risks (Phase 1).**
+
+- **P1-R1 — Before-deep-sleep prediction may not achieve usable lead time** on a sparse frontal EEG montage (this is prediction, not classification). The core premise could fail here. *Mitigation: shadow-mode validation against synchronized reference; renegotiate required lead-time/tolerance with the clinician if needed (R1').*
+- **P1-R2 — No in-house sleep-science expertise to define/validate the custom sleep-state.** Without a qualified reviewer, "correct" has no owner. *Mitigation: named client-side clinical/sleep-science reviewer; their sign-off is part of the Phase 1 exit gate (R10').*
+- **P1-R3 — Staging-engine fork unresolved (YASA vs proprietary vs YASA-as-validation).** Blocks both the build approach and the estimate. *Mitigation: force the decision at or before Phase 1 (see Open Decisions); links to [[biopredictx-alpha2-huggingface-model-approach]].*
+- **P1-R4 — Over-trusting Muse-derived stages as ground truth.** *Mitigation: treat EEG as reference not truth; clinician review; retain raw for reprocessing (R7').*
+- **P1-R5 — Low-frequency artifact mistaken for delta / poor overnight contact** corrupts state inference. *Mitigation: signal-quality gate before any state/control output (FR-E5); do not equate all delta power with restorative N3.*
+- **P1-R6 — Timestamp drift breaks EEG↔therapy cause/effect** in the analysis. *Mitigation: dual device+host timestamps, <1 s sync target, drift characterized (FR-E10, R6').*
+- **P1-R7 — Premature algorithm complexity** chasing noisy features. *Mitigation: shadow-first, fixed-protocol early nights; add complexity only after gates pass (R9').*
+
 ---
 
 ## Phase 2 — Gateway acquisition service, overnight robustness & operator view
@@ -84,6 +100,14 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 **Exit gate.** Overnight acceptance targets met under the selected study config; safe-state and recovery demonstrated; operator view usable by trained staff without developer intervention.
 
 **Relative size:** M–L.
+
+**Risks (Phase 2).**
+
+- **P2-R1 — Athena battery below a full night** under custom continuous streaming. *Mitigation: Phase 0 battery protocol; Phase 2 overnight acceptance targets (≥15–20% end-of-night reserve); setup-margin design of 10–12 h (R3').*
+- **P2-R2 — BLE interruption with no buffering invalidates the night.** *Mitigation: local buffering + auto-reconnect that preserves and documents gaps (FR-E4); packet-loss already characterized in Phase 0 (R4').*
+- **P2-R3 — Gateway/desktop failure or OS sleep-state silently stops the loop.** *Mitigation: powered mini-PC over battery-backed mobile OS; disable OS suspend; deterministic safe state on fault (R8').*
+- **P2-R4 — Overnight electrode contact degradation** reduces usable data late in the night. *Mitigation: continuous signal-quality metric + machine-readable missingness; no silent data loss (FR-E3/E5).*
+- **P2-R5 — Acceptance targets not met under real unattended conditions** (completeness ≥95%, sync <1 s, recovery 100%). *Mitigation: overnight qualification runs against the targets before the phase gate; tune or renegotiate targets with evidence.*
 
 ---
 

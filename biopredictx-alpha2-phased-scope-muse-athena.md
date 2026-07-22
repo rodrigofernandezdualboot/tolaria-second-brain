@@ -43,9 +43,13 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 
 **Activities.** Review Muse SDK / Muse Direct / licensing + sample apps; connect to a live Athena; record raw EEG with device + host timestamps; verify channels/rates/units/battery telemetry; prove a replay pipeline; measure packet loss and reconnection; test the Muse→gateway transport; decide gateway platform (Pi vs mini-PC); confirm **SDK licensing and raw/derived-data rights**.
 
-**Deliverables.** A definitive **sensor/data dictionary from actual SDK outputs**; a raw session-file format + processed-data schema + Restiv state-packet contract (draft); a gateway-platform recommendation; a battery/continuity qualification protocol; and a **re-estimate of Phases 1–3** schedule/staffing/budget.
+**Wave-feature streaming spike (near-real-time trigger primitives).** Build a thin **streaming wrapper** around YASA's `bandpower` and `sw_detect` (which are near-real-time capable — unlike YASA's non-causal stage classifier — but ship as batch functions on an array, not as a live runner). Feed rolling windows from the live Athena stream, compute **delta/slow-wave power** and **slow-wave events** continuously, and **characterize detection latency**. **Re-tune the amplitude thresholds for the frontal Athena montage** (YASA defaults are calibrated for adult central derivations) and add **online artifact rejection** (movement / poor contact). See [[biopredictx-alpha2-yasa-viability.md]].
 
-**Exit gate.** Live Athena connect + raw recording + valid timestamps + battery reporting + replay + packet-loss characterization demonstrated; licensing/rights confirmed sufficient; gateway platform chosen.
+- **Timing floor to design against:** band power needs a window **≥ ~4 s** to resolve delta (YASA rule: window ≥ 2 × 1/f_low; default `win_sec=4`); slow-wave event detection needs a **~5–10 s rolling buffer** and returns events with **~1–3 s lag**. This sets the earliest the therapy trigger can fire — acceptable because deep-sleep transitions unfold over minutes, not seconds.
+
+**Deliverables.** A definitive **sensor/data dictionary from actual SDK outputs**; a raw session-file format + processed-data schema + Restiv state-packet contract (draft); a gateway-platform recommendation; a battery/continuity qualification protocol; a **wave-feature latency & threshold feasibility memo** (measured delta-power/slow-wave detection latency on frontal Athena data, with re-tuned thresholds and the chosen window sizes); and a **re-estimate of Phases 1–3** schedule/staffing/budget.
+
+**Exit gate.** Live Athena connect + raw recording + valid timestamps + battery reporting + replay + packet-loss characterization demonstrated; streaming `bandpower`/`sw_detect` producing delta-power + slow-wave events in near-real-time with measured latency and frontal-tuned thresholds; licensing/rights confirmed sufficient; gateway platform chosen.
 
 **Relative size:** S (time-boxed spike). Blocks firm estimation of everything downstream.
 
@@ -62,6 +66,8 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 **Objective.** Prove the core premise on the new architecture: that Athena EEG can be acquired at quality overnight, that a **custom sleep-state** can be inferred causally, and that a therapy decision can be made **before** deep-sleep onset — all validated in **shadow mode** against synchronized EEG+Restiv records.
 
 **Tangible asset.** On the chosen gateway: acquisition + quality-control service, an EEG feature/state engine, and a therapy-decision service running in **shadow** (recommendations logged, no live actuation), plus a replay harness that runs recorded nights through the same interfaces used live. Written, clinician-reviewed sleep-state + timing definition.
+
+*Working assumption (features vs stages):* the live trigger is **EEG-feature/event-driven** — built on the Phase-0 streaming primitives (delta/slow-wave power trend + slow-wave event rate/amplitude from YASA `bandpower`/`sw_detect`), fired as deep-sleep emerges — **not** a discrete AASM stage classifier. YASA's stage classifier + slow-wave detection are retained for **offline scoring, deep-sleep qualification reporting, and as the validation reference** (see [[biopredictx-alpha2-yasa-viability.md]]). The exact trigger signature and threshold are the clinician sign-off item (Open Decisions #2, #3, #6).
 
 **Requirements addressed.** FR-E1 (connect/configure Athena), FR-E2 (ingest/persist native-resolution + dual timestamps), FR-E3 (fault/quality detection), FR-E5 (signal-quality gate), FR-E6 (feature set + state probabilities), FR-E7 (replay through live interfaces), FR-E8 (versioned shadow recommendations + confidence/reason codes), FR-E10 (time-sync store within tolerance); NFR-E: local real-time, latency/clock-drift measurement, immutable raw retention + reproducible reprocessing, no silent data loss.
 

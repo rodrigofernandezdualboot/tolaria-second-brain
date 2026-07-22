@@ -127,6 +127,13 @@ Full-resolution data stored locally; cloud only for post-night upload/analysis/t
 
 **Relative size:** L (largest raw volume; safety/audit surface larger than the Garmin-first Phase 3).
 
+**Risks (Phase 3).**
+
+- **P3-R1 — Restricted-active safety: a wrong live command reaches a sleeping participant** if the quality gate or lockouts fail. This is the highest-consequence risk once the device is live. *Mitigation: shadow-first rollout; quality gate + lockout/dwell + hard exposure limits + fault→safe-state (therapy OFF) + command acknowledgement + manual override; restricted control only after the Phase 1/2 gate passes.*
+- **P3-R2 — Control logic still "TBD — clinician input required"**, so Phase 3 cannot be fully specified or estimated until sign-off. *Mitigation: obtain clinician sign-off on modes/actions/gates/lockouts before locking Phase 3 scope (Open Decision #3).*
+- **P3-R3 — Data-protection & audit surface is larger than Garmin-first** (raw/processed/state/command/audit tiers, pseudonymous IDs, encryption, least-privilege). Gaps create compliance exposure. *Mitigation: de-identification + full auditability + encryption designed in, not bolted on (FR-E13, NFR-E).*
+- **P3-R4 — Integration risk: the proven pieces don't assemble into a system researchers can safely run.** *Mitigation: end-to-end session rehearsal via the portal on the real device before handoff; fault-path and permission testing as gate criteria.*
+
 ---
 
 ## Later / Study 2 track — EEG-calibrated multimodal autonomic control (not in Alpha 2.0 build)
@@ -186,7 +193,9 @@ Firm numbers are withheld until the Phase 0 spike. Directionally vs the ~$210K /
 6. **"Features vs stages" tension:** Doc 1's direct-EEG-features framing vs Lindsey's "customized sleep-state + before-deep-sleep timing." Reconcile before over-investing in either.
 7. **Scientific caution:** Restiv rotation frequency ≠ EEG slow-wave frequency; do not design the controller to "chase" the EEG frequency — treat as a testable hypothesis. Not all delta power = restorative N3.
 
-## Risks (updated — supersedes/extends the Garmin-first register; see [[biopredictx-alpha2-risks]])
+## Cross-phase risk roll-up (R-prime register)
+
+Master register that the per-phase **Risks** sections above draw on (P1–P3 cite these R' IDs; Phase 0's P0-R1…R3 are new and specific to the spike). Supersedes/extends the Garmin-first register; see [[biopredictx-alpha2-risks]].
 
 | # | Risk | Mitigation |
 | --- | --- | --- |

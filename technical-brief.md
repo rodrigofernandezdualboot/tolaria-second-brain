@@ -1,0 +1,27 @@
+---
+type: Note
+belongs_to: "[[pacific-seafood]]"
+---
+
+# Technical Brief
+
+## Goal. 
+Document what the AS/400 actually does when the three invoice flows arrive through the .NET integration — PGT billing a Pacific location, PGT billing a third party, PGT receiving a freight-carrier invoice — with focus on the resulting A/P and A/R posting behavior. The point is de-risking the D365 migration: surface hidden legacy logic before it bites in testing or after go-live. Because we're pushing for a runnable environment plus code traces, this is an evidence-based approach, not a static reading — which is what lets us claim the output is trustworthy rather than plausible.
+
+## Four anchors that do the heavy lifting.
+
+First, the .NET boundary is the free entry point. That code is legible; it tells us exactly how the AS/400 is invoked and with what parameters, converting "analyze the estate" into "start from these named entry programs."
+
+Second, IBM i describes its own structure deterministically. Before any model touches the code, pull the call graph and data map with native tooling (DSPPGMREF, the DB cross-reference files, DSPFD/DSPDBR, DDS). From the .NET entry points you compute the transitive closure of reachable programs and files — and that set is your scope boundary, derived rather than guessed. It also answers "we can't isolate the code": everything outside the closure is out of scope by construction.
+
+Third, runtime ground truth. On a non-prod box, run the three invoices with database journaling on and injected traces in the code. Journaling captures what data changed (the A/P and A/R postings); the trace captures which path executed and why — branch taken, indicator state, the real value of a reused field at that moment. Trace placement in ROI order: branch/decision points, file-write operations, program entry/exit, reused-field snapshots, and the .NET→RPG handoff with a correlation ID. Write traces to a structured table, not raw TXT, so it's machine-ingestible.
+
+Finally, the grounded extraction and synthesis engine. This is the layer that consumes anchors 1–3 and turns evidence into documented business logic. It takes the entry points and parameters, the call graph and data map, and the journal and trace records as its grounding inputs, then runs the RPG-native engine — Bob for native connect/compile (which is what makes the trace injection feasible), fixed-form→free-form transform as a reading aid, and first-draft explain/document — wrapped by a Dualboot reverse-engineering skill that encodes Artem's eight hard traits (member routing, field reuse, cycle semantics, the integration perimeter) as explicit steps the agent must check rather than flatten. Orchestration runs through Flow, or manually with SMEs in the early passes.
+
+Trust mechanism. The model's job is never "guess what happens" — it's "explain why the journal and trace show this." Any claim that contradicts the runtime evidence is auto-flagged. Every rule carries a confidence label (confirmed / inferred / conflicting / deprecated), divergence between models routes to SME, and SMEs validate before anything is final. Coverage caveat stays explicit: traces only prove the paths the test invoices exercise, so test cases are designed to hit known branches, and unexercised logic is labeled as such.
+
+Tooling and division of labor — internal, not named to the client. Bob is the RPG-native engine: native connect/compile (which is what makes trace injection feasible), fixed-form→free-form transform as a reading aid, and first-draft explain/document. A Dualboot reverse-engineering skill wraps it, encoding Artem's eight hard traits — member routing, field reuse, cycle semantics, the integration perimeter — as explicit steps the agent must check rather than flatten. Orchestrate via Flow (or manually with SMEs early). The IP the client pays for is the methodology and the validation loop, not Bob. Per Andrew and Tony: the SOW names no specific tool, and 3PO enters only at the end as the spec/packaging surface for validated output, if Pacific wants it.
+
+Deliverables, per invoice flow. Current-state narrative from ingress to final posting; feature/user-story/use-case docs linked to evidence; ERD segments for the files and fields in the path; Mermaid workflow diagrams; a business-rule catalog with confidence and validation status; and a gap view — observed behavior already covered by Pacific's requirements vs. hidden legacy logic not yet in ERP planning — with findings sorted retain / review / retire.
+
+What to lock in the next client call. The two that gate everything: confirmed non-prod environment we can run and instrument, and read/write/compile access for the trace injection. Then: the .NET integration mechanism (program call, stored proc, data queue, file drop); read-only source plus all /COPY copybooks and correct target release so programs compile cleanly; their existing swim lanes/requirements as grounding for the gap view; representative invoice cases per flow; and the SME roster (AS/400 technical, integration/BI, PGT finance). Data-governance point still open: whether Bob transmits source outside Pacific's environment — needs answering before it's in the stack.

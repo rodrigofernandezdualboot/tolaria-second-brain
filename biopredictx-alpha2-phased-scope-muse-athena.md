@@ -10,6 +10,7 @@ related_to:
   - "[[biopredictx-alpha2-yasa-viability]]"
   - "[[biopredictx-fdc-alpha-2-0]]"
 status: Draft
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Phased Implementation Proposal v2 (Muse Athena EEG-First)

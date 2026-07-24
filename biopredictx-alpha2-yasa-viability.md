@@ -7,6 +7,7 @@ related_to:
   - "[[biopredictx-alpha2-sleep-algorithm-selection]]"
   - "[[biopredictx-alpha2-huggingface-model-approach]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — YASA Viability Assessment (EEG Sleep Staging)

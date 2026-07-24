@@ -8,6 +8,7 @@ related_to:
   - "[[biopredictx-alpha2-huggingface-model-approach]]"
   - "[[biopredictx-fdc-alpha-2-0]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Muse Athena EEG Pivot (Handoff, Overview & Wearable Assessment)

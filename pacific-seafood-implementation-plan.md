@@ -6,7 +6,7 @@ related_to: "[[technical-intake-brief-pacific-seafood-as-400-invoice-flow-discov
 
 # Pacific Seafood - Implementation plan
 
-Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Four stages (formerly "anchors"): three produce evidence, the fourth converts evidence into documented business logic. Staffing constraint baked in: **no in-house Report Program Generator (RPG) expert** — de-risked through intensive artificial intelligence (AI) use, a named client-side validator, and an on-call RPG contractor as safety valve.
+Execution plan for the AS/400 invoice-flow discovery POC. Four stages (formerly "anchors"): three produce evidence, the fourth converts evidence into documented business logic. Staffing constraint baked in: **no in-house RPG expert** — de-risked through intensive AI use, a named client-side validator, and an on-call RPG contractor as safety valve.
 
 ## Team
 
@@ -14,10 +14,10 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 |---|---|---|---|
 | AI/agent engineer | Senior | Full-time | Stages 2–4: AI guidance, skill, orchestration, reconciliation |
 | .NET engineer | Mid/Senior | Part-time | Stage 1, correlation ID in Stage 3 |
-| Tooling/quality assurance (QA) engineer | Mid | Full-time | Stage 2 scripting, Stage 3 test design & execution |
-| Business analyst (BA) | Mid/Senior | Part-time → full in Stage 4 | ERP-relevant artifacts, gap view, workshop prep |
+| Tooling/QA engineer | Mid | Full-time | Stage 2 scripting, Stage 3 test design & execution |
+| Business analyst | Mid/Senior | Part-time → full in Stage 4 | ERP-relevant artifacts, gap view, workshop prep |
 | Engagement lead | Senior | Part-time | Governance, validation cadence, client escalation |
-| Client AS/400 subject matter expert (SME) (Ryan's team) | — | **Named, committed h/week — gating input** | Validation + unblocking (compiles, library lists, member routing) |
+| Client AS/400 SME (Ryan's team) | — | **Named, committed h/week — gating input** | Validation + unblocking (compiles, library lists, member routing) |
 | RPG contractor | Senior | On-call, ~10–20h total | Tie-breaks when AI and client SME disagree |
 
 ## Stage 1 — .NET entry points
@@ -29,7 +29,7 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 - Inventory the .NET integration code for the three invoice flows.
 - Identify the invocation mechanism into the AS/400 (program call, stored procedure, data queue, file drop).
 - Extract named entry programs and parameter payloads per flow; document payload schemas.
-- Map Structured Query Language (SQL) artifacts participating in the invoice path.
+- Map SQL artifacts participating in the invoice path.
 
 **Risks:**
 
@@ -42,10 +42,10 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 
 **Tasks:**
 
-- Run native extraction: `DSPPGMREF`, `DSPFD`/`DSPDBR`, Data Description Specifications (DDS) layouts, database cross-reference files.
+- Run native extraction: `DSPPGMREF`, `DSPFD`/`DSPDBR`, DDS layouts, DB cross-reference files.
 - Script the call graph and compute the reachable set from Stage 1 entry points.
 - Produce the branch inventory (feeds Stage 3 test design).
-- Analyze Control Language (CL) for library-list and member-routing context.
+- Analyze CL for library-list and member-routing context.
 - Snapshot the analyzed library set (codebase is live; drift control).
 - **Client SME review:** one bounded session to sanity-check the reachable set, especially member routing.
 
@@ -62,26 +62,26 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 
 - Design the trace physical file (correlation ID, timestamp, job, program, tag, field, value) and a single logging subprocedure in a service program.
 - Pick injection points from the branch inventory: branch/decision points, file writes, program entry/exit, reused-field snapshots, .NET→RPG handoff.
-- AI writes the instrumentation (one-line calls only); **client SME code-reviews the diff before any compile**; Compile in non-prod.
+- AI writes the instrumentation (one-line calls only); **client SME code-reviews the diff before any compile**; Bob-assisted compile in non-prod.
 - Native-trace fallback (`STRDBG`/`TRCJOB`) for programs that won't compile or that the client won't let us touch.
-- Start journaling (`STRJRNPF`) on accounts payable (A/P), accounts receivable (A/R), and relevant master files.
+- Start journaling (`STRJRNPF`) on A/P, A/R, and relevant master files.
 - Design test invoices per flow with PGT finance SMEs, targeting known branches including error paths.
 - Execute runs with correlation IDs; harvest journal receivers + trace rows into one evidence bundle per invoice.
 
 **Risks:**
 
-- Non-prod environment or compile access not granted → stage collapses, approach degrades to static-only. **Gating; resolve before statement of work (SOW) pricing.**
+- Non-prod environment or compile access not granted → stage collapses, approach degrades to static-only. **Gating; resolve before SOW pricing.**
 - Recompile failures (missing `/COPY`, target-release mismatch). Mitigation: native-trace fallback per program.
 - Coverage illusion: traces only prove executed paths. Mitigation: test design against branch inventory; unexercised logic ships labeled `inferred`.
 - Client discomfort with source modification even in non-prod. Mitigation: native-trace-first posture, injection only where field values are essential.
 
 ## Stage 4 — Extraction & synthesis
 
-**Goal:** Turn evidence into validated business-logic documentation relevant to the enterprise resource planning (ERP) program. The model never guesses; it explains what the evidence shows.
+**Goal:** Turn evidence into validated, ERP-relevant business-logic documentation. The model never guesses; it explains what the evidence shows.
 
 **Tasks:**
 
-- Build the Dualboot reverse-engineering (RE) skill encoding the eight hard traits (member routing, field reuse, RPG-cycle semantics, integration perimeter, etc.) as mandatory checks.
+- Build the Dualboot reverse-engineering skill encoding the eight hard traits (member routing, field reuse, RPG-cycle semantics, integration perimeter, etc.) as mandatory checks.
 - Stand up engine + Flow orchestration; ingest the evidence store (source, structure, traces, journals, Pacific's prior docs).
 - Run extraction per flow; fixed-form→free-form transform as reading aid (analysis-only).
 - Reconcile every claim against trace/journal; auto-flag contradictions.
@@ -89,7 +89,7 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 - Confidence labels on every rule: confirmed / inferred / conflicting / deprecated.
 - SME validation workshops in small batches on fixed cadence (no big-bang review).
 - RPG contractor tie-break on AI-vs-SME disagreements.
-- BA converts validated logic into deliverables: narratives, entity-relationship diagrams (ERDs), Mermaid diagrams, business-rule catalog, gap view (retain / review / retire).
+- BA converts validated logic into deliverables: narratives, ERDs, Mermaid diagrams, business-rule catalog, gap view (retain / review / retire).
 
 **Risks:**
 
@@ -118,7 +118,7 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 
 ### Stage 2 (Tooling engineer + AI engineer, ~1–2 weeks)
 
-1. Run `DSPPGMREF *ALL` to outfiles; extract database cross-reference (`QSYS` XREF files) and `DSPFD`/`DSPDBR` for candidate libraries.
+1. Run `DSPPGMREF *ALL` to outfiles; extract DB cross-reference (`QSYS` XREF files) and `DSPFD`/`DSPDBR` for candidate libraries.
 2. Load outputs into SQL/Python; build directed graph program→program and program→file.
 3. Seed with Stage 1 entry programs; compute transitive closure → reachable set.
 4. Extract DDS for every file in the set; build field/record-layout catalog.
@@ -131,7 +131,7 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 
 1. Create trace physical file and `TraceLog` service program; compile.
 2. AI generates injection diffs per program (one-line calls at points from the branch inventory); batch per program.
-3. Client SME reviews each diff batch; approved batches compiled into non-prod.
+3. Client SME reviews each diff batch; approved batches compiled via Bob into non-prod.
 4. Programs that fail compile or review → register for native tracing (`STRDBG`/`TRCJOB`).
 5. .NET engineer threads correlation ID from integration call into entry parameters (or trace-side correlation if payload can't change).
 6. Start `STRJRNPF` on A/P, A/R, and master files in the reachable set.

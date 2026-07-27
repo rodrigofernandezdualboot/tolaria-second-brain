@@ -3,21 +3,20 @@ type: Note
 belongs_to: "[[pacific-seafood]]"
 related_to: "[[technical-intake-brief-pacific-seafood-as-400-invoice-flow-discovery-poc]]"
 ---
-
 # Pacific Seafood - Implementation plan
 
-Execution plan for the AS/400 invoice-flow discovery POC. Four stages (formerly "anchors"): three produce evidence, the fourth converts evidence into documented business logic. Staffing constraint baked in: **no in-house RPG expert** — de-risked through intensive AI use, a named client-side validator, and an on-call RPG contractor as safety valve.
+Execution plan for the AS/400 invoice-flow discovery POC. Four stages: three produce evidence, the fourth converts evidence into documented business logic. Staffing constraint baked in: **no in-house RPG expert** — de-risked through intensive AI use, a named client-side validator, and an on-call RPG contractor as safety valve.
 
 ## Team
 
 | Role | Seniority | Allocation | Covers |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | AI/agent engineer | Senior | Full-time | Stages 2–4: AI guidance, skill, orchestration, reconciliation |
 | .NET engineer | Mid/Senior | Part-time | Stage 1, correlation ID in Stage 3 |
 | Tooling/QA engineer | Mid | Full-time | Stage 2 scripting, Stage 3 test design & execution |
 | Business analyst | Mid/Senior | Part-time → full in Stage 4 | ERP-relevant artifacts, gap view, workshop prep |
 | Engagement lead | Senior | Part-time | Governance, validation cadence, client escalation |
-| Client AS/400 SME (Ryan's team) | — | **Named, committed h/week — gating input** | Validation + unblocking (compiles, library lists, member routing) |
+| Client AS/400 SME | — | **Named, committed h/week — gating input** | Validation + unblocking (compiles, library lists, member routing) |
 | RPG contractor | Senior | On-call, ~10–20h total | Tie-breaks when AI and client SME disagree |
 
 ## Stage 1 — .NET entry points

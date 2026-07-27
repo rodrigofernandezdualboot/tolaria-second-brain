@@ -62,7 +62,7 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 
 - Design the trace physical file (correlation ID, timestamp, job, program, tag, field, value) and a single logging subprocedure in a service program.
 - Pick injection points from the branch inventory: branch/decision points, file writes, program entry/exit, reused-field snapshots, .NET→RPG handoff.
-- AI writes the instrumentation (one-line calls only); **client SME code-reviews the diff before any compile**; Bob-assisted compile in non-prod.
+- AI writes the instrumentation (one-line calls only); **client SME code-reviews the diff before any compile**; Compile in non-prod.
 - Native-trace fallback (`STRDBG`/`TRCJOB`) for programs that won't compile or that the client won't let us touch.
 - Start journaling (`STRJRNPF`) on accounts payable (A/P), accounts receivable (A/R), and relevant master files.
 - Design test invoices per flow with PGT finance SMEs, targeting known branches including error paths.
@@ -131,7 +131,7 @@ Execution plan for the AS/400 invoice-flow discovery proof of concept (POC). Fou
 
 1. Create trace physical file and `TraceLog` service program; compile.
 2. AI generates injection diffs per program (one-line calls at points from the branch inventory); batch per program.
-3. Client SME reviews each diff batch; approved batches compiled via Bob into non-prod.
+3. Client SME reviews each diff batch; approved batches compiled into non-prod.
 4. Programs that fail compile or review → register for native tracing (`STRDBG`/`TRCJOB`).
 5. .NET engineer threads correlation ID from integration call into entry parameters (or trace-side correlation if payload can't change).
 6. Start `STRJRNPF` on A/P, A/R, and master files in the reachable set.

@@ -1,5 +1,6 @@
 ---
 type: Project
+_organized: true
 ---
 # Run with Hal
 

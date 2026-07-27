@@ -3,6 +3,7 @@ type: Note
 related_to: "[[run-with-hal]]"
 status: Active
 url: https://apps.apple.com/us/app/run-with-hal/id1437166081
+_organized: true
 ---
 
 # Run with Hal — App Store Review Theme & Sentiment Analysis

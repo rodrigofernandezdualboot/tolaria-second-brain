@@ -9,6 +9,7 @@ related_to:
   - "[[biopredictx-alpha2-huggingface-model-approach]]"
   - "[[biopredictx-alpha2-yasa-viability]]"
   - "[[biopredictx-fdc-alpha-2-0]]"
+  - "[[biopredictx-alpha2-neurologist-responsibilities]]"
 status: Draft
 _organized: true
 ---

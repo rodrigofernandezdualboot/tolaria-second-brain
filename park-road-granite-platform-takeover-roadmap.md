@@ -3,7 +3,6 @@ type: Note
 status: Draft
 related_to: "[[park-road]]"
 ---
-
 # Park Road / Granite — Platform Takeover Roadmap & Risk Register
 
 **Audience:** Dualboot internal. Candid about delivery risk to us.
@@ -27,17 +26,17 @@ The good news is real: the Python AI/ML stack (BioBERT, XGBoost, Groq-hosted LLM
 
 This is the substance of our point of view. EY-P's report is competent, but four things in it would hurt us if we signed to them.
 
-**2.1 The business logic refactor estimate is not credible as a commitment.**
-EY-P sizes business logic refactoring at **1,600–2,200 hours / ~$140k–$190k** — roughly one person-year — derived from "contractor scrum team effort." That is to extract the operating logic of a platform running ~$9.5m of revenue, ~100 customers, and the full ARC claim lifecycle out of the database. We should treat that figure as a **floor, not an estimate**, and refuse to price it until Phase 0 produces a stored-procedure inventory (object count, lines of T-SQL, cyclomatic complexity, trigger fan-out). `[ASSUMPTION]` Our expectation is a materially larger number; we should range-check against internal comparables rather than inventing one here.
+**2.1 The business logic refactor estimate is not credible as a commitment.
+**EY-P sizes business logic refactoring at** 1,600–2,200 hours / ~$140k–$190k **— roughly one person-year — derived from "contractor scrum team effort." That is to extract the operating logic of a platform running ~$9.5m of revenue, ~100 customers, and the full ARC claim lifecycle out of the database. We should treat that figure as a** floor, not an estimate**, and refuse to price it until Phase 0 produces a stored-procedure inventory (object count, lines of T-SQL, cyclomatic complexity, trigger fan-out). `[ASSUMPTION]` Our expectation is a materially larger number; we should range-check against internal comparables rather than inventing one here.
 
-**2.2 EY-P mis-sequenced the enabling investment.**
-CI/CD and automated testing sit in EY-P's "Process & SDLC enhancements" bucket at **$15k–$25k each**, described as improvements that "reduce delivery friction." They are not enhancements. **A characterization test harness is a hard prerequisite of the XL refactor.** You cannot safely move logic out of stored procedures with no behavioral oracle to prove equivalence. Any plan that runs the refactor before the harness is a plan to break claims processing for 100 customers. This reordering is the single most important correction we make to their roadmap.
+**2.2 EY-P mis-sequenced the enabling investment.
+**CI/CD and automated testing sit in EY-P's "Process & SDLC enhancements" bucket at** $15k–$25k each**, described as improvements that "reduce delivery friction." They are not enhancements.** A characterization test harness is a hard prerequisite of the XL refactor.** You cannot safely move logic out of stored procedures with no behavioral oracle to prove equivalence. Any plan that runs the refactor before the harness is a plan to break claims processing for 100 customers. This reordering is the single most important correction we make to their roadmap.
 
-**2.3 The Windows Server 2016 deadline is much closer than "Low priority / phased."**
-EY-P rates the OS upgrade **Low** priority with a "~3–12 months (phased)" timeline and leaves it unsized. Verified against Microsoft lifecycle data: **Windows Server 2016 extended support ends 12 January 2027** and **SQL Server 2017 extended support ends 12 October 2027**. As of today (29 Jul 2026) that is **~5.5 months** and **~14.5 months**. EY-P's tech debt plan is **22–28 months**. Both platform floors go unsupported well before the modernization they are supposed to survive. For a business holding ~1m PHI records, running unsupported OS and DB is a HIPAA and cyber-insurance argument, not just a patching inconvenience. This is a compound 2027 wall and it should be Phase 1, not "phased, low."
+**2.3 The Windows Server 2016 deadline is much closer than "Low priority / phased."
+**EY-P rates the OS upgrade** Low **priority with a "~3–12 months (phased)" timeline and leaves it unsized. Verified against Microsoft lifecycle data:** Windows Server 2016 extended support ends 12 January 2027 **and** SQL Server 2017 extended support ends 12 October 2027**. As of today (29 Jul 2026) that is** ~5.5 months **and** ~14.5 months**. EY-P's tech debt plan is** 22–28 months**. Both platform floors go unsupported well before the modernization they are supposed to survive. For a business holding ~1m PHI records, running unsupported OS and DB is a HIPAA and cyber-insurance argument, not just a patching inconvenience. This is a compound 2027 wall and it should be Phase 1, not "phased, low."
 
-**2.4 The recurring data segregation failure is unsized and is probably a schema problem.**
-Cross-client data exposure has now happened **three times** — 2022, June 2024 (571 non-client accounts), January 2026 (174 patients' SSN/DOB/contact plus 11 misattached medical records). EY-P's own description of the 2026 event names the cause: *"account numbering collisions and SFTP processing logic."* Account identity is not reliably client-scoped. That is a data model defect touching record identity, not an SFTP script bug — which is why patching it twice did not hold. Nobody has sized fixing it, and the regulatory and contractual exposure follows whoever operates the platform. **If we take over operations, we inherit the fourth occurrence.**
+**2.4 The recurring data segregation failure is unsized and is probably a schema problem.
+**Cross-client data exposure has now happened** three times** — 2022, June 2024 (571 non-client accounts), January 2026 (174 patients' SSN/DOB/contact plus 11 misattached medical records). EY-P's own description of the 2026 event names the cause: *"account numbering collisions and SFTP processing logic."* Account identity is not reliably client-scoped. That is a data model defect touching record identity, not an SFTP script bug — which is why patching it twice did not hold. Nobody has sized fixing it, and the regulatory and contractual exposure follows whoever operates the platform. **If we take over operations, we inherit the fourth occurrence.**
 
 ---
 
@@ -47,8 +46,8 @@ Cross-client data exposure has now happened **three times** — 2022, June 2024 
 
 Cheap, fast, and it converts most of our unpriced risk into priced risk. We should push hard to run as much of this as access allows *before* signing a delivery scope.
 
-| # | Task | Why it exists |
-|---|---|---|
+| \# | Task | Why it exists |
+| --- | --- | --- |
 | 0.1 | Clean-room build validation — clone the repo, build ProWeb from scratch, deploy to a throwaway environment | With no CI, nobody has proof the repository is complete and buildable. This is the single highest-information test available to us. |
 | 0.2 | Static dependency map — every stored procedure, trigger, view, SQL Agent job, linked server, and cross-database reference | Produces the object inventory that lets us size 2.1 honestly, and exposes the trigger fan-out. |
 | 0.3 | Behavioral baseline capture — production query/workflow logging to build the regression oracle | The characterization harness needs recorded real inputs and outputs. Start collecting on day 1; it is calendar-bound, not effort-bound. |
@@ -64,8 +63,8 @@ Cheap, fast, and it converts most of our unpriced risk into priced risk. We shou
 
 ### Phase 1 — Make change safe and clear the 2027 wall (target 4–7 months, largely parallel)
 
-| # | Task | Notes |
-|---|---|---|
+| \# | Task | Notes |
+| --- | --- | --- |
 | 1.1 | Consolidate source control to Azure DevOps; branch policies; **revoke direct-to-production push for third-party developers** | Governance fix and a named cyber gap. Resolve the TFS-vs-Azure-DevOps contradiction (§6) first. |
 | 1.2 | Reproducible build → CI → automated deploy to lower environments | Sequenced deliberately: build reproducibility precedes pipeline automation. |
 | 1.3 | **Characterization / golden-master test harness over the stored procedure surface** | The enabling investment. Gates everything in Phase 2A/2B. Sized off 0.2 and 0.3, not guessed. |
@@ -87,8 +86,8 @@ Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory
 
 #### Path A — In-place modernization
 
-| # | Task |
-|---|---|
+| \# | Task |
+| --- | --- |
 | A1 | Domain-by-domain logic extraction from stored procedures into a .NET service layer, behind the 1.3 harness |
 | A2 | Trigger elimination — convert implicit DML side effects into explicit service calls |
 | A3 | WCF → REST replacement (insurance and fax workflows) |
@@ -100,8 +99,8 @@ Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory
 
 #### Path B — Strangler fig
 
-| # | Task |
-|---|---|
+| \# | Task |
+| --- | --- |
 | B1 | API façade / gateway in front of ProWeb; all new traffic routed through it |
 | B2 | New service layer and domain model — **start with Discovery** (2% of volume, advisory-only, client retains billing and AR: the lowest blast radius in the portfolio) |
 | B3 | CDC / dual-write and read-model separation; ProWeb DB stays system of record initially |
@@ -112,8 +111,8 @@ Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory
 
 ### Phase 3 — Automation and AI enablement
 
-| # | Task |
-|---|---|
+| \# | Task |
+| --- | --- |
 | 3.1 | Triage the **60% unplanned** automation opportunity by ProWeb dependency and by automation *class* (see R12) |
 | 3.2 | Ship off-platform automation now — the Python/Groq pipeline needs no ProWeb change |
 | 3.3 | Intelligent work routing; expected pay modelling; variance detection |
@@ -122,8 +121,8 @@ Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory
 
 ### Phase 4 — Data platform
 
-| # | Task |
-|---|---|
+| \# | Task |
+| --- | --- |
 | 4.1 | Analytical separation via CDC into a warehouse |
 | 4.2 | Migrate Power BI reporting off OLTP (unblocks refactor freedom retroactively) |
 | 4.3 | Feature store for the ML pipeline |
@@ -139,13 +138,13 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 0
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 0.1 Build validation | Repo is incomplete — missing config, undocumented manual deploy steps, binaries not in source control, a build that only works on one contractor's machine | **H×H** | Any "ask Droit for that file" during the attempt | Do this in week 1. A failed clean-room build is a go/no-go input, not a defect to fix later. Budget for reconstruction. |
 | 0.2 Dependency map | Tooling cannot resolve dynamic SQL. Logic assembled at runtime in strings is invisible to static analysis | **H×M** | High `EXEC(@sql)` / `sp_executesql` density | Combine static analysis with runtime query capture from 0.3. Explicitly report coverage as a percentage — never imply the map is complete. |
 | 0.3 Behavioral baseline | Capture window misses month-end, quarter-end, and payer-cycle edge cases; harness is built on a partial picture | **H×M** | Coverage gaps against the p.18 workflow map | Capture must span at least one full month-end. Start day 1 — this is calendar time we cannot compress later. |
-| 0.4 Asset inventory | Still not provided, or SQL Server turns out older than 2017 / a lower edition than assumed | M×M | Repeated deferral, as happened with EY | Escalate as a close condition. If SQL is pre-2017, 1.10 timeline and cloud options both change. |
+| 0.4 Asset inventory | Still not provided, or SQL Server turns out to be older than 2017 / a lower edition than assumed | M×M | Repeated deferral, as happened with EY | Escalate as a close condition. If SQL is pre-2017, 1.10 timeline and cloud options both change. |
 | 0.5 DR test | The test fails, or is refused because nobody will authorize a live failover | **M×H** | Reluctance to schedule a window | If a real failover is refused, that refusal is itself the finding — report it to Park Road. Do not accept untested RPO/RTO as fact. |
-| 0.6 PHI / BAA | No BAA with Groq covering medical records; offshore access to production PHI is unpapered | **M×H** | Vague answers on where inference runs | Legal review before we touch anything. If a BAA gap exists it is a pre-close issue for Park Road, not our remediation item. |
+| 0.6 PHI / BAA | No BAA with Groq covering medical records; offshore access to production PHI is unpapered | **M×H** | Vague answers on where inference runs | Legal review before we touch anything. If a BAA gap exists, it is a pre-close issue for Park Road, not our remediation item. |
 | 0.7 Segregation RCA | Root cause is record identity, not the SFTP script — implying a schema change across the core data model | **M×H** | Account keys not client-scoped; collisions possible by construction | Size two remediation options (compensating controls vs. identity re-model) and let the gate in Phase 2 consume the answer. |
 | 0.8 Licenses | Kendo UI or another commercial component has a change-of-control or per-seat restriction that bites post-close | M×M | Missing license documentation in the VDR | Route to Park Road's legal workstream now, while it is still their cost. |
 | 0.9 Reporting map | Operators depend on reports nobody documented; we discover coupling by breaking it | **H×M** | Power BI datasets querying tables directly rather than views | Treat every OLTP object touched by a report as a frozen interface until Phase 4.2. |
@@ -154,7 +153,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 1
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 1.1 Source control | Migration loses history, or two sources of truth run in parallel and diverge | M×M | The TFS/ADO contradiction in §6 goes unresolved | Resolve current state first. Freeze, migrate, verify, cut over — no dual-write period. |
 | 1.2 CI | Build automated but deploy still manual and business-coordinated, so release risk is unchanged | M×M | "We'll wire deploy up later" | Definition of done is deploy-to-lower-environment, not green build. |
 | 1.3 **Test harness** | Coverage is thinner than believed. Team gains confidence to refactor that the harness does not justify | **H×H** | Coverage measured in tests written rather than behaviors pinned | Coverage expressed per business workflow, not per procedure. No domain enters Phase 2 extraction until its behaviors are pinned. **This is the risk that decides whether the programme succeeds.** |
@@ -169,7 +168,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 2 — Path A (in-place)
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | A1 Logic extraction | Effort lands at a multiple of EY-P's 1,600–2,200 hours; we are anchored to a number we did not produce | **H×H** | Any commercial commitment made before 0.2 | Price per domain after inventory. Contract per domain, not for the whole extraction. Never quote EY-P's number back as ours. |
 | A1 | Extraction proceeds in parallel with contractor feature work, and the two collide continuously | **H×M** | Multiple teams on parallel code paths — EY-P already flags this as current practice | Domain ownership boundaries and a change freeze per domain under active extraction. |
 | A2 **Triggers** | Triggers fire invisible side effects. New service-layer writes bypass or double-fire them, corrupting claim state | **H×H** | Trigger count and fan-out from 0.2 | **Treat triggers as the top technical hazard, above stored procedures.** Map exhaustively, convert to explicit calls before extracting the procedures that depend on them. Silent data corruption in a billing system is the worst failure mode available here. |
@@ -181,7 +180,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 2 — Path B (strangler)
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | B1 Façade | Façade becomes a second passthrough layer with logic still in the database — new architecture diagram, same problem | **M×H** | No logic actually moved after the first domain | Success criterion is logic relocated, not traffic proxied. |
 | B2 First domain | Discovery is chosen for low blast radius but is too small to prove the pattern, so the second domain re-learns everything | M×M | First domain ships with no reusable scaffolding | Explicitly budget the first domain as pattern-establishing, and say so commercially. |
 | B3 CDC / dual-write | Dual-write drift between old and new stores. Reconciliation becomes permanent operational cost | **H×H** | No automated reconciliation from day 1 | Single writer per entity, always. If dual-write is unavoidable, ship reconciliation with it, not after. |
@@ -191,7 +190,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 3 — Automation and AI
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 3.1 Triage | The unplanned 60% is assumed to have the same unit economics as the planned 40% | **H×M** | A single blended savings figure | Re-baseline the ~$620k / ~$4.61-per-claim opportunity ourselves before committing to it. |
 | 3.2 Off-platform | Groq dependency: single provider, hosted models (Llama 4 Scout, gpt-oss-120b) that can be deprecated or repriced | **M×M** | No provider abstraction in the Python codebase | Abstract the inference interface. Cheap now, and it is also a margin-protection measure. |
 | 3.3 Routing / expected pay | Models trained on historical outcomes encode current process bias; measured lift fails to appear | M×M | No holdout or champion/challenger design | Insist on holdout groups. Do not let "AI-driven" substitute for measured lift. |
@@ -201,7 +200,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 4 — Data platform
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 4.1 Warehouse | Built before reporting migrates, so it becomes a parallel unused asset | M×M | No report migration plan | Fund 4.1 and 4.2 as one workstream. |
 | 4.2 Reporting migration | Operators resist losing familiar reports; OLTP coupling persists and keeps constraining Phase 2 | **M×H** | Report owners unidentified | Use the 0.9 map. Migrate report-by-report with the owner named. |
 
@@ -211,8 +210,8 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 
 Ranked by expected cost to Dualboot, not by technical interest.
 
-| # | Risk | Why it tops the list |
-|---|---|---|
+| \# | Risk | Why it tops the list |
+| --- | --- | --- |
 | **R1** | We anchor commercially to EY-P's 1,600–2,200h business logic estimate | Direct margin exposure on the largest item in the programme. Purely self-inflicted and entirely avoidable. |
 | **R2** | Refactoring begins before the characterization harness is real | Silent data corruption in a claims platform serving ~100 customers. Existential to the engagement and to the client relationship. |
 | **R3** | Triggers cause invisible side effects during extraction | Same failure mode as R2, arriving through a path EY-P never named. |
@@ -272,4 +271,4 @@ Non-negotiable inputs to a fixed-price conversation:
 
 ## Verification note
 
-Microsoft lifecycle dates in §2.3 and R6 were verified against Microsoft Learn on 29 Jul 2026: [SQL Server 2017](https://learn.microsoft.com/en-us/lifecycle/products/sql-server-2017) extended end 2027-10-12; [Windows Server 2016](https://learn.microsoft.com/en-us/lifecycle/products/windows-server-2016) extended end 2027-01-12. All Granite-specific figures trace to the EY-P report at the page numbers cited in [[park-road]]. Every inference is tagged `[ASSUMPTION]`; no technical detail about Granite's environment has been supplied where the report is silent.
+Microsoft lifecycle dates in §2.3 and R6 were verified against Microsoft Learn on 29 Jul 2026: SQL Server 2017 extended end 2027-10-12; Windows Server 2016 extended end 2027-01-12. All Granite-specific figures trace to the EY-P report at the page numbers cited in [[park-road]]. Every inference is tagged `[ASSUMPTION]`; no technical detail about Granite's environment has been supplied where the report is silent.

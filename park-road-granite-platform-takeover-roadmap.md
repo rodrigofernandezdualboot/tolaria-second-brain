@@ -3,6 +3,7 @@ type: Note
 status: Draft
 related_to: "[[park-road]]"
 ---
+
 # Park Road / Granite — Platform Takeover Roadmap & Risk Register
 
 **Audience:** Dualboot internal. Candid about delivery risk to us.
@@ -24,19 +25,24 @@ The good news is real: the Python AI/ML stack (BioBERT, XGBoost, Groq-hosted LLM
 
 ## 2. Where we disagree with EY-P
 
-This is the substance of our point of view. EY-P's report is competent, but four things in it would hurt us if we signed to them.
+This is the substance of our point of view. EY-P's report is competent, but five things in it would hurt us if we signed to them.
 
-**2.1 The business logic refactor estimate is not credible as a commitment.
-**EY-P sizes business logic refactoring at** 1,600–2,200 hours / ~$140k–$190k **— roughly one person-year — derived from "contractor scrum team effort." That is to extract the operating logic of a platform running ~$9.5m of revenue, ~100 customers, and the full ARC claim lifecycle out of the database. We should treat that figure as a** floor, not an estimate**, and refuse to price it until Phase 0 produces a stored-procedure inventory (object count, lines of T-SQL, cyclomatic complexity, trigger fan-out). `[ASSUMPTION]` Our expectation is a materially larger number; we should range-check against internal comparables rather than inventing one here.
+**2.1 The business logic refactor estimate is not credible as a commitment.**
+EY-P sizes business logic refactoring at **1,600–2,200 hours / ~$140k–$190k** — roughly one person-year — derived from "contractor scrum team effort." That is to extract the operating logic of a platform running ~$9.5m of revenue, ~100 customers, and the full ARC claim lifecycle out of the database. We should treat that figure as a **floor, not an estimate**, and refuse to price it until Phase 0 produces a stored-procedure inventory (object count, lines of T-SQL, cyclomatic complexity, trigger fan-out). `[ASSUMPTION]` Our expectation is a materially larger number; we should range-check against internal comparables rather than inventing one here.
 
-**2.2 EY-P mis-sequenced the enabling investment.
-**CI/CD and automated testing sit in EY-P's "Process & SDLC enhancements" bucket at** $15k–$25k each**, described as improvements that "reduce delivery friction." They are not enhancements.** A characterization test harness is a hard prerequisite of the XL refactor.** You cannot safely move logic out of stored procedures with no behavioral oracle to prove equivalence. Any plan that runs the refactor before the harness is a plan to break claims processing for 100 customers. This reordering is the single most important correction we make to their roadmap.
+**2.2 EY-P mis-sequenced the enabling investment.**
+CI/CD and automated testing sit in EY-P's "Process & SDLC enhancements" bucket at **$15k–$25k each**, described as improvements that "reduce delivery friction." They are not enhancements. **A characterization test harness is a hard prerequisite of the XL refactor.** You cannot safely move logic out of stored procedures with no behavioral oracle to prove equivalence. Any plan that runs the refactor before the harness is a plan to break claims processing for 100 customers. This reordering is the single most important correction we make to their roadmap.
 
-**2.3 The Windows Server 2016 deadline is much closer than "Low priority / phased."
-**EY-P rates the OS upgrade** Low **priority with a "~3–12 months (phased)" timeline and leaves it unsized. Verified against Microsoft lifecycle data:** Windows Server 2016 extended support ends 12 January 2027 **and** SQL Server 2017 extended support ends 12 October 2027**. As of today (29 Jul 2026) that is** ~5.5 months **and** ~14.5 months**. EY-P's tech debt plan is** 22–28 months**. Both platform floors go unsupported well before the modernization they are supposed to survive. For a business holding ~1m PHI records, running unsupported OS and DB is a HIPAA and cyber-insurance argument, not just a patching inconvenience. This is a compound 2027 wall and it should be Phase 1, not "phased, low."
+**2.3 The Windows Server 2016 deadline is much closer than "Low priority / phased."**
+EY-P rates the OS upgrade **Low** priority with a "~3–12 months (phased)" timeline and leaves it unsized. Verified against Microsoft lifecycle data: **Windows Server 2016 extended support ends 12 January 2027** and **SQL Server 2017 extended support ends 12 October 2027**. As of today (29 Jul 2026) that is **~5.5 months** and **~14.5 months**. EY-P's tech debt plan is **22–28 months**. Both platform floors go unsupported well before the modernization they are supposed to survive. For a business holding ~1m PHI records, running unsupported OS and DB is a HIPAA and cyber-insurance argument, not just a patching inconvenience. This is a compound 2027 wall and it should be Phase 1, not "phased, low."
 
-**2.4 The recurring data segregation failure is unsized and is probably a schema problem.
-**Cross-client data exposure has now happened** three times** — 2022, June 2024 (571 non-client accounts), January 2026 (174 patients' SSN/DOB/contact plus 11 misattached medical records). EY-P's own description of the 2026 event names the cause: *"account numbering collisions and SFTP processing logic."* Account identity is not reliably client-scoped. That is a data model defect touching record identity, not an SFTP script bug — which is why patching it twice did not hold. Nobody has sized fixing it, and the regulatory and contractual exposure follows whoever operates the platform. **If we take over operations, we inherit the fourth occurrence.**
+**2.4 The recurring data segregation failure is unsized and is probably a schema problem.**
+Cross-client data exposure has now happened **three times** — 2022, June 2024 (571 non-client accounts), January 2026 (174 patients' SSN/DOB/contact plus 11 misattached medical records). EY-P's own description of the 2026 event names the cause: *"account numbering collisions and SFTP processing logic."* Account identity is not reliably client-scoped. That is a data model defect touching record identity, not an SFTP script bug — which is why patching it twice did not hold. Nobody has sized fixing it, and the regulatory and contractual exposure follows whoever operates the platform. **If we take over operations, we inherit the fourth occurrence.**
+
+**2.5 "Migrating to Azure SQL" is not a decision — it is two very different decisions.**
+EY-P frames the database path as "either upgrading to a supported SQL Server version or migrating to Azure SQL" (p.25). *Azure SQL* is not one product. Azure SQL **Database** is PaaS with instance-level features removed; Azure SQL **Managed Instance** preserves them. Microsoft's own [migration overview](https://learn.microsoft.com/en-us/data-migration/sql-server/database/overview) presents the loss of instance-scoped dependencies as a *benefit* — "you can then eliminate any dependency on technical components that are scoped at the instance level, such as SQL Agent jobs." For a platform whose business logic is entirely T-SQL, that is not a benefit, it is the bill. The same page confirms SQL Agent jobs are unsupported (use elastic jobs), Windows logins are unsupported (use Entra ID), and only `master` and `tempdb` exist as system databases.
+
+Nobody has inventoried Granite's SQL Agent jobs, linked servers, or cross-database queries, so nobody can currently say which target is viable. Microsoft's recommended sequence is assessment first — Azure Migrate to discover and assess, then Azure Database Migration Service to move. **We adopt that sequence: task 0.11 below.** Our working position pending assessment: `[ASSUMPTION]` Managed Instance is the realistic cloud target if we go to cloud at all, but an in-place upgrade to SQL Server 2022 is the right default — it buys the October 2027 compliance runway at a fraction of the effort and defers the cloud decision until after Phase 2, when the architecture actually suits PaaS. Migrating a monolith's database to PaaS before extracting its logic means paying for both problems simultaneously. EY-P separately concluded a broad Azure migration would raise infrastructure cost without clear operational benefit at current volumes, which supports the same conclusion from the cost side.
 
 ---
 
@@ -46,25 +52,26 @@ This is the substance of our point of view. EY-P's report is competent, but four
 
 Cheap, fast, and it converts most of our unpriced risk into priced risk. We should push hard to run as much of this as access allows *before* signing a delivery scope.
 
-| \# | Task | Why it exists |
-| --- | --- | --- |
+| # | Task | Why it exists |
+|---|---|---|
 | 0.1 | Clean-room build validation — clone the repo, build ProWeb from scratch, deploy to a throwaway environment | With no CI, nobody has proof the repository is complete and buildable. This is the single highest-information test available to us. |
-| 0.2 | Static dependency map — every stored procedure, trigger, view, SQL Agent job, linked server, and cross-database reference | Produces the object inventory that lets us size 2.1 honestly, and exposes the trigger fan-out. |
+| 0.2 | Static dependency map — every stored procedure, trigger, view, SQL Agent job, linked server, and cross-database reference | Produces the object inventory that lets us size 2.1 honestly, exposes trigger fan-out, and feeds 0.11. |
 | 0.3 | Behavioral baseline capture — production query/workflow logging to build the regression oracle | The characterization harness needs recorded real inputs and outputs. Start collecting on day 1; it is calendar-bound, not effort-bound. |
-| 0.4 | Environment and asset inventory; confirm SQL Server version, edition, and licensing | EY requested an asset inventory and **never received one**. SQL Server 2017 is EY-P's inference, not a confirmed fact. |
+| 0.4 | Environment and asset inventory; confirm SQL Server version, edition, and licensing | EY requested an asset inventory and **never received one**. SQL Server 2017 is EY-P's inference, not a confirmed fact. Licensing also determines Azure Hybrid Benefit eligibility. |
 | 0.5 | End-to-end DR failover test (Orlando → Atlanta) | Stated RPO/RTO of 15–30 min are design targets that have never been validated. |
 | 0.6 | PHI data-flow map and BAA review — including Groq and offshore developer access | Medical records are sent to a third-party inference provider; offshore contractors push to production. Both need BAA and access-control answers. |
 | 0.7 | Root cause analysis of the cross-client segregation defect | Determines whether this is a script fix or a tenancy/schema change. Changes the shape of the whole roadmap. |
 | 0.8 | Vendor, license, and change-of-control review — Kendo UI/Telerik, Veeam, Datto, Kaseya, Mineral, KnowBe4, Coalition | Commercial licenses at change of control are a classic post-close surprise. |
 | 0.9 | Reporting dependency map — which Power BI reports bind to which OLTP objects | Reporting runs directly off the transactional database, so schema changes break operators' reports. This map defines our refactor blast radius. |
 | 0.10 | Vendor transition and knowledge-capture plan with Droit and Lapiz | Droit is long-tenured and is the final code controller. Their knowledge is the only specification that exists. |
+| **0.11** | **Azure Migrate assessment — run discovery and assessment across the SQL estate before committing to any database target.** Produce: target recommendation (in-place SQL Server 2022 / Azure SQL Managed Instance / Azure SQL Database / SQL Server on Azure VM), right-sizing and monthly cost estimate, and a feature-compatibility gap list | **No database target gets chosen without this.** Microsoft's recommended first step, and it is the only way to know whether Azure SQL Database is even viable. Must explicitly enumerate the instance-level dependencies that Azure SQL Database drops: **SQL Agent jobs** (→ elastic jobs), **linked servers**, **cross-database queries**, **Windows logins** (→ Entra ID), system-database usage, and any third-party agent needing OS/file-system access (Datto RMM/EDR, Veeam, the file server in the p.28 architecture) — the last of which is Microsoft's stated trigger for choosing SQL Server on Azure VM instead. Consumes 0.2 and 0.4. |
 
-**Exit criteria:** we can build and deploy ProWeb ourselves; we have an object-level inventory; we know what our changes can break; 2.1 is priceable.
+**Exit criteria:** we can build and deploy ProWeb ourselves; we have an object-level inventory; we know what our changes can break; **we have an evidence-based database target recommendation with costs**; 2.1 is priceable.
 
 ### Phase 1 — Make change safe and clear the 2027 wall (target 4–7 months, largely parallel)
 
-| \# | Task | Notes |
-| --- | --- | --- |
+| # | Task | Notes |
+|---|---|---|
 | 1.1 | Consolidate source control to Azure DevOps; branch policies; **revoke direct-to-production push for third-party developers** | Governance fix and a named cyber gap. Resolve the TFS-vs-Azure-DevOps contradiction (§6) first. |
 | 1.2 | Reproducible build → CI → automated deploy to lower environments | Sequenced deliberately: build reproducibility precedes pipeline automation. |
 | 1.3 | **Characterization / golden-master test harness over the stored procedure surface** | The enabling investment. Gates everything in Phase 2A/2B. Sized off 0.2 and 0.3, not guessed. |
@@ -74,33 +81,33 @@ Cheap, fast, and it converts most of our unpriced risk into priced risk. We shou
 | 1.7 | Dependency remediation — iTextSharp CVE-2021-43113 (CVSS 9.8) and CVE-2017-9096 (8.8) first, then jQuery UI / Knockout / CPython | The two iTextSharp findings are the only critical/high items and are cheap to close. |
 | 1.8 | WAF in front of ProWeb; DAST in the pipeline | ProWeb is internet-facing with ~1m PHI records and no WAF. EY-P prices the WAF at <$5k — take it immediately. |
 | 1.9 | Observability baseline — app and DB telemetry into a single monitoring plane | No SIEM today. Also gives us the change-impact signal we need during refactoring. |
-| 1.10 | SQL Server upgrade decision and execution (in-place 2022 vs. Azure SQL MI) | Deadline 12 Oct 2027. Azure SQL **Database** likely breaks SQL Agent jobs, linked servers, and cross-DB queries — Managed Instance is the realistic cloud target. Depends on 0.2. |
+| 1.10 | **Database target decision and execution — gated on 0.11.** Default recommendation: in-place upgrade to SQL Server 2022 to clear the 12 Oct 2027 deadline, cloud decision deferred to post-Phase 2 | Only 0.11 can justify a cloud target. If cloud is chosen: **Managed Instance** unless the assessment shows no instance-level dependencies; migrate with **Azure Database Migration Service in online mode**, or transactional replication (supports SQL Server 2017 as a source, with limitations on publishable objects). **Not BACPAC** — Microsoft notes export time rises sharply with object count and it requires downtime, and Granite is all objects with ~100 customers who cannot stop. Use the vCore purchasing model to claim **Azure Hybrid Benefit** on existing licenses. Plan to scale target resources up for cutover: transaction log rate is governed in Azure SQL Database. |
 
 **Exit criteria:** we can change ProWeb and know within minutes if we broke it. Both 2027 platform floors cleared or formally deferred with ESU.
 
 ### Phase 2 — Decision gate: in-place vs. strangler
 
-Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory and complexity, trigger fan-out, reporting coupling, segregation-defect RCA outcome, hold-period horizon, and who Granite hires as Director of Engineering.
+Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory and complexity, trigger fan-out, reporting coupling, segregation-defect RCA outcome, the 0.11 target recommendation, hold-period horizon, and who Granite hires as Director of Engineering.
 
 **Bias:** if 0.7 concludes the segregation defect requires a tenancy/identity change, that pushes hard toward Path B — you do not want to re-model record identity inside a monolith you cannot test.
 
 #### Path A — In-place modernization
 
-| \# | Task |
-| --- | --- |
+| # | Task |
+|---|---|
 | A1 | Domain-by-domain logic extraction from stored procedures into a .NET service layer, behind the 1.3 harness |
 | A2 | Trigger elimination — convert implicit DML side effects into explicit service calls |
 | A3 | WCF → REST replacement (insurance and fax workflows) |
 | A4 | .NET 4.8.1 → current .NET, **blocked on A3** |
 | A5 | Frontend: incremental React islands replacing Knockout/Kendo views |
-| A6 | Database modernization completed per 1.10 |
+| A6 | Revisit the cloud database target once logic has left the database — PaaS fit improves as instance-level dependency falls |
 
 *Profile:* lower disruption, longer tail, value arrives late, and we carry the monolith's constraints the whole way. Every step is reversible.
 
 #### Path B — Strangler fig
 
-| \# | Task |
-| --- | --- |
+| # | Task |
+|---|---|
 | B1 | API façade / gateway in front of ProWeb; all new traffic routed through it |
 | B2 | New service layer and domain model — **start with Discovery** (2% of volume, advisory-only, client retains billing and AR: the lowest blast radius in the portfolio) |
 | B3 | CDC / dual-write and read-model separation; ProWeb DB stays system of record initially |
@@ -111,8 +118,8 @@ Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory
 
 ### Phase 3 — Automation and AI enablement
 
-| \# | Task |
-| --- | --- |
+| # | Task |
+|---|---|
 | 3.1 | Triage the **60% unplanned** automation opportunity by ProWeb dependency and by automation *class* (see R12) |
 | 3.2 | Ship off-platform automation now — the Python/Groq pipeline needs no ProWeb change |
 | 3.3 | Intelligent work routing; expected pay modelling; variance detection |
@@ -121,8 +128,8 @@ Decide once, with Phase 0/1 evidence in hand. Inputs: stored-procedure inventory
 
 ### Phase 4 — Data platform
 
-| \# | Task |
-| --- | --- |
+| # | Task |
+|---|---|
 | 4.1 | Analytical separation via CDC into a warehouse |
 | 4.2 | Migrate Power BI reporting off OLTP (unblocks refactor freedom retroactively) |
 | 4.3 | Feature store for the ML pipeline |
@@ -138,22 +145,25 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 0
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-| --- | --- | --- | --- | --- |
+|---|---|---|---|---|
 | 0.1 Build validation | Repo is incomplete — missing config, undocumented manual deploy steps, binaries not in source control, a build that only works on one contractor's machine | **H×H** | Any "ask Droit for that file" during the attempt | Do this in week 1. A failed clean-room build is a go/no-go input, not a defect to fix later. Budget for reconstruction. |
 | 0.2 Dependency map | Tooling cannot resolve dynamic SQL. Logic assembled at runtime in strings is invisible to static analysis | **H×M** | High `EXEC(@sql)` / `sp_executesql` density | Combine static analysis with runtime query capture from 0.3. Explicitly report coverage as a percentage — never imply the map is complete. |
 | 0.3 Behavioral baseline | Capture window misses month-end, quarter-end, and payer-cycle edge cases; harness is built on a partial picture | **H×M** | Coverage gaps against the p.18 workflow map | Capture must span at least one full month-end. Start day 1 — this is calendar time we cannot compress later. |
-| 0.4 Asset inventory | Still not provided, or SQL Server turns out to be older than 2017 / a lower edition than assumed | M×M | Repeated deferral, as happened with EY | Escalate as a close condition. If SQL is pre-2017, 1.10 timeline and cloud options both change. |
+| 0.4 Asset inventory | Still not provided, or SQL Server turns out older than 2017 / a lower edition than assumed | M×M | Repeated deferral, as happened with EY | Escalate as a close condition. If SQL is pre-2017, 1.10 timeline and cloud options both change. |
 | 0.5 DR test | The test fails, or is refused because nobody will authorize a live failover | **M×H** | Reluctance to schedule a window | If a real failover is refused, that refusal is itself the finding — report it to Park Road. Do not accept untested RPO/RTO as fact. |
-| 0.6 PHI / BAA | No BAA with Groq covering medical records; offshore access to production PHI is unpapered | **M×H** | Vague answers on where inference runs | Legal review before we touch anything. If a BAA gap exists, it is a pre-close issue for Park Road, not our remediation item. |
+| 0.6 PHI / BAA | No BAA with Groq covering medical records; offshore access to production PHI is unpapered | **M×H** | Vague answers on where inference runs | Legal review before we touch anything. If a BAA gap exists it is a pre-close issue for Park Road, not our remediation item. |
 | 0.7 Segregation RCA | Root cause is record identity, not the SFTP script — implying a schema change across the core data model | **M×H** | Account keys not client-scoped; collisions possible by construction | Size two remediation options (compensating controls vs. identity re-model) and let the gate in Phase 2 consume the answer. |
 | 0.8 Licenses | Kendo UI or another commercial component has a change-of-control or per-seat restriction that bites post-close | M×M | Missing license documentation in the VDR | Route to Park Road's legal workstream now, while it is still their cost. |
 | 0.9 Reporting map | Operators depend on reports nobody documented; we discover coupling by breaking it | **H×M** | Power BI datasets querying tables directly rather than views | Treat every OLTP object touched by a report as a frozen interface until Phase 4.2. |
 | 0.10 Vendor transition | Droit reads the takeover as displacement and disengages, taking the only system knowledge with it | **M×H** | Slow responses, gatekeeping on repo access | Design them in, not out — paid knowledge-transfer scope with named deliverables. Do not let commercial tension destroy the only map of the system. |
+| **0.11 Azure Migrate assessment** | Assessment is run but its output is treated as a recommendation to follow rather than an input to weigh. Azure Migrate optimizes for a supported Azure landing zone; it has no view on whether moving the database *now* is wise given the refactor ahead | **M×M** | A target selected on tool output alone, without the Phase 2 path decided | Assessment answers *which targets are technically viable and at what cost*. Whether and when to move stays our judgment call. Record both answers separately. |
+| 0.11 | Assessment misses dependencies because discovery does not cover everything — jobs on unmanaged servers, ad-hoc linked servers, undocumented ETL | **M×H** | Discovery scope narrower than the 0.4 asset inventory, which itself may be incomplete | Reconcile 0.11 discovery output line-by-line against 0.2 and 0.4. Any gap between them is an unpriced migration risk and should be reported as such. |
+| 0.11 | Cost estimate is built on current on-prem sizing, which reflects a database doing application work. Post-refactor the profile changes materially, so the estimate expires | M×M | Sizing taken from peak CPU on the current box | Treat the monthly estimate as a decision input with a stated shelf life, not a budget line. Re-run after Phase 2A/2B. |
 
 ### Phase 1
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-| --- | --- | --- | --- | --- |
+|---|---|---|---|---|
 | 1.1 Source control | Migration loses history, or two sources of truth run in parallel and diverge | M×M | The TFS/ADO contradiction in §6 goes unresolved | Resolve current state first. Freeze, migrate, verify, cut over — no dual-write period. |
 | 1.2 CI | Build automated but deploy still manual and business-coordinated, so release risk is unchanged | M×M | "We'll wire deploy up later" | Definition of done is deploy-to-lower-environment, not green build. |
 | 1.3 **Test harness** | Coverage is thinner than believed. Team gains confidence to refactor that the harness does not justify | **H×H** | Coverage measured in tests written rather than behaviors pinned | Coverage expressed per business workflow, not per procedure. No domain enters Phase 2 extraction until its behaviors are pinned. **This is the risk that decides whether the programme succeeds.** |
@@ -162,25 +172,28 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 | 1.6 **Windows Server 2022** | We miss 12 Jan 2027. ProWeb runs on an unsupported OS holding ~1m PHI records | **H×H** | ESU not procured by Nov 2026 | Procure ESU as insurance **now**, regardless of plan confidence. Cheap relative to being unsupported. Legacy app compatibility on 2022 needs testing early — this is where an old .NET/IIS stack surprises you. |
 | 1.7 iTextSharp | The upgrade path is not drop-in — iText's licensing changed across major versions (AGPL/commercial) | **M×M** | Version pinned very old for a reason | Check licensing implications alongside the CVE fix. Consider replacing the component rather than upgrading it. |
 | 1.8 WAF | WAF in blocking mode breaks legitimate claim submission traffic; gets disabled under operational pressure | **M×M** | No monitor-mode learning period | Monitor mode → tune → enforce. Never straight to blocking on a revenue-path application. |
-| 1.9 Observability | Telemetry added, but nobody owns alerts; noise leads to it being ignored | M×M | No named owner | Tie to the vCISO / Director of Engineering hire. Tooling without ownership is theatre. |
-| 1.10 SQL upgrade | Azure SQL Database chosen, then cross-database queries, SQL Agent jobs, or linked servers break late in migration | **M×H** | Target selected before 0.2 completes | Do not choose a target before the dependency map exists. Managed Instance is the realistic cloud option given database-centric design. Deadline 12 Oct 2027. |
+| 1.9 Observability | Telemetry added but nobody owns alerts; noise leads to it being ignored | M×M | No named owner | Tie to the vCISO / Director of Engineering hire. Tooling without ownership is theatre. |
+| 1.10 Database target | **Azure SQL Database chosen and SQL Agent jobs, linked servers, or cross-database queries break late in migration.** Microsoft frames removing these as a benefit; for a database-centric platform it is rework | **M×H** | A target named before 0.11 completes | Hard gate on 0.11. Managed Instance preserves instance-level features; Azure SQL Database does not. Default to in-place SQL Server 2022. |
+| 1.10 | Cloud migration and logic extraction run concurrently, so two moving foundations interact and neither can be rolled back cleanly | **M×H** | Cloud migration scheduled inside the Phase 2 window | Sequence, do not parallelize. Clear the 2027 deadline in place; move to cloud after the architecture suits it. |
+| 1.10 | In-place SQL Server 2022 upgrade surfaces deprecated T-SQL or compatibility-level behavior changes across thousands of procedures | **M×H** | No harness coverage on the affected procedures | Run Data Migration Assistant against the estate first. Pin compatibility level initially, raise it deliberately behind 1.3. |
+| 1.10 | Windows logins are unsupported in Azure SQL Database; identity migration to Entra ID is discovered late | M×M | Service and application accounts unmapped | Covered by 0.11's feature-gap list. Granite already uses Entra for MFA, so the groundwork exists. |
 
 ### Phase 2 — Path A (in-place)
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-| --- | --- | --- | --- | --- |
+|---|---|---|---|---|
 | A1 Logic extraction | Effort lands at a multiple of EY-P's 1,600–2,200 hours; we are anchored to a number we did not produce | **H×H** | Any commercial commitment made before 0.2 | Price per domain after inventory. Contract per domain, not for the whole extraction. Never quote EY-P's number back as ours. |
 | A1 | Extraction proceeds in parallel with contractor feature work, and the two collide continuously | **H×M** | Multiple teams on parallel code paths — EY-P already flags this as current practice | Domain ownership boundaries and a change freeze per domain under active extraction. |
 | A2 **Triggers** | Triggers fire invisible side effects. New service-layer writes bypass or double-fire them, corrupting claim state | **H×H** | Trigger count and fan-out from 0.2 | **Treat triggers as the top technical hazard, above stored procedures.** Map exhaustively, convert to explicit calls before extracting the procedures that depend on them. Silent data corruption in a billing system is the worst failure mode available here. |
 | A3 WCF | WCF has no .NET Core equivalent; CoreWCF covers only part of the surface. Insurance and fax integrations are third-party contracts we cannot unilaterally change | **H×H** | Partner-side change required | Inventory every WCF endpoint and its external consumer in Phase 0. Partner coordination is calendar-driven and outside our control — surface it as a schedule risk early. |
 | A4 .NET Core | Hard-blocked on A3, plus System.Web-coupled Razor views and the ADO connector | **H×M** | A3 slipping | Communicate the dependency chain explicitly. EY-P presents .NET Core as "also being considered" without noting it is gated. |
 | A5 Frontend | React islands coexisting with Knockout/Kendo produce two state models and a worse UX than either | **M×M** | Shared state across framework boundaries | Migrate by whole screen, never by widget within a screen. Accept a visibly mixed UI for a period. |
-| A6 Database | Covered in 1.10 | — | — | — |
+| A6 Cloud revisit | The Phase 1 decision is never revisited, so we stay on-prem by inertia after the reason for staying has gone | M×M | No scheduled re-assessment | Diarize a re-run of 0.11 after the first two domains are extracted. |
 
 ### Phase 2 — Path B (strangler)
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-| --- | --- | --- | --- | --- |
+|---|---|---|---|---|
 | B1 Façade | Façade becomes a second passthrough layer with logic still in the database — new architecture diagram, same problem | **M×H** | No logic actually moved after the first domain | Success criterion is logic relocated, not traffic proxied. |
 | B2 First domain | Discovery is chosen for low blast radius but is too small to prove the pattern, so the second domain re-learns everything | M×M | First domain ships with no reusable scaffolding | Explicitly budget the first domain as pattern-establishing, and say so commercially. |
 | B3 CDC / dual-write | Dual-write drift between old and new stores. Reconciliation becomes permanent operational cost | **H×H** | No automated reconciliation from day 1 | Single writer per entity, always. If dual-write is unavoidable, ship reconciliation with it, not after. |
@@ -190,7 +203,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 3 — Automation and AI
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-| --- | --- | --- | --- | --- |
+|---|---|---|---|---|
 | 3.1 Triage | The unplanned 60% is assumed to have the same unit economics as the planned 40% | **H×M** | A single blended savings figure | Re-baseline the ~$620k / ~$4.61-per-claim opportunity ourselves before committing to it. |
 | 3.2 Off-platform | Groq dependency: single provider, hosted models (Llama 4 Scout, gpt-oss-120b) that can be deprecated or repriced | **M×M** | No provider abstraction in the Python codebase | Abstract the inference interface. Cheap now, and it is also a margin-protection measure. |
 | 3.3 Routing / expected pay | Models trained on historical outcomes encode current process bias; measured lift fails to appear | M×M | No holdout or champion/challenger design | Insist on holdout groups. Do not let "AI-driven" substitute for measured lift. |
@@ -200,7 +213,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 ### Phase 4 — Data platform
 
 | Task | What goes wrong | L×I | Leading indicator | How we de-risk |
-| --- | --- | --- | --- | --- |
+|---|---|---|---|---|
 | 4.1 Warehouse | Built before reporting migrates, so it becomes a parallel unused asset | M×M | No report migration plan | Fund 4.1 and 4.2 as one workstream. |
 | 4.2 Reporting migration | Operators resist losing familiar reports; OLTP coupling persists and keeps constraining Phase 2 | **M×H** | Report owners unidentified | Use the 0.9 map. Migrate report-by-report with the owner named. |
 
@@ -210,8 +223,8 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 
 Ranked by expected cost to Dualboot, not by technical interest.
 
-| \# | Risk | Why it tops the list |
-| --- | --- | --- |
+| # | Risk | Why it tops the list |
+|---|---|---|
 | **R1** | We anchor commercially to EY-P's 1,600–2,200h business logic estimate | Direct margin exposure on the largest item in the programme. Purely self-inflicted and entirely avoidable. |
 | **R2** | Refactoring begins before the characterization harness is real | Silent data corruption in a claims platform serving ~100 customers. Existential to the engagement and to the client relationship. |
 | **R3** | Triggers cause invisible side effects during extraction | Same failure mode as R2, arriving through a path EY-P never named. |
@@ -221,9 +234,10 @@ Ranked by expected cost to Dualboot, not by technical interest.
 | **R7** | Cross-client segregation defect recurs on our watch | Fourth occurrence, now attributable to us as operator. Reputationally worse than any technical slip. |
 | **R8** | The remaining 60% automation opportunity is portal/telephony RPA | Where the promised $620k lives, and the hardest class of work to sustain. |
 | **R9** | WCF blocks the .NET Core path and requires third-party partner coordination | Schedule risk outside our control, unnamed in the report. |
-| **R10** | Granite hires a Director of Engineering who re-litigates our scope | Structural commercial risk of a staff-augmentation-adjacent engagement. Anticipate it; ideally influence the hire. |
-| **R11** | Offshore PHI exposure without a masked environment | Blocks our own delivery model until 1.4 lands. |
-| **R12** | Reporting coupled to OLTP silently constrains every refactor | Slow, cumulative drag rather than a single event. |
+| **R10** | A database target is committed to before the Azure Migrate assessment, or cloud migration runs concurrently with logic extraction | Azure SQL Database removes exactly the instance-level features a T-SQL-centric platform runs on. Two moving foundations at once removes our ability to roll back. Gated by 0.11. |
+| **R11** | Granite hires a Director of Engineering who re-litigates our scope | Structural commercial risk of a staff-augmentation-adjacent engagement. Anticipate it; ideally influence the hire. |
+| **R12** | Offshore PHI exposure without a masked environment | Blocks our own delivery model until 1.4 lands. |
+| **R13** | Reporting coupled to OLTP silently constrains every refactor | Slow, cumulative drag rather than a single event. |
 
 ---
 
@@ -233,6 +247,7 @@ The report is a working draft marked "PRELIMINARY DRAFT FOR REVIEW" throughout, 
 
 - **Source control:** p.25 says code is on **TFS** with Azure DevOps "evaluated but not initiated." p.44 says Granite "leverages **Azure DevOps** for source control." p.36 lists TFS, Azure Repos/Git, *and* Azure Repos/TFVC as tooling. `[ASSUMPTION]` the Python AI/ML repo is on Azure DevOps while ProWeb remains on TFS — but this must be confirmed, since it determines whether 1.1 is a migration or a consolidation.
 - **Inference runtime:** p.31 refers to "**Ollama**-based open source models" while the same page's diagram and p.32 specify **GroqCloud** with Llama 4 Scout and gpt-oss-120b. Ollama is a local runtime; Groq is hosted. Either there is local inference infrastructure nobody described, or this is a drafting error.
+- **"Azure SQL"** is used without specifying Database vs. Managed Instance (p.25), which are materially different targets. See §2.5.
 - **R&D as % of revenue:** ~9% on pp.7 and 9, ~8% on p.15.
 - **Incident count:** management said five, documents showed seven. Already flagged by EY-P, but it sets a baseline for how to weight unverified management statements generally.
 - **SQL Server version:** inferred, never confirmed.
@@ -247,11 +262,12 @@ Non-negotiable inputs to a fixed-price conversation:
 1. Stored procedure and trigger inventory with complexity metrics (0.2)
 2. Successful clean-room build (0.1)
 3. Confirmed SQL Server version, edition, licensing (0.4)
-4. WCF endpoint inventory with external consumers (0.1 / 0.2)
-5. Segregation defect root cause (0.7)
-6. Reporting-to-OLTP dependency map (0.9)
-7. Droit transition terms (0.10)
-8. Close date — everything in the 2027 analysis is relative to it
+4. Azure Migrate assessment output — viable targets, feature gaps, monthly cost (0.11)
+5. WCF endpoint inventory with external consumers (0.1 / 0.2)
+6. Segregation defect root cause (0.7)
+7. Reporting-to-OLTP dependency map (0.9)
+8. Droit transition terms (0.10)
+9. Close date — everything in the 2027 analysis is relative to it
 
 **Commercial posture:** T&M or capped-T&M for Phase 0 and Phase 1. Fixed price only per domain in Phase 2, and only after 0.2. We should be willing to walk away from a fixed-price commitment on the full extraction — and say so early rather than discovering our position under pressure later.
 
@@ -265,10 +281,11 @@ Non-negotiable inputs to a fixed-price conversation:
 - Does Park Road expect the ~$620k automation savings in the model? If underwritten, R8 becomes their risk too and we should say so before close, not after.
 - Who owns the fourth segregation incident if it happens after we take over? Answer this contractually.
 - Is there a BAA with Groq covering PHI in medical records?
+- Does Park Road have an existing Azure footprint or enterprise agreement? It changes the cost case in 0.11.
 - Would Park Road support us influencing the Director of Engineering hire?
 
 ---
 
 ## Verification note
 
-Microsoft lifecycle dates in §2.3 and R6 were verified against Microsoft Learn on 29 Jul 2026: SQL Server 2017 extended end 2027-10-12; Windows Server 2016 extended end 2027-01-12. All Granite-specific figures trace to the EY-P report at the page numbers cited in [[park-road]]. Every inference is tagged `[ASSUMPTION]`; no technical detail about Granite's environment has been supplied where the report is silent.
+Microsoft lifecycle dates in §2.3 and R6 verified against Microsoft Learn on 29 Jul 2026: [SQL Server 2017](https://learn.microsoft.com/en-us/lifecycle/products/sql-server-2017) extended end 2027-10-12; [Windows Server 2016](https://learn.microsoft.com/en-us/lifecycle/products/windows-server-2016) extended end 2027-01-12. Azure migration guidance in §2.5, 0.11, and 1.10 drawn from [Migration overview: SQL Server to Azure SQL Database](https://learn.microsoft.com/en-us/data-migration/sql-server/database/overview) (Microsoft Learn, updated 2026-02-19) — note that page covers **Azure SQL Database only** and does not address Managed Instance, so the Database-vs-MI comparison here is reasoned rather than sourced and should be confirmed against the Managed Instance guide. All Granite-specific figures trace to the EY-P report at the page numbers cited in [[park-road]]. Every inference is tagged `[ASSUMPTION]`; no technical detail about Granite's environment has been supplied where the report is silent.

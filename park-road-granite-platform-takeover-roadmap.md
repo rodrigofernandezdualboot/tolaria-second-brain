@@ -162,7 +162,7 @@ Scored L(ikelihood) × I(mpact), H/M/L.
 | 1.6 **Windows Server 2022** | We miss 12 Jan 2027. ProWeb runs on an unsupported OS holding ~1m PHI records | **H×H** | ESU not procured by Nov 2026 | Procure ESU as insurance **now**, regardless of plan confidence. Cheap relative to being unsupported. Legacy app compatibility on 2022 needs testing early — this is where an old .NET/IIS stack surprises you. |
 | 1.7 iTextSharp | The upgrade path is not drop-in — iText's licensing changed across major versions (AGPL/commercial) | **M×M** | Version pinned very old for a reason | Check licensing implications alongside the CVE fix. Consider replacing the component rather than upgrading it. |
 | 1.8 WAF | WAF in blocking mode breaks legitimate claim submission traffic; gets disabled under operational pressure | **M×M** | No monitor-mode learning period | Monitor mode → tune → enforce. Never straight to blocking on a revenue-path application. |
-| 1.9 Observability | Telemetry added but nobody owns alerts; noise leads to it being ignored | M×M | No named owner | Tie to the vCISO / Director of Engineering hire. Tooling without ownership is theatre. |
+| 1.9 Observability | Telemetry added, but nobody owns alerts; noise leads to it being ignored | M×M | No named owner | Tie to the vCISO / Director of Engineering hire. Tooling without ownership is theatre. |
 | 1.10 SQL upgrade | Azure SQL Database chosen, then cross-database queries, SQL Agent jobs, or linked servers break late in migration | **M×H** | Target selected before 0.2 completes | Do not choose a target before the dependency map exists. Managed Instance is the realistic cloud option given database-centric design. Deadline 12 Oct 2027. |
 
 ### Phase 2 — Path A (in-place)

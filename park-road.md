@@ -9,6 +9,8 @@ Park Road Partners LP (PE, 1230 6th Avenue, NY) — evaluating an investment in 
 
 Primary source: *EY-Parthenon "Project Granite" Product, Technology & Cybersecurity Due Diligence — Summary of Findings, May 12, 2026* (working draft, 50 pp). Engagement lead: Ryan Jacobson (Partner), Peter Zadrozny (MD). Client contact: Matt Dubbioso. ~2 weeks of diligence, 5 hours of management meetings incl. a 1-hr platform demo.
 
+**Dualboot's angle:** platform takeover as delivery partner post-close. Roadmap and per-task risk register in [[park-road-granite-platform-takeover-roadmap]].
+
 ## Investment thesis (EY-P's understanding)
 
 - ProWeb, Granite's proprietary platform, is a credible and scalable foundation for value creation.
@@ -27,6 +29,8 @@ Primary source: *EY-Parthenon "Project Granite" Product, Technology & Cybersecur
 **Architecture (p.23).** Built almost entirely around T-SQL stored procedures and triggers; effectively no business logic in the application layer. The app server is a passthrough over an ADO-based DB connector. Web API + WCF provide integration pathways, WCF being a legacy pattern. Performant at current scale, but concentrating logic in the database makes workflows hard to test, maintain, and extend — and creates friction for AI that needs to *drive* actions inside ProWeb rather than write results back adjacent to it.
 
 **Stack (p.24).** UI: Bootstrap 3.x/4.x, jQuery 3.x, Knockout.js 3.x, KendoUI, Razor. App: C# / .NET Framework 4.5 (EOL since 2022) + Python. DB: SQL Server 2017 `[ASSUMPTION — version not confirmed; inferred by EY-P from management's stated 2027 end-of-support date]`. Integration: REST API, IIS-hosted XML webhook, WCF, SFTP. Data tooling: Power BI. Near-term stabilization step identified by management is .NET 4.8.1 — not full modernization to .NET Core. React is under evaluation for the frontend but is not a confirmed roadmap decision.
+
+**Verified end-of-support dates** (Microsoft Learn, checked 29 Jul 2026): SQL Server 2017 extended support ends **12 Oct 2027**; Windows Server 2016 extended support ends **12 Jan 2027**. Against EY-P's 22–28 month tech debt timeline, both platform floors expire mid-programme. EY-P rates the OS upgrade Low priority and leaves it unsized.
 
 **Technical debt (pp.25–26).** Ranked by criticality: .NET modernization (M), business logic refactoring out of stored procedures (**XL** — the biggest item), frontend/UI modernization (L), infrastructure/DB modernization (M), TFS → Azure DevOps (S), CI/CD pipeline (S), Windows Server 2016 upgrade (unsized, IT-led), data warehouse (unsized — not feasible near-to-medium term).
 
@@ -51,8 +55,8 @@ Assessed as the strongest area — "on target or exceeding target" across data s
 
 - 14 total R&D personnel vs. a benchmark of 43 for this size. All product development executed by **external contractors** — 10 across two vendors (Droit, long-tenured; Lapiz, added ~2.5 yrs ago for competition/redundancy). No internal dev or QA capability.
 - The Director of IT also acts as Product Manager. No dedicated senior product or engineering leadership → reactive prioritization, delayed modernization decisions, reliance on contractor-led recommendations.
-- R&D spend ~$900k (~9% of revenue) — judged appropriate and efficiently deployed.
-- SDLC: Agile, two-week sprints, work split across Incidents and GPIs (multi-sprint epics). **No automated testing framework. No CI/CD — merges and releases are manual.** Source control on TFS (Azure DevOps under evaluation, not initiated). Visual Studio 2017. Multiple teams sometimes work parallel code paths requiring manual reconciliation.
+- R&D spend ~$900k (~9% of revenue) — judged appropriate and efficiently deployed. (p.15 says ~8%; minor internal inconsistency.)
+- SDLC: Agile, two-week sprints, work split across Incidents and GPIs (multi-sprint epics). **No automated testing framework. No CI/CD — merges and releases are manual.** Source control on TFS per p.25 — but p.44 says Azure DevOps and p.36 lists both; unresolved contradiction. Visual Studio 2017. Multiple teams sometimes work parallel code paths requiring manual reconciliation.
 - AI tooling in the SDLC: **Claude Teams** used broadly across design, requirements, research, and code review; **Google Antigravity** for agent-driven development in the Python AI/ML team. GitHub Copilot evaluated, not adopted.
 
 ## Cybersecurity (pp.41–46) — the most urgent workstream
@@ -81,12 +85,14 @@ Gaps, roughly in order of exposure:
 
 | Theme | One-time | Annual |
 |---|---|---|
-| Cybersecurity remediation | ~$200k–$290k | ~$70k–$100k (vCISO) |
+| Cybersecurity remediation | ~$205k–$290k | ~$70k–$100k (vCISO) |
 | Technical debt | ~$365k–$485k | — |
 | Process / SDLC | ~$30k–$50k | — |
 | Organization (Digital Product Director + Director of Engineering) | — | ~$300k–$400k |
 | Automation initiatives | ~$100k | ~$55k |
 | **Total** | **~$700k–$925k** | **~$425k–$555k** |
+
+Cyber subtotal is derived from the p.11 line items (compromise assessment ~$60–80k, WAF <$5k, data privacy assessment ~$125–175k, secure ProWeb ~$15–30k); EY-P does not state it. The ~$700k–$925k and ~$425k–$555k totals are EY-P's.
 
 Automation upside: **~$620k annual savings (~$4.61/claim)** at current run-rate volumes. The roadmap covers only ~40% of identified opportunities; **60% is unplanned**. ~2 months to deliver, but full value realization is gated on ProWeb modernization.
 
@@ -106,8 +112,10 @@ Automation upside: **~$620k annual savings (~$4.61/claim)** at current run-rate 
 - Data warehouse and Windows OS upgrade are unsized, so the ~$700k–$925k one-time total is incomplete.
 - Immutability of backups is asserted but unvalidated.
 - IR retainer — in place or not.
-- `[ASSUMPTION]` Dualboot's angle here is not yet defined. Whether the ask is remediation delivery, modernization execution, a second-opinion technical read for Park Road, or post-close R&D capacity needs to be established before shaping anything.
+- Is there a BAA with Groq covering PHI in the medical records sent for inference? Not addressed by EY-P.
+- Expected hold period — unknown, and it should drive the rebuild-vs-modernize decision more than any technical factor.
 
 ## Related
 
+- [[park-road-granite-platform-takeover-roadmap]] — proposed takeover roadmap, per-task risk register, and where we disagree with EY-P.
 - Report is a **working draft** marked "PRELIMINARY DRAFT FOR REVIEW" throughout, dated May 12, 2026, intended solely for Park Road management and board.

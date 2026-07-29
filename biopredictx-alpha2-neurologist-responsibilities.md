@@ -6,6 +6,7 @@ related_to:
   - "[[biopredictx-alpha2-muse-athena-eeg-pivot]]"
   - "[[biopredictx-alpha2-risks]]"
 status: Draft
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Neurologist / Sleep-Science Responsibilities by Phase

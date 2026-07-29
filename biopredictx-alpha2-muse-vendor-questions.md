@@ -7,6 +7,7 @@ related_to:
   - "[[biopredictx-alpha2-risks]]"
   - "[[biopredictx-alpha2-yasa-viability]]"
 status: Active
+_organized: true
 ---
 
 # BioPredictX Alpha 2.0 — Muse (Interaxon) Vendor Technical Questions

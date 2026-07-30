@@ -68,10 +68,6 @@ We would structure this as five phases, the first of which is the only one we ==
 
 The stored procedure, function, view, and trigger inventory, because it is the only honest basis for the business logic estimate. A successful build from a clean checkout, because a failure turns the first phase into a reconstruction project. A screen count, because the frontend range is twice as wide as it needs to be without one. A report count with named owners, because the reporting work moves by several hundred hours on it. An answer on whether the solution lines separate, because it determines whether we are proposing incremental replacement or a much less attractive in-place extraction. And a live database connection during diligence, because without it the migration assessment and the database decision both slip past close.
 
-Two commercial points to settle internally. We should not quote any single figure before the assessment returns — including our own, and particularly not on business logic. And we should be clear with Park Road that EY-P's dollar figures embed an $85-an-hour contractor rate. The hours are debatable. The price, at anyone else's rates, is not the price.
-
 ---
 
-## Verification note
-
-Page 26 was read as a rendered image to distinguish EY-P's printed dollar ranges from the hour ranges annotated in red. All dollar figures, category structure, totals, and footnotes are EY-P's as printed. All hour figures are ours, derived from those dollars; the implied blended rate of $83–88 per hour is our arithmetic on the two sets of numbers, and EY-P's footnote 1 independently states their costs derive from contractor scrum team effort. The 22-to-28-month timeline and the $300–400k leadership hiring figure are EY-P's, from p.11 and p.26 respectively. Microsoft support dates verified against Microsoft Learn on 29 Jul 2026. Our own phase estimates derive from the internal `estimation-reference` and remain provisional pending assessment — six of them scale with counts that do not currently exist in the diligence. The correction in the opening section supersedes the attribution of hour figures to EY-P in [[park-road-granite-platform-takeover-roadmap]], [[park-road-granite-executive-summary-sow]], and [[park-road-granite-estimate-accuracy-review]].
+## Total estimated cost

@@ -56,9 +56,9 @@ We would structure this as five phases, the first of which is the only one we ==
 
 **Second, making change safe, over three to four months and roughly 1,600 to 2,400 hours** ==**(3.5 FTEs, 0.5PM, 2 BE, 0.5 DEVOPS)**==**.** The regression baseline, a reproducible build with automated deployment, a development environment without live patient data, the two 2027 support deadlines cleared, the outstanding critical vulnerabilities closed, and application-layer protection in front of an internet-facing platform that currently has none. None of this is modernization. All of it is the precondition for modernization, and it is the part EY-P's plan does not contain.
 
-**Third, separating reporting from the operational database.** ==**(2.5 FTEs, 0.5PM, 2 BE)**== Two to three months, 800 to 1,200 hours. Power BI queries the transactional database directly today, which means the schema is effectively frozen by report consumers nobody has enumerated. Until that coupling is broken, every subsequent change is negotiating with an unknown set of operational reports. Doing this early is what makes the rest possible, and it is comparatively cheap here because the reporting layer is thin.
+**Third, separating reporting from the operational database.** ==**(2.5 FTEs, 0.5PM, 2 BE)**== **Two to three months, 800 to 1,200 hours**. Power BI queries the transactional database directly today, which means the schema is effectively frozen by report consumers nobody has enumerated. Until that coupling is broken, every subsequent change is negotiating with an unknown set of operational reports. Doing this early is what makes the rest possible, and it is comparatively cheap here because the reporting layer is thin.
 
-**Fourth, replacing the platform one solution line at a time**, over twelve to twenty months. We would start with Discovery — two percent of volume, advisory-only, the client retains billing and collections — deliberately as a pilot, to establish the pattern and the scaffolding rather than to deliver value. Then Aged, at 32% of volume and the strongest fee rates, as the first line carrying real weight. Then Historical, then Day 1 last, since it owns the full lifecycle and is the largest surface. Throughout, the platform continues to behave identically toward clients, clearinghouses, and third-party data providers. This phase is somewhere between 6,400 and 11,000 hours, and that range is wide enough to be honest rather than precise enough to commit to. We would price it per line, after the assessment, and never as a single number. ==**(5 FTEs, 0.5PM, 2 BE, 1FE, 1QA, 0.5 DEVOPS)**==
+**Fourth, replacing the platform one solution line at a time**, over twelve to twenty months. We would start with Discovery — two percent of volume, advisory-only, the client retains billing and collections — deliberately as a pilot, to establish the pattern and the scaffolding rather than to deliver value. Then Aged, at 32% of volume and the strongest fee rates, as the first line carrying real weight. Then Historical, then Day 1 last, since it owns the full lifecycle and is the largest surface. Throughout, the platform continues to behave identically toward clients, clearinghouses, and third-party data providers. This phase is somewhere between **6,400 and 11,000 hours**, and that range is wide enough to be honest rather than precise enough to commit to. We would price it per line, after the assessment, and never as a single number. ==**(5 FTEs, 0.5PM, 2 BE, 1FE, 1QA, 0.5 DEVOPS)**==
 
 **Running alongside all of it, extending the AI capability.** Granite's Python stack — the BioBERT clinical feature extraction, the XGBoost claim scoring, the Groq-hosted document intelligence — is genuinely good and architecturally separate from the legacy platform. It can be extended without touching ProWeb, which makes it the only place we can deliver visible value in the first few months. It is also where the client's return actually lives: EY-P identifies roughly $620k of annual savings available through automation, with only about forty percent of it on the current roadmap. The caution is that a large share of the remaining opportunity is payer portal and telephony work, which is brittle, breaks whenever a payer changes a screen, and carries per-payer maintenance indefinitely. The build is not the cost there. We should re-baseline that opportunity ourselves before anyone underwrites it.
 
@@ -74,10 +74,10 @@ The stored procedure, function, view, and trigger inventory, because it is the o
 
 Phase 1 - 600-800
 
-Phase 2 - 
+Phase 2 - 1600-2400
 
-Phase 3 - 
+Phase 3 - 800-1200
 
-Phase 4 -
+Phase 4 - 
 
 Phase 5 -

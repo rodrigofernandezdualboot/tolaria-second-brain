@@ -165,15 +165,15 @@ Gated on 0.13 confirming separability.
 
 The heuristic's real warning still binds: a 2% win will not sustain executive sponsorship across a multi-year programme. So **Aged is named upfront as the first real product line**, and Discovery is budgeted explicitly as pattern-establishing work — scaffolding, harness, deployment path, team shape — not as value delivery. If we cannot say what Discovery produced that makes Aged cheaper, the pilot failed.
 
-| \# | Task | Criticality |
+| 2B.1 | **Discovery (pilot).** New service implementation; **Event Interception** on ISO/Verisk webhooks and SFTP arrivals; **Revert to Source** for placement files. Deliverable includes the reusable scaffolding, not just the feature | Criticality |
 | --- | --- | --- |
-| 2B.1 | **Discovery (pilot).** New service implementation; **Event Interception** on ISO/Verisk webhooks and SFTP arrivals; **Revert to Source** for placement files. Deliverable includes the reusable scaffolding, not just the feature | **Critical** (B) — but critical *by choice*, not by dependency. Nothing technically requires a pilot; we chose one because there is no harness or specification to learn from. The scaffolding it produces is what later lines depend on |
-| 2B.2 | **Legacy Mimic** layer so clients, clearinghouses, and ISO/Verisk cannot tell which system is serving them | **Critical** (B, X) — no product line can cut over without it, and partner-visible breakage is contractual |
-| 2B.3 | **Aged** — first real line, 32% of volume, 20–30% of collections. Staged cutover: beta cohort, then 1% / 5% / 10% | **Critical** (G) — the first genuine value delivery and what sustains sponsorship for 2B.4–5 |
-| 2B.4 | **Historical** — 25% | Non-critical — deferrable; nothing depends on it |
-| 2B.5 | **Day 1** — 42%, full lifecycle ownership, last | **Critical** (B) — ProWeb cannot be retired while Day 1 still runs on it, so the programme cannot complete without it. Deferrable in sequence, not in scope |
-| 2B.6 | Progressive retirement of displaced ProWeb modules, contracted as named deliverables | **Critical** (B) — this is what distinguishes displacement from running two platforms |
-| 2B.7 | **Removal of transitional architecture** — façade, CDC bridges, reconciliation jobs | **Critical** (B) — skipping it is the R9 failure. Fund and schedule it; do not leave it to goodwill |
+| 2B.2 | **Legacy Mimic** layer so clients, clearinghouses, and ISO/Verisk cannot tell which system is serving them | **Critical** (B) — but critical *by choice*, not by dependency. Nothing technically requires a pilot; we chose one because there is no harness or specification to learn from. The scaffolding it produces is what later lines depend on |
+| 2B.3 | **Aged** — first real line, 32% of volume, 20–30% of collections. Staged cutover: beta cohort, then 1% / 5% / 10% | **Critical** (B, X) — no product line can cut over without it, and partner-visible breakage is contractual |
+| 2B.4 | **Historical** — 25% | **Critical** (G) — the first genuine value delivery and what sustains sponsorship for 2B.4–5 |
+| 2B.5 | **Day 1** — 42%, full lifecycle ownership, last | Non-critical — deferrable; nothing depends on it |
+| 2B.6 | Progressive retirement of displaced ProWeb modules, contracted as named deliverables | **Critical** (B) — ProWeb cannot be retired while Day 1 still runs on it, so the programme cannot complete without it. Deferrable in sequence, not in scope |
+| 2B.7 | **Removal of transitional architecture** — façade, CDC bridges, reconciliation jobs | **Critical** (B) — this is what distinguishes displacement from running two platforms |
+| 2B.1 | **Discovery (pilot).** New service implementation; **Event Interception** on ISO/Verisk webhooks and SFTP arrivals; **Revert to Source** for placement files. Deliverable includes the reusable scaffolding, not just the feature | **Critical** (B) — skipping it is the R9 failure. Fund and schedule it; do not leave it to goodwill |
 
 Per Extract Product Lines: identify shared capabilities early and **value use over reuse**. Limit what the new product lines share, or we rebuild the over-generic system we are trying to escape.
 

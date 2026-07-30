@@ -71,3 +71,13 @@ The stored procedure, function, view, and trigger inventory, because it is the o
 ---
 
 ## Total estimated cost
+
+Phase 1 - 600-800
+
+Phase 2 - 
+
+Phase 3 - 
+
+Phase 4 -
+
+Phase 5 -

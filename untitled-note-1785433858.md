@@ -11,3 +11,18 @@ About the original idea. I will go area by area, talking about my thoughts and i
 5. That's it. The 700-800 hours, which is between four and five months, looks way too high. Imagine that the easiest approach would be to have a back-up and to restore that back-up into Azure, which would take maybe a week. Backups are not an option because it requires you to have downtime but perhaps they are open to that idea.
 6. The source management, the source code management point, consists of migrating from DFS to Azure DevOps and it was estimated between one and two months of work. To me if, assuming that they don't need to carry over the work that they may have done in terms of tickets and management things they may have on DFS and they want just to have the repos in Azure, that would be really simple. It would be a matter of a couple of days to have it on a repo in Azure, ready to start working on day zero.
 7. CI/CD could be challenging and I think that this, once you do months, is realistic depending on the tech stack that we have to build and deploy and the strategy that we have to. For example if we were talking about the net core application that can be Dockerized and we deploy to a natural container registry, be running on container apps, for sure this is way too high. Since we may have to have a virtual machine to run the build on the old network version, see it, maybe upload to NSF TP, download it on a machine, replace the files into the IIS, and configure users with permissions enough to perform that action, that may be accurate. If we were on a much more stack, for sure this is way too high.
+
+Up to this point, if we follow all these steps, we will end up with:
+
+- a newer version of the.NET framework and application service layer
+- the Azure databases migrated to the cloud with the backups policy and recovery strategies all configured on that
+- a new React application
+
+I don't see much value proposition in this because.NET will reach its end of life. There will be new needs. Keeping this monolith as it is, it will not be prepared as we are just migrating the business logic that was on the database into the application area. This will gain us new sorts of challenges, such as:
+
+- unit-of-work dependency injection
+- context management
+- the usage of an ORM not just to execute the SQL but to prevent SQL injection
+- the dependency between the upcoming migrations and changes made to the source code
+
+It's not a clear win in this whole process rather than security issues and having a more modern stack.

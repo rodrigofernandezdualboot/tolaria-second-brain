@@ -25,4 +25,15 @@ I don't see much value proposition in this because.NET will reach its end of lif
 - the usage of an ORM not just to execute the SQL but to prevent SQL injection
 - the dependency between the upcoming migrations and changes made to the source code
 
-It's not a clear win in this whole process rather than security issues and having a more modern stack.
+It's not a clear win in this whole process rather than security issues and having a more modern stack. 
+
+We should propose a different approach. The logic refactor with just this information is something that we cannot be compromised on. It's not realistic for us to take this assumption between 10 and 14 months because we don't know what's in this.
+What we propose is a displacement strategy starting with a discovery phase that is targeted between a month and a month and a half. We will involve a technical lead, a project manager, and a DevOps to:
+
+- build and clone the application from the repository
+- perform a build and see that we have all the information and pieces that we will need to deploy in your version
+- run a static dependency map on the database, where we map all the database objects: procedures, triggers, views, functions, SQL agent jobs, link servers, cross-database references, and anything that may be there It needs to be mapped and documented. With that we should start building the behavioral baseline capture, which means different flows in the applications that end up with information being stored in the data. Something that is important in this context is to build a PHI (personal health care information) data flow to see which are the critical goals, structures that we should take care of in terms of security, storing that information, and accessibility. Ideally we would like to review or assess the root cause for the cross-client segregation defect. That's one of the leaks that I have previously. Based on the information that we have it seems to be a multi-tenancy issue that can be solved in different ways. Something that hasn't been taken as an important piece is the Power BI. There's a Power BI connected to the databases with the assumption that it has a decent number of reports. Those reports will be lost in the old OLTP database, which is not the recommended approach. We should map which reports they have and which structures they depend on, or build the replacement piece that's on the later chapter. Another thing that we need to do is the actual migration assessment. That's a tool that we can use from Azure that will assess exactly which kind of objects you have on the databases or the database and see if it can be just moved or not. The changes that we need to do, for example:
+- SQL agent jobs
+- link servers
+- database queries
+- winter plugins will be lost obviously and we will be changed by Microsoft. Entra id logins will define how much work it needs to be done for the migration. The final outcome for this phase is going to be a product line separability assessment because as we are building a displacement we should start working on different product lines, creating a modular monolith, and we should have those isolated. It's clear that it's going to be driven by discovery, age, historical, and day one.

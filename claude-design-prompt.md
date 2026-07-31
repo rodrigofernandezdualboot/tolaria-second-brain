@@ -1,5 +1,6 @@
 ---
 type: Note
+_organized: true
 ---
 # Claude Design prompt
 

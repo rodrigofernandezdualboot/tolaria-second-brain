@@ -3,7 +3,6 @@ type: Note
 related_to: "[[artsavl]]"
 status: Active
 ---
-
 # ArtsAVL — Technical Assessment (Phases 1–5)
 
 Sol deal assessment run 2026-07-31 against the *2026 Creative Portal Expansion RFP*. Source of truth is the engagement folder (`engagements/artsavl-creative-portal/assessment.md`); this note is the recall version. Companion notes: [[artsavl-risk-register]], [[artsavl-solution-architecture]], [[artsavl-client-questions]], [[artsavl-assessment-findings-vs-initial-read]].
@@ -19,7 +18,7 @@ Sol deal assessment run 2026-07-31 against the *2026 Creative Portal Expansion R
 
 ### Buying group
 
-- **Katie Cornell — economic buyer *and* technical evaluator.** Sole named RFP contact. Non-technical but systems-literate. Also President of the Western Arts Agencies of NC and Immediate Past Board Chair of Arts North Carolina — she personally convenes the peer councils the licensing goal would sell into. Goal 4 is her strategy.
+- **Katie Cornell — economic buyer** ***and*** **technical evaluator.** Sole named RFP contact. Non-technical but systems-literate. Also President of the Western Arts Agencies of NC and Immediate Past Board Chair of Arts North Carolina — she personally convenes the peer councils the licensing goal would sell into. Goal 4 is her strategy.
 - **Maria Buchanan** — probable day-to-day administrator and the closest thing to a functional product owner. Unconfirmed.
 - Financial scrutiny on the board: Susan Harper (Treasurer), Alaina Nelson (Financial Advisor), April Brown (BofA SVP). Dodie Stephens (marketing professional) is the likely voice on UX. Brandy Bourne (Vice Chair, Library Director) is the only plausible technical-adjacent board evaluator — a hypothesis, not a fact.
 
@@ -34,7 +33,7 @@ Consequence: the recommendation must survive being repeated by a non-technical e
 **Stated problem vs. diagnosed problem** — the value is the gap:
 
 | RFP says | Diagnosis |
-|---|---|
+| --- | --- |
 | "Evaluate and recommend enhancement, partial redevelopment, or complete rebuild. We have not predetermined the approach." | Largely answered by ArtsAVL's own evidence — current Ruby/Rails, 2,000+ RSpec examples, 154 end-to-end tests, guarded deploy pipeline, maintained documentation, plus §5's instruction not to re-bill the modernization. The real decision is narrower: **which single subsystem must be reworked to carry licensing** — most likely the account model, which the RFP calls "the ownership and billing root." |
 | Six goals, six months, $150–250K | Goals 1/2/3/5 are increments on a working product. **Goal 4 is a different product with a different operating model.** The budget funds one of those well. |
 | "Long-term product development and technology partner" | What ArtsAVL structurally lacks is an **internal product owner**. "Partner" is the word available for a role a five-person nonprofit cannot hire. |
@@ -62,12 +61,12 @@ Disposition summary: core Rails app **Reuse** (extend, don't replace); PostgreSQ
 
 - **Little Green Light** — donations on both properties route to `secure.lglforms.com`. Absent from §4's integration list. Almost certainly the CRM behind Goal 2's "CRM integration," with donors and members as unlinked populations.
 - **The newsletter platform** — unidentified. Two newsletters, 7,000+ subscribers, 60%+ open rate, banner ads sold against them. A revenue channel with a larger audience than the membership base, on a system nobody named.
-- **`ashevillearts.com`** — legacy domain still linked live from the platform footer's "Contact Us."
+- `ashevillearts.com` — legacy domain still linked live from the platform footer's "Contact Us."
 - WordPress 7.0.x with a Divi theme (inferred from theme query parameters).
 
 ### Two integrations with unknown purpose
 
-**Linkup** and **Rastrac** appear in §4's integration list with no explanation and no obvious function in an arts directory. Rastrac's name matches a GPS/fleet-tracking product. Left as **Unknown** dispositions rather than guessed — either they carry real behaviour or they are dead dependencies, and both answers are useful.
+**Linxup** and **Rastrac** appear in §4's integration list with no explanation and no obvious function in an arts directory. Rastrac's name matches a GPS/fleet-tracking product. Left as **Unknown** dispositions rather than guessed — either they carry real behaviour or they are dead dependencies, and both answers are useful.
 
 ### Observed on the live site
 

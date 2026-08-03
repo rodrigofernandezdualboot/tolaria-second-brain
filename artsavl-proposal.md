@@ -121,7 +121,7 @@ Each consumer would have its own access key with usage visible to ArtsAVL. That 
 
 `[NEEDS INPUT — named individuals, with short bios emphasising Rails depth and prior takeover experience.]`
 
-The team we propose is a product lead, a project manager, a technical lead, two engineers, and a designer engaged through discovery and the design work. `[NEEDS INPUT — confirm names.]` No subcontractors. `[NEEDS INPUT — confirm.]`
+The team we propose is a project manager, a technical lead, two engineers, a tester, and a designer engaged through discovery and the design work.  No subcontractors. 
 
 On continuity, which the RFP asks about directly: we would name the product lead and technical lead in the contract and commit them for the maintenance term, not only the build. ArtsAVL is changing partners right now and knows exactly what it costs when the people who understand a system move on. The most credible answer we can give is a named commitment rather than a reassurance.
 

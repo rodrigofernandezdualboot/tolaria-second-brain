@@ -4,6 +4,7 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
+
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
@@ -14,15 +15,19 @@ _width: wide
 
 > - Three referenceable clients with contact details for long-term product/support engagements
 
-> - Named team members for product lead, project manager, tech lead, UX
-
 > - Firm overview: ownership, size, office locations
 
 > - Final fee figures per phase
 
+> - Whether we can offer anonymised role profiles and/or introductions at interview stage (see §5)
+
 > 
 
-> **Scope decision — revised 2026-08-03 at a blended rate of $85/h.** All six goals cost roughly **$233K** (2,743 hours including management reserve) against a $250K ceiling; the phased shape costs roughly **$174K** (2,045 hours). **Both fit under the ceiling.** An earlier version of this draft said the full programme did not fit — that was computed at an assumed $125–150/h and was wrong. §3 and §7 are rewritten accordingly: the case for sequencing the licensing build is now made on sequencing grounds, not affordability. Two live cautions: at $233K the reserve is already consumed and the pessimistic case ($263K) breaches the ceiling; and if ArtsAVL is planning toward the **$150K floor** rather than the ceiling, only the phased shape fits at all.
+> **Scope decision — revised 2026-08-03 at a blended rate of $85/h.** All six goals cost roughly **$233K** (2,743 hours including management reserve) against a $250K ceiling; the sequenced shape costs roughly **$174K** (2,045 hours). **Both fit under the ceiling.** An earlier version of this draft said the full programme did not fit — that was computed at an assumed $125–150/h and was wrong. §3 and §7 are rewritten accordingly: the case for sequencing the licensing build is now made on sequencing grounds, not affordability. Two live cautions: at $233K the reserve is already consumed and the pessimistic case ($263K) breaches the ceiling; and if ArtsAVL is planning toward the **$150K floor** rather than the ceiling, only the sequenced shape fits at all.
+
+> 
+
+> **Team composition note (internal).** §5 is written role-based with no individual names, per Dualboot practice. Two knock-ons worth checking: the revised composition adds a **tester** and has no **product lead**, so (a) the 270 hours of QA in the estimate now sit with a dedicated tester rather than being distributed across engineers — no change to total hours, but a change to who does them; and (b) the assessment's mitigation for having no technical champion on the client side assumed a product lead carrying the technical narrative to Katie Cornell and her board. That job now needs an owner — most naturally the technical lead, with the PM on cadence.
 
 ---
 
@@ -117,13 +122,33 @@ Each consumer would have its own access key with usage visible to ArtsAVL. That 
 
 ## 5. Team, communication and the long-term relationship
 
-### Who would work on this
+### The team we propose
 
-`[NEEDS INPUT — named individuals, with short bios emphasising Rails depth and prior takeover experience.]`
+We staff this engagement by role, with defined seniority and allocation, and we commit to that composition rather than to particular individuals:
 
-The team we propose is a project manager, a technical lead, two engineers, a tester, and a designer engaged through discovery and the design work.  No subcontractors. 
+| Role | Responsibility on this engagement |
+| --- | --- |
+| Project manager | Cadence, prioritization, change control, reporting, and the single point of contact for ArtsAVL day to day |
+| Technical lead | Architecture decisions, the tenancy design and specification, code review, and the technical narrative for ArtsAVL's staff and board |
+| Two engineers | Delivery across the platform — Rails, with production experience on this stack |
+| Tester | Verification against the inherited automated suite, exploratory testing, and coordination of ArtsAVL's acceptance testing |
+| Designer | Discovery research, user flows, and interface design through the experience work |
 
-On continuity, which the RFP asks about directly: we would name the product lead and technical lead in the contract and commit them for the maintenance term, not only the build. ArtsAVL is changing partners right now and knows exactly what it costs when the people who understand a system move on. The most credible answer we can give is a named commitment rather than a reassurance.
+No subcontractors. Every person on the engagement is a Dualboot employee working under our own review and quality practices.
+
+We should be straightforward about one thing rather than let it look like an omission. We do not put individual names into proposals, and we would rather explain why than list people we might later have to change. A named individual in a proposal is a commitment a firm of any size cannot honestly guarantee for a multi-year relationship — people take leave, change roles, and occasionally leave. What we can guarantee is the composition, the seniority, and the practices that make an individual's presence less load-bearing than it would otherwise be. `[NEEDS INPUT — confirm whether we can offer anonymised role profiles with the proposal, and introductions to the actual team at interview or finalist stage. Both are usually acceptable and would close most of this gap.]`
+
+### How continuity is actually maintained
+
+ArtsAVL is in the middle of a partner transition and knows better than most what discontinuity costs. We would argue the lesson of that experience is not that a name should have been written into a contract. It is that understanding of a system should never live only inside the vendor. That is the thing we would build against, and it is why the following are commitments rather than intentions:
+
+- **The composition above is held for the engagement and for the maintenance term.** We do not reduce seniority after the contract is signed.
+- **Changes to the technical lead or project manager role come with advance notice to ArtsAVL, a documented handover, and an overlap period at our cost, not ArtsAVL's.** Not more than one lead role changes at a time.
+- **Every architectural and product decision is written down, in ArtsAVL's own repository, at the time it is made** — with the reasoning, the alternatives considered, and the trade-off accepted. This is the substantive continuity guarantee. It means a new person joining our team, or a different firm entirely, can reconstruct why the system is the way it is without needing to find whoever was in the room.
+- **No single person holds exclusive knowledge of any part of the platform.** Code review across the team, shared access, and documentation kept current as part of each phase rather than at the end.
+- **ArtsAVL's onboarding is documented as a runbook**, not as institutional memory — access, environments, deployment, and the operational checks that matter.
+
+We recognise that a firm willing to write names into the contract may look like the stronger answer on paper. We would rather make a narrower promise and keep it, and give ArtsAVL the thing that actually protects it: a platform whose reasoning is legible to whoever comes next, including someone who is not us.
 
 ### What we would need from ArtsAVL
 
@@ -155,7 +180,7 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see `[[artsavl-estimation]]`.]`
+`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see [[artsavl-estimation]].]`
 
 Both options below sit inside the budget range stated in the RFP.
 

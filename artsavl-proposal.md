@@ -183,12 +183,12 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 Both options below sit inside the budget range stated in the RFP.
 
-| Item | Basis | Fee |
+| Item | Basis | Fee USD |
 | --- | --- | --- |
-| Onboarding, transition and continuity | Fixed | `[NEEDS INPUT]` |
-| Platform assessment, discovery, accessibility audit and tenancy architecture specification | Fixed | `[NEEDS INPUT]` |
-| Initial delivery — discoverability, reporting, revenue workflows, accessibility remediation, content distribution | Fixed | `[NEEDS INPUT]` |
-| Multi-organization implementation and first partner onboarding | Fixed, confirmed against the agreed architecture | `[NEEDS INPUT]` |
+| Onboarding, transition and continuity | Fixed | `$6,120`  |
+| Platform assessment, discovery, accessibility audit and tenancy architecture specification | Fixed | $33,575 |
+| Initial delivery — discoverability, reporting, revenue workflows, accessibility remediation, content distribution | Fixed | `$`106,335 |
+| Multi-organization implementation and first partner onboarding | Fixed, confirmed against the agreed architecture | $65,195 |
 | Annual maintenance and support | Annual, separate from the above | `[NEEDS INPUT]` |
 | Per-partner payment collection, if required | Optional, priced separately | `[NEEDS INPUT]` |
 

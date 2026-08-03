@@ -20,12 +20,6 @@ _width: wide
 
 > - Whether we can offer anonymised role profiles and/or introductions at interview stage (see §5)
 
-> 
-
-> **Scope decision — revised 2026-08-03 at a blended rate of $85/h.** All six goals cost roughly **$233K** (2,743 hours including management reserve) against a $250K ceiling; the sequenced shape costs roughly **$174K** (2,045 hours). **Both fit under the ceiling.** An earlier version of this draft said the full programme did not fit — that was computed at an assumed $125–150/h and was wrong. §3 and §7 are rewritten accordingly: the case for sequencing the licensing build is now made on sequencing grounds, not affordability. Two live cautions: at $233K the reserve is already consumed and the pessimistic case ($263K) breaches the ceiling; and if ArtsAVL is planning toward the **$150K floor** rather than the ceiling, only the sequenced shape fits at all.
-
-> 
-
 > **Team composition note (internal).** §5 is written role-based with no individual names, per Dualboot practice. Two knock-ons worth checking: the revised composition adds a **tester** and has no **product lead**, so (a) the 270 hours of QA in the estimate now sit with a dedicated tester rather than being distributed across engineers — no change to total hours, but a change to who does them; and (b) the assessment's mitigation for having no technical champion on the client side assumed a product lead carrying the technical narrative to Katie Cornell and her board. That job now needs an owner — most naturally the technical lead, with the PM on cadence.
 
 ---
@@ -218,5 +212,3 @@ To move that recommendation from well-founded to verified, we would want:
 - **The accessibility conformance level** ArtsAVL expects, and any prior audit.
 - **The support history** behind the maintenance agreement.
 - **A conversation with the outgoing development team** during transition.
-
-We would rather ask these now than price around them.

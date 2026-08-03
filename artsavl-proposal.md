@@ -4,19 +4,26 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
-
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
 
 > **Before this can be sent — items only Dualboot can supply.** Everything else below is drawn from evidence. These are marked `[NEEDS INPUT]` inline and deliberately left blank rather than filled with plausible-sounding text:
+
 > - Three to five reference engagements with client names, dates, our role and current status
+
 > - Three referenceable clients with contact details for long-term product/support engagements
+
 > - Named team members for product lead, project manager, tech lead, UX
+
 > - Firm overview: ownership, size, office locations
+
 > - Blended rate and the resulting fee figures
+
 > - Whether we bid the phased scope (recommended, fits budget) or all six goals at ~37% over
->
+
+> 
+
 > **Unresolved commercial decision.** The estimate puts all-six-thin at ~2,743 hours against a budget that buys 1,650–2,000. This draft is written around the **phased** shape because that is what fits and what §11 invites. If we bid all six, §3 and §7 change materially.
 
 ---
@@ -64,11 +71,11 @@ We would spend the first several weeks establishing facts rather than building, 
 - **An accessibility audit** with prioritized findings, so that conformance work is scoped against a measured baseline instead of a general commitment.
 - **A tenancy architecture decision document** that settles how partner organizations would be separated, what each partner controls, and what it costs — reviewed and agreed before any of it is built.
 - **Baseline measurement.** Member and profile counts, renewal rate, advertising revenue, event and opportunity volumes, traffic, and the staff hours currently spent on moderation and advertising trafficking. Without these, no improvement can be shown to have worked.
-- **A phased roadmap** with sequencing, dependencies, effort and explicit decision points — including what is deferred and what deferring costs.
+- **A phased roadmap** with sequencing, dependencies, effort, and explicit decision points — including what is deferred and what deferring costs.
 
 ### A phased roadmap, and one honest observation about scope
 
-The RFP describes six substantial goals, a six-month window, and a budget of $150,000–$250,000, and it invites recommendations where a firm believes a different scope or approach would fit better. We have estimated the full six-goal programme carefully and we do not believe it fits — not at a quality either of us would want to put ArtsAVL's name on. We would rather say that now than discover it in month four.
+The RFP describes six substantial goals, a six-month window, and a budget of $150,000–$250,000, and it invites recommendations where a firm believes a different scope or approach would fit better. We have estimated the full six-goal programme carefully, and we do not believe it fits — not at a quality either of us would want to put ArtsAVL's name on. We would rather say that now than discover it in month four.
 
 What we propose instead is to deliver a coherent, complete first phase inside the budget and timeline, and to hand ArtsAVL a costed, sequenced plan for the rest:
 
@@ -146,10 +153,10 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — all figures. Apply the blended rate to the hour envelopes in [[artsavl-estimation]]. Do not publish hour counts to the client; publish fees by phase.]`
+`[NEEDS INPUT — all figures. Apply the blended rate to the hour envelopes in `[[artsavl-estimation]]`. Do not publish hour counts to the client; publish fees by phase.]`
 
 | Item | Basis | Fee |
-|---|---|---|
+| --- | --- | --- |
 | Onboarding, transition and continuity | Fixed | `[NEEDS INPUT]` |
 | Platform assessment, discovery, accessibility audit and tenancy architecture | Fixed | `[NEEDS INPUT]` |
 | Phase one delivery — discoverability, reporting, revenue workflows, accessibility remediation | Fixed | `[NEEDS INPUT]` |

@@ -4,7 +4,6 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
-
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
@@ -74,7 +73,7 @@ We would spend the first several weeks establishing facts rather than building, 
 
 ### Scope, sequencing, and one recommendation we would make against our own interest
 
-All six goals in the RFP can be delivered within the stated budget and the six-month window. We have estimated them in detail and we are not asking ArtsAVL to accept less than it asked for.
+All six goals in the RFP can be delivered within the stated budget and the six-month window. We have estimated them in detail, and we are not asking ArtsAVL to accept less than it asked for.
 
 We would still recommend sequencing one of them differently, and the reason has nothing to do with affordability.
 
@@ -156,7 +155,7 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see [[artsavl-estimation]].]`
+`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see `[[artsavl-estimation]]`.]`
 
 Both options below sit inside the budget range stated in the RFP.
 

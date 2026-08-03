@@ -87,7 +87,7 @@ So we propose to **specify** the licensing architecture in the first phase, full
 
 We are aware this recommendation defers revenue we could otherwise bill sooner. We think it is the right advice anyway, and we would rather make the case for it now than have ArtsAVL discover in month five that a decision made in month one had to be undone.
 
-**If ArtsAVL would prefer the full programme, including the licensing build, inside the initial engagement**, we will present that version at its real cost. It fits within the stated budget range. Two things we would want ArtsAVL to know if that is the preference: it consumes essentially the whole envelope, leaving little room for the scope discoveries that discovery reliably produces; and it commits us to building the tenancy model before we have read the code that determines its shape. We would take that on if asked. We would just rather ArtsAVL choose it knowingly.
+**If ArtsAVL would prefer the full programme, including the licensing build, inside the initial engagement**, we will present that version at its real cost. It fits within the stated budget range. Two things we would want ArtsAVL to know if that is the preference: it consumes the whole envelope essentially, leaving little room for the scope discoveries that discovery reliably produces; and it commits us to building the tenancy model before we have read the code that determines its shape. We would take that on if asked. We would just rather ArtsAVL choose it knowingly.
 
 ### Design and implementation
 

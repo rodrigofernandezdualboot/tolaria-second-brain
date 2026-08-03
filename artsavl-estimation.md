@@ -195,3 +195,30 @@ The version that fits, in shape: **continuity, assessment and discovery, discove
 
 *Step 6 complete pending scenario confirmation. Step 7 (verdict) pending.*
 
+
+---
+
+## Correction — recomputed at $85/h (2026-08-03)
+
+The rate sensitivity table above spans $95–150/h and concluded the scope was 37% over budget. **Dualboot's blended rate can be as low as $85/h, which reverses the conclusion.**
+
+| Scope | Hours | Cost at $85/h | vs $250K ceiling |
+|---|---|---|---|
+| All six — most likely | 2,298 | $195,330 | inside |
+| All six — PERT expected | 2,385 | $202,725 | inside |
+| **All six — PERT + 15% reserve** | **2,743** | **$233,155** | **inside, ~7% headroom** |
+| All six — pessimistic | 3,100 | $263,500 | **over by $13,500** |
+| All six — pessimistic + reserve | 3,565 | $303,025 | well over |
+| **Sequenced scope + reserve** | **2,045** | **$173,825** | inside, comfortable |
+
+Inverted: **$250K buys 2,941 hours at $85/h**, not the 1,650–2,000 stated above at $125–150/h. All six needs 2,743. **It fits.**
+
+**What was wrong and what wasn't.** The hour estimate is unchanged and was explicitly published as rate-agnostic ("no Dualboot rate card was used — apply the real blended rate to convert"). What was wrong was the *conclusion* drawn from it, which then became the most load-bearing sentence in [[artsavl-proposal]] — that the full programme could not be delivered at a quality worth signing. At $85/h that is not true, and the proposal has been rewritten.
+
+**What survives the correction:**
+
+- **The sequencing argument, which was never about money.** Building the tenancy model depends on three unresolved things: how the ownership model is actually structured (unverifiable without repo access — assumption [A-02], sitting under the largest Epic), whether partners collect their own payments ([A-05]), and whether peer councils will pay at all (risk B1). Building before those answers risks building twice. This holds at any rate.
+- **Thin headroom at the ceiling.** $233K against $250K leaves ~$17K, and the management reserve is already inside that number. The pessimistic case breaches. Bidding all six at the ceiling means scope growth becomes a change order against an exhausted budget.
+- **The budget floor now matters more than the ceiling.** ArtsAVL stated **$150,000–250,000**. At $85/h the floor buys **1,765 hours** — which does not cover all six (2,743h) but does cover the sequenced scope. If ArtsAVL is planning toward the low end, the sequenced shape is the only one that fits. Question A3 (does the upper end need additional board approval) is now the most commercially significant open question in the set.
+
+**Net effect on the verdict:** still **CONDITIONAL GO**, but the condition changes. It is no longer "rescope to fit the budget." It is "confirm which end of the budget range is real, and gate the tenancy build behind repo access and the payment-model decision."

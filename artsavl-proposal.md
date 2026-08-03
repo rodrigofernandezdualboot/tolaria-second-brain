@@ -4,6 +4,7 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
+
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
@@ -18,13 +19,11 @@ _width: wide
 
 > - Firm overview: ownership, size, office locations
 
-> - Blended rate and the resulting fee figures
-
-> - Whether we bid the phased scope (recommended, fits budget) or all six goals at ~37% over
+> - Final fee figures per phase
 
 > 
 
-> **Unresolved commercial decision.** The estimate puts all-six-thin at ~2,743 hours against a budget that buys 1,650–2,000. This draft is written around the **phased** shape because that is what fits and what §11 invites. If we bid all six, §3 and §7 change materially.
+> **Scope decision — revised 2026-08-03 at a blended rate of $85/h.** All six goals cost roughly **$233K** (2,743 hours including management reserve) against a $250K ceiling; the phased shape costs roughly **$174K** (2,045 hours). **Both fit under the ceiling.** An earlier version of this draft said the full programme did not fit — that was computed at an assumed $125–150/h and was wrong. §3 and §7 are rewritten accordingly: the case for sequencing the licensing build is now made on sequencing grounds, not affordability. Two live cautions: at $233K the reserve is already consumed and the pessimistic case ($263K) breaches the ceiling; and if ArtsAVL is planning toward the **$150K floor** rather than the ceiling, only the phased shape fits at all.
 
 ---
 
@@ -73,19 +72,23 @@ We would spend the first several weeks establishing facts rather than building, 
 - **Baseline measurement.** Member and profile counts, renewal rate, advertising revenue, event and opportunity volumes, traffic, and the staff hours currently spent on moderation and advertising trafficking. Without these, no improvement can be shown to have worked.
 - **A phased roadmap** with sequencing, dependencies, effort, and explicit decision points — including what is deferred and what deferring costs.
 
-### A phased roadmap, and one honest observation about scope
+### Scope, sequencing, and one recommendation we would make against our own interest
 
-The RFP describes six substantial goals, a six-month window, and a budget of $150,000–$250,000, and it invites recommendations where a firm believes a different scope or approach would fit better. We have estimated the full six-goal programme carefully, and we do not believe it fits — not at a quality either of us would want to put ArtsAVL's name on. We would rather say that now than discover it in month four.
+All six goals in the RFP can be delivered within the stated budget and the six-month window. We have estimated them in detail and we are not asking ArtsAVL to accept less than it asked for.
 
-What we propose instead is to deliver a coherent, complete first phase inside the budget and timeline, and to hand ArtsAVL a costed, sequenced plan for the rest:
+We would still recommend sequencing one of them differently, and the reason has nothing to do with affordability.
 
-**Phase one — six months, inside budget.** Transition and continuity. Platform assessment and discovery. Accessibility audit and remediation of the highest-priority findings. Search and discoverability improvements, including structured data and sitemaps so that member profiles are found by the people looking for them. Staff reporting built on real platform data. The membership and advertising revenue workflows, including moving advertising purchase and the nonprofit package into self-service rather than email. And the tenancy architecture decision, fully specified and agreed.
+The multi-organization licensing work is the largest single piece of engineering in this RFP. It touches every record in the database, and its shape depends on three things nobody can answer yet: how the platform's current ownership model is actually structured — which we cannot see until we have the code — whether partner organizations will collect their own membership and advertising payments, and whether peer arts councils will in fact pay for the product. Building it before those three answers exist means a material chance of building it twice.
 
-**Phase two — defined and costed now, delivered next.** The multi-organization implementation and the first partner onboarding, plus expanded content distribution.
+So we propose to **specify** the licensing architecture in the first phase, fully and in writing, with the cost of building it attached — and to **build** it immediately afterward, once those three answers are in hand. Between them, the specification and the answers take weeks, not months.
 
-We are proposing to specify the licensing work in phase one and build it in phase two deliberately. It is the largest single piece of engineering in the RFP, it touches every record in the database, and it depends on decisions ArtsAVL has not yet had to make — chiefly whether partner organizations collect their own membership and advertising payments. Getting that answer before writing the code is worth considerably more than starting sooner.
+**What we would deliver in the initial engagement:** transition and continuity. Platform assessment and discovery. An accessibility audit with remediation of the highest-priority findings. Search and discoverability improvements, including structured data and sitemaps, so that profiles members pay to be listed in are found by the people looking for them. Staff reporting built on real platform data. The membership and advertising revenue workflows, including moving advertising purchase and the nonprofit package out of email and into self-service. Expanded content distribution. And the tenancy architecture, specified, costed and agreed.
 
-If ArtsAVL would prefer all six goals inside the initial engagement, we will present that version with its cost stated honestly rather than trimmed to fit.
+**What follows immediately:** the multi-organization implementation and the first partner onboarding, on the specification agreed in phase one and with the payment question settled.
+
+We are aware this recommendation defers revenue we could otherwise bill sooner. We think it is the right advice anyway, and we would rather make the case for it now than have ArtsAVL discover in month five that a decision made in month one had to be undone.
+
+**If ArtsAVL would prefer the full programme, including the licensing build, inside the initial engagement**, we will present that version at its real cost. It fits within the stated budget range. Two things we would want ArtsAVL to know if that is the preference: it consumes essentially the whole envelope, leaving little room for the scope discoveries that discovery reliably produces; and it commits us to building the tenancy model before we have read the code that determines its shape. We would take that on if asked. We would just rather ArtsAVL choose it knowingly.
 
 ### Design and implementation
 
@@ -153,14 +156,16 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — all figures. Apply the blended rate to the hour envelopes in `[[artsavl-estimation]]`. Do not publish hour counts to the client; publish fees by phase.]`
+`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see [[artsavl-estimation]].]`
+
+Both options below sit inside the budget range stated in the RFP.
 
 | Item | Basis | Fee |
 | --- | --- | --- |
 | Onboarding, transition and continuity | Fixed | `[NEEDS INPUT]` |
-| Platform assessment, discovery, accessibility audit and tenancy architecture | Fixed | `[NEEDS INPUT]` |
-| Phase one delivery — discoverability, reporting, revenue workflows, accessibility remediation | Fixed | `[NEEDS INPUT]` |
-| Phase two — multi-organization implementation, first partner onboarding, expanded distribution | Estimated range, confirmed after the architecture decision | `[NEEDS INPUT]` |
+| Platform assessment, discovery, accessibility audit and tenancy architecture specification | Fixed | `[NEEDS INPUT]` |
+| Initial delivery — discoverability, reporting, revenue workflows, accessibility remediation, content distribution | Fixed | `[NEEDS INPUT]` |
+| Multi-organization implementation and first partner onboarding | Fixed, confirmed against the agreed architecture | `[NEEDS INPUT]` |
 | Annual maintenance and support | Annual, separate from the above | `[NEEDS INPUT]` |
 | Per-partner payment collection, if required | Optional, priced separately | `[NEEDS INPUT]` |
 
@@ -172,7 +177,7 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 `[NEEDS INPUT — confirm start availability and the capacity reserved for ArtsAVL.]`
 
-Indicatively, against a six-month window from contract execution: onboarding and continuity in the first weeks; assessment, discovery, audits and the tenancy architecture decision through roughly week six, ending in a joint review of the roadmap and a confirmation of priorities; delivery in two-week increments thereafter, sequenced so that discoverability and revenue work do not depend on the licensing decisions and can proceed regardless of how those land.
+Indicatively, against a six-month window from contract execution: onboarding and continuity in the first weeks; assessment, discovery, audits and the tenancy architecture specification through roughly week six, ending in a joint review of the roadmap and a confirmation of priorities; delivery in two-week increments thereafter, sequenced so that discoverability and revenue work do not depend on the licensing decisions and can proceed regardless of how those land.
 
 We would ask ArtsAVL about fixed dates we should design around — board meetings, the State of the Arts Brunch, the 2027 Arts Guide production cycle, and membership renewal periods — since staff availability during those windows affects the pace more than anything on our side.
 

@@ -5,6 +5,7 @@ related_to:
   - "[[park-road]]"
   - "[[park-road-granite-platform-takeover-roadmap]]"
   - "[[park-road-granite-estimate-accuracy-review]]"
+_organized: true
 ---
 # Park Road / Granite — Executive Summary: Estimates and Proposed Phasing
 

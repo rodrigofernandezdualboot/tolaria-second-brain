@@ -5,6 +5,7 @@ related_to:
   - "[[park-road]]"
   - "[[patterns-of-legacy-displacement]]"
 _width: wide
+_organized: true
 ---
 # Park Road / Granite — Platform Takeover Roadmap & Risk Register
 

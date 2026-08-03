@@ -6,6 +6,7 @@ related_to:
   - "[[park-road-granite-platform-takeover-roadmap]]"
   - "[[park-road-granite-executive-summary-sow]]"
 _width: wide
+_organized: true
 ---
 # Park Road / Granite — Estimate Accuracy Review (EY-P p.26)
 

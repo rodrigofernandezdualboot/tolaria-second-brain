@@ -4,7 +4,6 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
-
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
@@ -158,7 +157,7 @@ We would rather state this plainly than discover it later. The pace of this enga
 
 Two-week increments, each with a demonstration and a written decision record that ArtsAVL keeps. A shared board for work in progress, with change requests handled in writing against the roadmap rather than absorbed informally. Prioritization is a joint conversation at each increment boundary, and ArtsAVL sets the order.
 
-We put unusual weight on those written decision records, for a specific reason. ArtsAVL does not have an in-house technical counterpart to remember why a decision was made two years from now — so the written record has to serve that purpose. It is also what keeps ArtsAVL genuinely free to work with someone else in future, which the RFP's ownership terms make clear the organization intends to preserve. We think that is the right instinct and we would build for it rather than around it.
+We put unusual weight on those written decision records, for a specific reason. ArtsAVL does not have an in-house technical counterpart to remember why a decision was made two years from now — so the written record has to serve that purpose. It is also what keeps ArtsAVL genuinely free to work with someone else in the future, which the RFP's ownership terms make clear the organization intends to preserve. We think that is the right instinct and we would build for it rather than around it.
 
 ### Maintenance and support after the initial engagement
 
@@ -180,7 +179,7 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see [[artsavl-estimation]].]`
+`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see `[[artsavl-estimation]]`.]`
 
 Both options below sit inside the budget range stated in the RFP.
 

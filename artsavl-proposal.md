@@ -6,11 +6,7 @@ _width: wide
 ---
 # ArtsAVL Proposal
 
-**Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
-
 > **Before this can be sent — items only Dualboot can supply.** Everything else below is drawn from evidence. These are marked `[NEEDS INPUT]` inline and deliberately left blank rather than filled with plausible-sounding text:
-
-> - Three referenceable clients with contact details for long-term product/support engagements
 
 > - Firm overview: ownership, size, office locations
 
@@ -272,7 +268,7 @@ ArtsAVL is in the middle of a partner transition and knows better than most what
 - **No single person holds exclusive knowledge of any part of the platform.** Code review across the team, shared access, and documentation kept current as part of each phase rather than at the end.
 - **ArtsAVL's onboarding is documented as a runbook**, not as institutional memory — access, environments, deployment, and the operational checks that matter.
 
-This is not a theoretical commitment. On EntityKeeper we carried a multi-year engagement through leadership transitions on our own team without losing delivery velocity, and preserving institutional knowledge across those changes was an explicit objective of the engagement rather than a hope.
+This is not a theoretical commitment. On EntityKeeper, we carried a multi-year engagement through leadership transitions on our own team without losing delivery velocity, and preserving institutional knowledge across those changes was an explicit objective of the engagement rather than a hope.
 
 We recognise that a firm willing to write names into the contract may look like the stronger answer on paper. We would rather make a narrower promise and keep it, and give ArtsAVL the thing that actually protects it: a platform whose reasoning is legible to whoever comes next, including someone who is not us.
 

@@ -42,6 +42,22 @@ Three things we think matter more than they appear in the document.
 
 ## 2. Relevant experience
 
+### Debtbook
+
+#### Case Study
+
+DebtBook, co-founded by Tyler Traudt and Erik Pelletier, is a platform that helps governments, educational institutions, and nonprofits manage financial data with precision. By replacing error-prone spreadsheets with a user-friendly application, DebtBook streamlines debt management, improves financial reporting, and enhances organizational impact. These sectors often face challenges with traditional spreadsheet-based methods, which lead to inefficiencies, data inaccuracies, and risks like fraud. DebtBook simplifies financial management, providing a solution that reduces errors, consolidates data, and minimizes risk.
+
+#### The Solution
+
+We collaborated with DebtBook from the conceptual stage to develop a robust application tailored to the financial management needs of public and nonprofit entities. We provided strategic guidance and validated the feasibility of the platform, ensuring it incorporated essential financial regulations and offered high accuracy in managing complex data. Our partnership extended beyond development, as we facilitated introductions to key vendors, media outlets, and investors, including securing a lead investor to support DebtBook's growth. The platform features an intuitive dashboard that simplifies data viewing, analysis, and reporting, while automating complex financial tasks to reduce reliance on error-prone spreadsheets. This innovative solution enhances decision-making, improves efficiency, and minimizes risks for organizations.
+
+#### The Results
+
+- Debtbook raised more than $23 million.
+- Secured contracts with major educational institutions, local governments, and nonprofit organizations.
+- We were able to efficiently build and launch the product in roughly 4 months.
+
 `[NEEDS INPUT — three to five engagements, with client name, description, our role, dates, current status. The RFP asks specifically for existing Rails applications, membership or directory products, advertising or revenue-generating platforms, multi-tenant or white-label products, and long-term support relationships. Do not pad this list; it is weighted heavily and a thin entry is worse than a shorter list.]`
 
 `[NEEDS INPUT — three referenceable clients with contact details, for comparable long-term product development or application-support engagements.]`

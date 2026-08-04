@@ -4,23 +4,24 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
+
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
 
 > **Before this can be sent — items only Dualboot can supply.** Everything else below is drawn from evidence. These are marked `[NEEDS INPUT]` inline and deliberately left blank rather than filled with plausible-sounding text:
 
-> - Three to five reference engagements with client names, dates, our role and current status
-
 > - Three referenceable clients with contact details for long-term product/support engagements
 
 > - Firm overview: ownership, size, office locations
 
-> - Final fee figures per phase
+> - Engagement dates and current status for MyWorkChoice and EntityKeeper (not published on our own case-study pages)
 
 > - Whether we can offer anonymised role profiles and/or introductions at interview stage (see §5)
 
 > **Team composition note (internal).** §5 is written role-based with no individual names, per Dualboot practice. Two knock-ons worth checking: the revised composition adds a **tester** and has no **product lead**, so (a) the 270 hours of QA in the estimate now sit with a dedicated tester rather than being distributed across engineers — no change to total hours, but a change to who does them; and (b) the assessment's mitigation for having no technical champion on the client side assumed a product lead carrying the technical narrative to Katie Cornell and her board. That job now needs an owner — most naturally the technical lead, with the PM on cadence.
+
+> **Case selection note (internal).** §2 now carries six entries. Two of them — PetScreening and PetScreening/AWS — are **the same client**, presented as product and infrastructure views of one engagement. §8 asks for three to five *engagements*, so counting them separately risks reading as padding against a request that explicitly wants distinct relationships. Recommend either merging them into one entry or dropping one, then choosing which five to submit. Every fact in these entries comes from our own published case studies; nothing has been embellished, and the two gaps our own pages do not state are flagged rather than filled.
 
 ---
 
@@ -42,6 +43,8 @@ Three things we think matter more than they appear in the document.
 
 ## 2. Relevant experience
 
+The engagements below were chosen for their overlap with what ArtsAVL is asking for: maintaining and extending existing Ruby on Rails applications, directory and profile-driven products, revenue-generating platforms, multi-party systems, and relationships measured in years rather than months.
+
 ### Debtbook
 
 #### Case Study
@@ -58,11 +61,128 @@ We collaborated with DebtBook from the conceptual stage to develop a robust appl
 - Secured contracts with major educational institutions, local governments, and nonprofit organizations.
 - We were able to efficiently build and launch the product in roughly 4 months.
 
-`[NEEDS INPUT — three to five engagements, with client name, description, our role, dates, current status. The RFP asks specifically for existing Rails applications, membership or directory products, advertising or revenue-generating platforms, multi-tenant or white-label products, and long-term support relationships. Do not pad this list; it is weighted heavily and a thin entry is worse than a shorter list.]`
+### EntityKeeper
+
+*Engagement from 2014, across multiple years and multiple roadmap phases · current status `[NEEDS INPUT — confirm whether the relationship is still active]`*
+
+#### Case Study
+
+EntityKeeper is a cloud-based platform that streamlines the management of legal entities for law firms, real estate investors, and business operators, with organizational chart visualization, compliance tracking and centralized records. It allows users to govern dozens — or hundreds — of entities with clarity.
+
+By 2014, the platform's original **Ruby codebase had gone years without updates**. To meet the demands of a growing legal-tech market and ensure long-term scalability, EntityKeeper partnered with Dualboot to modernize the platform, accelerate development and drive product innovation. Revitalizing it required more than technical updates. It called for a partner who could stabilize and refactor an existing codebase, modernize the architecture and user experience, deliver new features aligned with client needs, scale the engineering team over time, **preserve institutional knowledge during transitions**, and collaborate on long-term planning.
+
+#### The Solution
+
+We began by stabilizing the inherited code, then transitioned into a full product development partner, collaborating with EntityKeeper's leadership over multiple years and across successive phases of the roadmap. We worked directly with the COO and product stakeholders, providing development, DevOps and product strategy.
+
+The work included refactoring and updating the core architecture for reliability and scalability, and redesigning core modules: organization chart visualization for complex ownership mapping, compliance tracking with automated deadline reminders, entity profile management with centralized records for personnel, jurisdictions and properties, and role-based access controls for enterprise-grade permissions. Alongside it we implemented Agile practices — sprint planning, milestone tracking and improved DevOps workflows — scaled the team between two and six contributors as the roadmap required, **managed team leadership transitions without losing velocity**, and maintained communication through weekly meetings and shared Slack channels.
+
+#### The Results
+
+- Reduced the legacy bug backlog by **90% in the first six months**, laying the foundation for a stable release cycle.
+- Launched **25+ new features** and enhancements.
+- **Doubled release frequency** through improved planning, DevOps and delivery process.
+- Sustained a multi-year strategic partnership through changes on both sides — the closest parallel we have to what ArtsAVL is asking of a long-term partner.
+
+### Boardroom Insiders
+
+*Replatforming delivered over roughly three and a half months; new platform live at the end of 2018 · relationship ongoing*
+
+#### Case Study
+
+Boardroom Insiders, founded by Sharon Gillenwater, provides business intelligence on C-suite executives for enterprise sales, marketing and recruiting teams. It had grown into an online database of **more than 19,000 executive profiles**, maintained by a distributed team of editors and researchers.
+
+The business was successful and the market growing, but the platform was built on a legacy PHP codebase that became more brittle with each addition. Neither Sharon nor President Lee Demby is a technical executive; they needed someone to own the platform so they could build a business on top of it. They had tried a contractor who managed the back end, then an outside agency, and described that process as painful — work shipped without proper testing, and they spent untold hours documenting defects. Meanwhile their customers were getting larger and more demanding about user experience.
+
+#### The Solution
+
+Rather than add to a mountain of brittle code, we proposed replatforming the entire system — and we said so even though it was the bigger job, because it was what would let the business move faster later.
+
+The original code was PHP on Rackspace and still functioning, so we built the replacement **in Ruby on Rails on AWS, in parallel**, while the existing platform continued serving customers as usual. When the new system was ready, we cut over. We led and managed the whole process, while giving Sharon and Lee direct access to our developers through a dedicated Slack channel. We deliberately preserved most of the existing public design so that the migration would shore up the foundation without disturbing a user experience customers were already happy with.
+
+#### The Results
+
+- At cutover there was **no uproar, no frustrated emails, no cancelled contracts — in fact no feedback at all** from public users, which for a migration of a live revenue platform is the outcome you want.
+- The internal editorial experience, rebuilt rather than preserved, changed substantially: described by the client as "so much less cumbersome… more of a spa-like experience."
+- Increased engagement from the editorial team and more focus on the higher-level analysis the product depends on.
+- Follow-on work: an editorial dashboard for productivity metrics, performance tracking and staffing forecasts, then the company's first new product since founding — which Sharon credited to having replatformed first.
+
+### PetScreening
+
+*Design through public launch in under five months · public launch October 2017 · ongoing partnership, eight-plus years*
+
+#### Case Study
+
+PetScreening, founded by John Bradford — a long-time real estate investor, entrepreneur and North Carolina legislator — is a platform that streamlines pet screening for tenants and property managers. Traditional processes relied on self-reported forms with no verification, leaving property owners exposed to misrepresentation and liability, usually discovered too late to address.
+
+John had built software before and knew what he needed: a development team, and someone to run point between that team and him.
+
+#### The Solution
+
+The engagement began with collaborative discovery sessions to map the business model, clarify requirements and align on go-to-market. Wireframes and mockups were created, reviewed and refined before engineering began.
+
+Testing ran first inside John's own property management firm for two months, then as a closed beta with roughly ten additional firms — **generating revenue while still iterating**. Because the MVP reached market quickly, budget and flexibility remained to iterate on real user feedback, and we scaled the software team in step with adoption.
+
+As adoption accelerated, onboarding demand began to outpace manual processes. The choice was to add staff or to automate. As John put it: *"Just throwing a person at it doesn't mean you'll get someone onboard… You have to make it automatic and instantaneous."* We built technology-driven onboarding workflows through system integrations and APIs — reducing friction, lowering cost of sale and letting the business scale without headcount.
+
+#### The Results
+
+- **21% month-over-month growth** in the period following launch, with customers arriving through inbound demand.
+- Recognized as **Vendor of the Year** by a leading industry conference one year after public debut, and attracted interest from the largest multifamily management company in the US.
+- Sustained uptime the client characterized as never having been down — freeing his attention from whether the platform works to what to build next.
+- In 2025 alone: **$87.9 million** in reclaimed pet-related revenue for property managers and owners, **1.3 million administrative and legal hours saved** through the assistance-animal review process, **12,000 lost pets reunited** with families, and 5.1 million lost-pet alerts sent.
+
+### PetScreening — infrastructure and scale on AWS
+
+*Same engagement as above, infrastructure workstream · ongoing*
+
+#### Case Study
+
+As PetScreening moved from startup to established product, the platform had to absorb sustained growth in both traffic and data while keeping infrastructure cost under control. It now processes **up to 35,000 requests per minute against roughly 400GB of data**.
+
+#### The Solution
+
+We architected and operate the platform on AWS with a stack that closely mirrors the shape of ArtsAVL's own: **Amazon RDS for PostgreSQL** as the primary database with a read-only replica and automated snapshots, **ElastiCache (Redis)** for caching and as the store for **Sidekiq background jobs**, **ECS** for containerized application instances with autoscaling behind an Application Load Balancer, **S3** for photo and document uploads, **Lambda** for generating image thumbnails for social and third-party consumers, **CloudWatch** for monitoring, alerting and log aggregation, **CloudTrail** as an audit log, **SSM** as a parameter store, **MSK** for database synchronization, and **EC2 spot instances running CI/CD pipelines in GitLab**.
+
+Cost was treated as a design concern rather than an afterthought: RDS Reserved Instances cut that bill by 20%, and Lambda handled image processing inside free-tier usage.
+
+#### The Results
+
+- Scaled from early-stage to **35k requests per minute and 400GB of data** without re-architecture.
+- **20% reduction** in database hosting cost through reserved capacity.
+- Read replicas and automated backups established for data integrity and availability.
+- Platform in use by **over 200 property managers across 500,000 doors**, averaging four new property manager sign-ups per day, growing 22% month over month.
+
+### MyWorkChoice
+
+*Dates `[NEEDS INPUT — not stated on our published case study]` · platform live and operating at national scale*
+
+#### Case Study
+
+MyWorkChoice is a workforce management business specializing in temporary staffing and shift-based scheduling. Its platform is a **three-sided marketplace** connecting staffing agencies, client companies and shift-based workers, and today manages millions of shift assignments annually across multiple regions.
+
+As the company expanded nationally, its legacy infrastructure struggled with growing transaction volumes and real-time communication demands. Manual scaling, fragmented monitoring and inconsistent cost management created bottlenecks: application slowdowns during peak shift-posting hours, manual server management and deployment complexity, idle compute capacity off-peak, and no centralized view of performance.
+
+#### The Solution
+
+We re-architected the platform into a cloud-native, containerized, cost-optimized AWS environment. **Amazon ECS on Fargate orchestrates Rails APIs, React front ends and Sidekiq background workers**, with automated scaling and zero-downtime rolling deployments. **RDS PostgreSQL with PostGIS** provides the transactional database and powers geolocation-based worker-to-shift matching and reliability scoring. **ElastiCache (Redis)** manages job queues and accelerates API responses across thousands of concurrent users. S3 stores profile photos, timecards and reports under lifecycle policies; Rekognition automates identity verification during onboarding; CloudWatch provides unified observability; Secrets Manager and KMS handle credentials and keys; VPC, Route 53 and load balancing provide secure multi-AZ networking. Infrastructure is defined in Terraform, with GitLab CI/CD.
+
+#### The Results
+
+- **99.9% uptime** across all production environments.
+- **Two to three deployments per week with zero downtime.**
+- **60% reduction in operational overhead** through automation and managed services.
+- **35–45% monthly infrastructure cost reduction** via Fargate Spot, right-sizing and reserved capacity.
+- **70% faster response times** during peak shift notification periods.
+- Geolocation intelligence improved shift fill rates and reduced unfilled jobs.
+
+### Why these five
+
+Taken together they cover what §8 asks about. **Existing Rails applications:** Boardroom Insiders was rebuilt in Rails and is still ours; MyWorkChoice runs Rails APIs we modernized; EntityKeeper was an unmaintained Ruby codebase we inherited and stabilized. **Directory and profile products:** Boardroom Insiders maintains more than 19,000 curated profiles with an editorial workflow behind them; EntityKeeper manages entity profiles with centralized records and role-based permissions. **Revenue-generating platforms:** PetScreening and DebtBook were both built to earn, and PetScreening's shift from manual onboarding to automated self-service is the same move ArtsAVL needs for advertising and membership. **Multi-party products:** MyWorkChoice's three-sided marketplace separates agencies, employers and workers inside one system. **Long-term support:** EntityKeeper across multiple years and roadmap phases, PetScreening for eight-plus, Boardroom Insiders continuing past launch into new products.
+
+The one we would point ArtsAVL to first is **EntityKeeper** — an unmaintained Ruby platform taken over from someone else, stabilized, modernized and carried for years, with continuity of understanding preserved across leadership changes on both sides. That is the situation ArtsAVL is in.
 
 `[NEEDS INPUT — three referenceable clients with contact details, for comparable long-term product development or application-support engagements.]`
-
-What we would want this section to demonstrate, in order of importance to ArtsAVL: that we maintain and extend mature Rails applications as a normal part of our work rather than as an exception; that we have taken over someone else's codebase before and can describe how that went; that we have built membership, directory or community-engagement products where the revenue mattered; and that we have kept a client for years rather than months.
 
 ## 3. How we would approach the work
 
@@ -157,6 +277,8 @@ ArtsAVL is in the middle of a partner transition and knows better than most what
 - **No single person holds exclusive knowledge of any part of the platform.** Code review across the team, shared access, and documentation kept current as part of each phase rather than at the end.
 - **ArtsAVL's onboarding is documented as a runbook**, not as institutional memory — access, environments, deployment, and the operational checks that matter.
 
+This is not a theoretical commitment. On EntityKeeper we carried a multi-year engagement through leadership transitions on our own team without losing delivery velocity, and preserving institutional knowledge across those changes was an explicit objective of the engagement rather than a hope.
+
 We recognise that a firm willing to write names into the contract may look like the stronger answer on paper. We would rather make a narrower promise and keep it, and give ArtsAVL the thing that actually protects it: a platform whose reasoning is legible to whoever comes next, including someone who is not us.
 
 ### What we would need from ArtsAVL
@@ -189,15 +311,15 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see `[[artsavl-estimation]]`.]`
+`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see [[artsavl-estimation]].]`
 
 Both options below sit inside the budget range stated in the RFP.
 
 | Item | Basis | Fee USD |
 | --- | --- | --- |
-| Onboarding, transition and continuity | Fixed | `$6,120`  |
+| Onboarding, transition and continuity | Fixed | $6,120 |
 | Platform assessment, discovery, accessibility audit and tenancy architecture specification | Fixed | $33,575 |
-| Initial delivery — discoverability, reporting, revenue workflows, accessibility remediation, content distribution | Fixed | `$`106,335 |
+| Initial delivery — discoverability, reporting, revenue workflows, accessibility remediation, content distribution | Fixed | $106,335 |
 | Multi-organization implementation and first partner onboarding | Fixed, confirmed against the agreed architecture | $65,195 |
 | Annual maintenance and support | Annual, separate from the above | `[NEEDS INPUT]` |
 | Per-partner payment collection, if required | Optional, priced separately | `[NEEDS INPUT]` |

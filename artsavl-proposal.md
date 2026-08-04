@@ -4,7 +4,6 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
-
 # ArtsAVL Proposal
 
 **Draft for the 2026 Creative Directory & Engagement Platform RFP.** Due 2026-08-15. Built from [[artsavl-technical-assessment]], [[artsavl-solution-architecture]], [[artsavl-risk-register]], [[artsavl-estimation]] and the live-site crawl. Sections are ordered to cover every area ArtsAVL said it would assess, without referring to its scoring scheme.
@@ -18,10 +17,6 @@ _width: wide
 > - Engagement dates and current status for MyWorkChoice and EntityKeeper (not published on our own case-study pages)
 
 > - Whether we can offer anonymised role profiles and/or introductions at interview stage (see §5)
-
-> **Team composition note (internal).** §5 is written role-based with no individual names, per Dualboot practice. Two knock-ons worth checking: the revised composition adds a **tester** and has no **product lead**, so (a) the 270 hours of QA in the estimate now sit with a dedicated tester rather than being distributed across engineers — no change to total hours, but a change to who does them; and (b) the assessment's mitigation for having no technical champion on the client side assumed a product lead carrying the technical narrative to Katie Cornell and her board. That job now needs an owner — most naturally the technical lead, with the PM on cadence.
-
-> **Case selection note (internal).** §2 now carries six entries. Two of them — PetScreening and PetScreening/AWS — are **the same client**, presented as product and infrastructure views of one engagement. §8 asks for three to five *engagements*, so counting them separately risks reading as padding against a request that explicitly wants distinct relationships. Recommend either merging them into one entry or dropping one, then choosing which five to submit. Every fact in these entries comes from our own published case studies; nothing has been embellished, and the two gaps our own pages do not state are flagged rather than filled.
 
 ---
 
@@ -63,7 +58,7 @@ We collaborated with DebtBook from the conceptual stage to develop a robust appl
 
 ### EntityKeeper
 
-*Engagement from 2014, across multiple years and multiple roadmap phases · current status `[NEEDS INPUT — confirm whether the relationship is still active]`*
+*Engagement from 2014, across multiple years and multiple roadmap phases · current status *`[NEEDS INPUT — confirm whether the relationship is still active]`
 
 #### Case Study
 
@@ -155,7 +150,7 @@ Cost was treated as a design concern rather than an afterthought: RDS Reserved I
 
 ### MyWorkChoice
 
-*Dates `[NEEDS INPUT — not stated on our published case study]` · platform live and operating at national scale*
+*Dates *`[NEEDS INPUT — not stated on our published case study]`* · platform live and operating at national scale*
 
 #### Case Study
 
@@ -311,7 +306,7 @@ On accessibility, we would start with an audit and a prioritized plan, then reme
 
 ## 7. Investment and value
 
-`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see [[artsavl-estimation]].]`
+`[NEEDS INPUT — publish fees by phase, not hour counts. Internal basis: 2,045 hours for the sequenced scope, 2,743 hours for the full programme including licensing build, both including management reserve — see `[[artsavl-estimation]]`.]`
 
 Both options below sit inside the budget range stated in the RFP.
 

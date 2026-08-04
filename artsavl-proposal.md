@@ -76,7 +76,7 @@ The work included refactoring and updating the core architecture for reliability
 
 - Reduced the legacy bug backlog by **90% in the first six months**, laying the foundation for a stable release cycle.
 - Launched **25+ new features** and enhancements.
-- **Doubled release frequency** through improved planning, DevOps and delivery process.
+- **Doubled release frequency** through improved planning, DevOps, and delivery process.
 - Sustained a multi-year strategic partnership through changes on both sides — the closest parallel we have to what ArtsAVL is asking of a long-term partner.
 
 ### Boardroom Insiders
@@ -87,7 +87,7 @@ The work included refactoring and updating the core architecture for reliability
 
 Boardroom Insiders, founded by Sharon Gillenwater, provides business intelligence on C-suite executives for enterprise sales, marketing and recruiting teams. It had grown into an online database of **more than 19,000 executive profiles**, maintained by a distributed team of editors and researchers.
 
-The business was successful and the market growing, but the platform was built on a legacy PHP codebase that became more brittle with each addition. Neither Sharon nor President Lee Demby is a technical executive; they needed someone to own the platform so they could build a business on top of it. They had tried a contractor who managed the back end, then an outside agency, and described that process as painful — work shipped without proper testing, and they spent untold hours documenting defects. Meanwhile their customers were getting larger and more demanding about user experience.
+The business was successful and the market growing, but the platform was built on a legacy PHP codebase that became more brittle with each addition. Neither Sharon nor President Lee Demby is a technical executive; they needed someone to own the platform so they could build a business on top of it. They had tried a contractor who managed the back end, then an outside agency, and described that process as painful — work shipped without proper testing, and they spent untold hours documenting defects. Meanwhile, their customers were getting larger and more demanding about user experience.
 
 #### The Solution
 

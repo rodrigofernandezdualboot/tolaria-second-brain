@@ -256,7 +256,9 @@ We staff this engagement by role, with defined seniority and allocation, and we 
 
 No subcontractors. Every person on the engagement is a Dualboot employee working under our own review and quality practices.
 
-We should be straightforward about one thing rather than let it look like an omission. We do not put individual names into proposals, and we would rather explain why than list people we might later have to change. A named individual in a proposal is a commitment a firm of any size cannot honestly guarantee for a multi-year relationship — people take leave, change roles, and occasionally leave. What we can guarantee is the composition, the seniority, and the practices that make an individual's presence less load-bearing than it would otherwise be. `[NEEDS INPUT — confirm whether we can offer anonymised role profiles with the proposal, and introductions to the actual team at interview or finalist stage. Both are usually acceptable and would close most of this gap.]`
+We should be straightforward about one thing rather than let it look like an omission. We do not put individual names into proposals, and we would rather explain why than list people we might later have to change. A named individual in a proposal is a commitment a firm of any size cannot honestly guarantee for a multi-year relationship — people take leave, change roles, and occasionally leave. What we can guarantee is the composition, the seniority, and the practices that make an individual's presence less load-bearing than it would otherwise be. 
+
+We staff by role and commit to the composition above, and we'd be glad to introduce the specific people during interviews.
 
 ### How continuity is actually maintained
 

@@ -255,10 +255,10 @@ We staff this engagement by role, with defined seniority and allocation, and we 
 | Designer | Discovery research, user flows, and interface design through the experience work |
 
 No subcontractors. Every person on the engagement is a Dualboot employee working under our own review and quality practices.
+We staff by role and commit to the composition above, and we'd be glad to introduce the specific people during interviews.
 
 We should be straightforward about one thing rather than let it look like an omission. We do not put individual names into proposals, and we would rather explain why than list people we might later have to change. A named individual in a proposal is a commitment a firm of any size cannot honestly guarantee for a multi-year relationship — people take leave, change roles, and occasionally leave. What we can guarantee is the composition, the seniority, and the practices that make an individual's presence less load-bearing than it would otherwise be. 
 
-We staff by role and commit to the composition above, and we'd be glad to introduce the specific people during interviews.
 
 ### How continuity is actually maintained
 

@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[pacific-seafood]]"
 _organized: true
+_width: wide
 ---
 # Pacific Seafood - Technical Brief
 

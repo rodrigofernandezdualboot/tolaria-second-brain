@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[pacific-seafood]]"
 related_to: "[[technical-intake-brief-pacific-seafood-as-400-invoice-flow-discovery-poc]]"
 _organized: true
+_width: wide
 ---
 # Pacific Seafood - Implementation plan
 

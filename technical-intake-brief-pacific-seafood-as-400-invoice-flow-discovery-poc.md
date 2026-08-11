@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[pacific-seafood]]"
 _organized: true
+_width: wide
 ---
 # Technical Intake Brief — Pacific Seafood AS/400 Invoice-Flow Discovery POC
 

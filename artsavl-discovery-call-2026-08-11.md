@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[artsavl]]"
 status: Active
+_width: wide
 ---
 
 # ArtsAVL — Discovery Call Notes (11 Aug 2026)

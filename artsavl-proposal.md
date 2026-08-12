@@ -4,24 +4,7 @@ related_to: "[[artsavl]]"
 status: Draft
 _width: wide
 ---
-
 # ArtsAVL Proposal
-
-> **Revised after the 11 Aug discovery call** — see [[artsavl-discovery-call-2026-08-11]]. Seven changes applied: membership-scale claim retracted, timeline reframed, first licensees named, handoff language softened, four admin priorities added as deliverables, the reporting assumption corrected, and the fee table flagged for recompute.
-
-> **Before this can be sent — items only Dualboot can supply.**
-
-> - Firm overview: ownership, size, office locations
-
-> - Engagement dates and current status for MyWorkChoice and EntityKeeper
-
-> - Whether we can offer role profiles and/or introductions at interview stage (see §5)
-
-> - **Revised fee figures.** §7's numbers predate the call and are now understated — the reporting and messaging Epic grew materially (see internal note in §7). Recompute before sending.
-
-> **Internal — what the call changed.** Membership is ~350 accounts, not thousands; the six-figure revenue argument is gone and licensing is confirmed as the growth thesis. Katie's own priority is hardening *before* licensing, because she will not offer a glitchy product to licensees — which endorses our sequencing rather than conflicting with it. Timeline: she *hopes* to finish inside the fiscal year ending 30 June 2027, but said "hoping", and the RFP's six months remains the written requirement — treated below as a question, not a fact. The outgoing developer is friendly, has read the RFP, and will speak to bidders. Two named first licensees exist. Reporting effectively does not exist and in-tool messaging does not exist at all — assumption A-03 resolved against us.
-
----
 
 ## 1. Our understanding of ArtsAVL and the Creative Portal
 

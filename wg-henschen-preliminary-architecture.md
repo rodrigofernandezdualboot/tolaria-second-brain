@@ -25,11 +25,72 @@ NetSuite enforces data access through roles — subsidiary, department, location
 | **Query NetSuite live** | Real-time | **Inherited automatically** | Slow; consumes a shared account-wide concurrency budget | Poor |
 | **Replicate to a warehouse** | Batch — hourly or nightly | **Must be rebuilt** | Fast and cheap | Strong |
 
-So the architecture below does both and routes between them. *"How many of part 47-A do we have right now, and is any of it allocated"* goes live and comes back correctly scoped with no permission code on our side. *"What is our total on-hand value by category this quarter"* needs the warehouse — and every row that lands there is a row whose access rules we now own.
+Neither column wins outright, which is why the proposal below uses both and routes between them per question. *"How many of part 47-A do we have right now, and is any of it allocated"* goes live and comes back correctly scoped with no permission code on our side. *"What is our total on-hand value by category this quarter"* needs the warehouse — and every row that lands there is a row whose access rules we now own.
 
 The open question is no longer *whether* to reproduce their permission model. It is *how faithfully we can do it cheaply*, and that depends entirely on the shape of their restrictions — which we have not seen. See **Permission model** below.
 
-## Architecture at a glance
+## Architecture
+
+Three diagrams follow, but **there is only one proposal**. A and B are the two pure approaches drawn in isolation, so the trade-off above is legible; C is what we actually recommend and contains both.
+
+The difference to watch for is the **scheduled sync**. In A there is none — nothing is copied anywhere, and every answer comes from NetSuite at the moment it is asked. B and C add a pipeline that copies data out of NetSuite on a timer, entirely independent of anyone asking a question.
+
+| | A — Live only | B — Replicated only | C — Proposed |
+|---|---|---|---|
+| Scheduled sync out of NetSuite | No | Yes | Yes |
+| S3 + Glue + Redshift | No | Yes | Yes |
+| Permission code we have to write | None | All of it | Only for warehouse questions |
+| Answers "right now" accurately | Yes | No — as stale as the last sync | Yes |
+| Answers totals and trends over history | Poorly, and slowly | Yes | Yes |
+| Load on their NetSuite | Every question | Sync only | Sync + live questions |
+
+### A — Live only
+
+Every question becomes a SuiteQL query against NetSuite, issued under the asking user's own token. NetSuite filters the results by that user's role before they ever reach us.
+
+```mermaid
+flowchart LR
+  SPA["React SPA<br/>inside NetSuite"] --> AUTH["Lambda authorizer<br/>reads user's NetSuite role"]
+  AUTH --> AGENT["Agent"]
+  AGENT --> TOOL["SuiteQL tool<br/>Lambda"]
+  TOOL -->|queries as this user| NSQ["NetSuite<br/>SuiteQL endpoint"]
+  NSQ -->|already filtered by role| TOOL
+  TOOL --> AGENT
+  AGENT --> GUARD["Guardrails"]
+  GUARD --> SPA
+```
+
+**Why it appeals:** no data platform, no copies of their data anywhere, and the permission requirement is satisfied by NetSuite itself at zero engineering cost.
+
+**Why it isn't enough on its own:** NetSuite caps concurrent API requests account-wide — as few as five on a Standard tier, shared with every other integration they run. Aggregate questions over long history are slow or impossible within that budget, and heavy use would degrade their existing integrations.
+
+### B — Replicated only
+
+A scheduled pipeline copies NetSuite into S3 and refines it through bronze, silver and gold layers. Questions are answered from Redshift, never from NetSuite.
+
+```mermaid
+flowchart LR
+  subgraph SYNC["Scheduled sync — runs on a timer, no user involved"]
+    NSX["NetSuite"] --> EXT["Extractor<br/>windowed SuiteQL"]
+    EXT --> BR["Bronze<br/>raw"] --> SI["Silver<br/>conformed"] --> GO["Gold<br/>+ restriction keys"]
+  end
+  GO --> RS["Redshift"]
+  SPA["React SPA<br/>inside NetSuite"] --> AUTH["Lambda authorizer<br/>reads user's NetSuite role"]
+  AUTH --> KB["Knowledge base<br/>GenerateQuery"]
+  KB --> WRAP["Permission wrapper<br/>we rebuild the rules here"]
+  WRAP --> RS
+  RS --> WRAP
+  WRAP --> GUARD["Guardrails"]
+  GUARD --> SPA
+```
+
+**Why it appeals:** fast, cheap per query, and genuinely good at totals, trends and anything spanning history. Almost no ongoing load on NetSuite.
+
+**Why it isn't enough on its own:** answers are only as current as the last sync, which rules it out for stock-on-hand questions. And the box marked *permission wrapper* is where the whole access model has to be reconstructed by us, because none of it survives the copy.
+
+### C — Proposed: both, with a router
+
+The user asks one question in one place. A router decides which path answers it — the user never chooses, and never sees the difference.
 
 ```mermaid
 flowchart TB
@@ -66,6 +127,10 @@ flowchart TB
   SQL -.->|scheduled| EXT
   EXT --> B --> S --> G
 ```
+
+Reading it: steps 1–4 are the same for every question. Step 5a is diagram A, step 5b is diagram B. The dotted line at the bottom is the scheduled sync — it runs on its own clock and is not part of answering any individual question.
+
+**The payoff of combining them** is that the expensive part gets smaller. Permission-sensitive and point-in-time questions go live, where NetSuite enforces correctness for free. Only the aggregate questions need the warehouse, so only that subset of data needs its access rules rebuilt — which is what the *Permission model* section is about.
 
 ## Layer by layer
 
@@ -122,11 +187,11 @@ A NetSuite instance has hundreds of tables. Ten is not a target to model toward,
 
 Accuracy levers documented by AWS: per-table and per-column semantic descriptions, and curated natural-language/SQL example pairs.
 
-Permission enforcement on this path is covered below — it is why the diagram shows a wrapper between the knowledge base and Redshift rather than a direct connection.
+Permission enforcement on this path is covered below — it is why the diagrams show a wrapper between the knowledge base and Redshift rather than a direct connection.
 
 ### 6. Data platform — bronze, silver, gold
 
-Standard medallion layering on S3, orchestrated by Glue.
+Standard medallion layering on S3, orchestrated by Glue. This exists only in approaches B and C.
 
 **Bronze — raw extracts.** Recommendation: write a **custom SuiteQL extractor** rather than using Glue's Oracle NetSuite connector for the transaction and item objects. AWS documents that connector's date filter operators as unreliable on Item, Transaction Line, and Transaction Accounting Line — precisely the objects and precisely the filters an incremental sync depends on. It also caps at 100,000 records per extract. The connector may still be reasonable for smaller, better-behaved objects.
 
@@ -166,7 +231,7 @@ The requirement is fixed: per-user fidelity to NetSuite. What is open is the mec
 
 **The model is never the enforcement point.** Bedrock's own documentation states that the include/exclude lists on a structured knowledge base are *"non-deterministic and intended for improving accuracy, not security."* Prompt instructions are not access control either. Enforcement has to sit in a deterministic layer the model cannot talk its way around.
 
-That is why the diagram routes the mart path through a wrapper. The mechanism: use the knowledge base's **`GenerateQuery`** operation, which returns the generated SQL rather than executing it, then execute it ourselves against a connection whose visibility is already constrained. The model proposes; our layer disposes.
+That is why the diagrams route the mart path through a wrapper. The mechanism: use the knowledge base's **`GenerateQuery`** operation, which returns the generated SQL rather than executing it, then execute it ourselves against a connection whose visibility is already constrained. The model proposes; our layer disposes.
 
 ### Three mechanisms, cheapest first
 
@@ -205,7 +270,7 @@ Why each one matters to us, ordered by how much it moves the design. The client-
 3. **The shape of their restrictions.** Which axes, how many effective scopes, how often they change. Selects mechanism 1, 2, or 3 and therefore most of the permission cost. Top technical unknown now that per-user fidelity is fixed.
 4. **Service tier, SuiteCloud Plus license count, and whether SuiteAnalytics Connect is licensed.** All three visible on one screen: Setup > Integration > Integration Management > Integration Governance. Caps how much load the live path can carry — which matters more now that live is the fidelity-guaranteed path.
 5. **Which modules beyond inventory, and how heavily customized?** Drives the gold mart design against the 10-table ceiling. Aerospace normally implies serialized and lot traceability, which is a different data shape than plain distribution.
-6. **Is any part data export-controlled (ITAR/EAR)?** Aerospace. If yes, it constrains region, model selection, and data retention before anything else does. Not raised on the call; it should have been.
+6. **Is any part data export-controlled (ITAR/EAR)?** Aerospace. If yes, it constrains region, model selection, and data retention before anything else does. Not raised on the call; it should have been. Check first whether this was already assessed for the drawings engagement — that project touched the higher-risk data, so an answer may already exist.
 7. **Chat-only, or exportable output (CSV) as well?** Raised on the call, still open. Adds a deliverable if yes — and an export inherits the same permission obligations as the chat answer.
 8. **OneWorld?** Determines whether subsidiary restrictions are in play — a whole axis of the permission model.
 

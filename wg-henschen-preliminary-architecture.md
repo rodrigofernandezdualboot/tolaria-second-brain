@@ -168,9 +168,9 @@ Roughly a day of work total. Each one is cheap now and expensive to discover lat
 3. **Whether REST record endpoints filter by role restrictions.** Documented for SuiteQL, not stated for record CRUD. Test empirically rather than assuming.
 4. **Schema reconnaissance.** Custom record and custom field volume, and how many tables lack `last_modified_date`. This is what makes the sync estimate real rather than notional.
 
-## Open questions for WG Henschen
+## Open questions — internal view
 
-Ordered by how much each moves the design.
+Why each one matters to us, ordered by how much it moves the design. The client-facing wording is in the next section.
 
 1. **Who owns NetSuite internally?** Still unidentified, and it is the critical-path dependency — every question below needs an owner who can answer it. Internal administrator, or an outside NetSuite partner?
 2. **A sandbox account with an integration role.** Not production. Half a day in a sandbox answers more than another two calls.
@@ -186,3 +186,77 @@ Ordered by how much each moves the design.
 - Sync frequency for the mart. Depends on how stale they can tolerate inventory being, which is a business answer.
 - Gold mart table design. Requires their schema.
 - Whether the live path needs its own caching layer. Depends on the tier answer in question 3.
+
+---
+
+# Questions for David
+
+Copy-ready. Written to be forwarded to WG Henschen as-is.
+
+Before we can put a credible shape and number on this, there are a handful of things we need from your side. Most are quick to answer; two need someone with NetSuite administrator access. We've grouped them and noted why each one matters, so you can route them to the right person.
+
+## 1. Who owns NetSuite on your side?
+
+**Question:** Who administers your NetSuite account day to day — someone internal, or an outside NetSuite partner? Can we get them into a call?
+
+**Why we're asking:** Almost everything below needs an answer from whoever holds administrator access. Identifying that person is the single thing most likely to hold up the estimate.
+
+## 2. Can we get a sandbox account?
+
+**Question:** Can you provision a NetSuite **sandbox** (not production) account for us, with a role that has REST Web Services and SuiteAnalytics Workbook permissions?
+
+**Why we're asking:** Half a day looking at the actual data model tells us more than several more calls. We need to see how much of your setup is standard NetSuite versus custom fields and custom records — that difference is one of the larger swings in effort, and we would rather measure it than guess at it.
+
+## 3. Three numbers from one screen
+
+**Question:** From **Setup > Integration > Integration Management > Integration Governance**, could your administrator send us a screenshot or the values for:
+
+- your NetSuite **service tier** (Standard, Premium, Enterprise, or Ultimate);
+- how many **SuiteCloud Plus** licenses you hold;
+- whether **SuiteAnalytics Connect** is licensed on the account.
+
+Also useful: is the account **OneWorld** (multiple subsidiaries)?
+
+**Why we're asking:** NetSuite limits how many API requests can run at once, and that budget is shared across every integration you already have. It sets how fast the assistant can answer live questions, and it tells us whether we risk slowing down your existing integrations. The Connect licence, if you have it, meaningfully simplifies the data extraction.
+
+## 4. Who should see what?
+
+**Question:** Should the assistant show every user the same data, or should it respect each person's existing NetSuite permissions? Concretely: if a warehouse user and a controller both ask "what's our inventory value this quarter," should they get the same answer?
+
+Related: roughly how many distinct levels of data access do you have? A handful of broad groups, or fine-grained restrictions per person, subsidiary, location, or department?
+
+**Why we're asking:** This is the biggest single driver of cost and timeline in the project, so it's worth answering carefully. When the assistant queries NetSuite directly, your permissions apply automatically — we get that for free. When we copy data into a reporting layer to make the assistant fast and good at totals and trends, those permissions don't come with it and have to be rebuilt.
+
+There's a sensible middle path: start with data that's broadly visible anyway (typically inventory), prove the tool works, and take on the stricter domains as a second phase. But we'd rather you make that call knowingly than have us assume it.
+
+## 5. What should it be able to answer?
+
+**Question:** Beyond inventory, which areas are in scope — accounting, customer data, purchasing, something else? And which NetSuite modules are you running (Advanced Inventory, WMS, Manufacturing, Demand Planning, Quality Management, others)?
+
+If you can give us **ten to fifteen real questions** you'd want to ask the assistant on day one, in your own words, that would be the most useful single input we could get.
+
+**Why we're asking:** The AWS service that handles numeric and aggregate questions has a hard limit on how many tables it can reason over, so we have to design a focused data model rather than exposing all of NetSuite. Real example questions are how we make sure the right things are in it. It's also how we'll measure whether the finished tool is actually good.
+
+## 6. Is any of your part data export-controlled?
+
+**Question:** Is any part, drawing, or customer data subject to **ITAR or EAR** export control, or covered by CMMC or similar obligations?
+
+**Why we're asking:** If yes, it constrains our choices about where data is processed and stored before anything else does — so we need to know now rather than late. It's the same class of concern that drove the architecture on the drawings project.
+
+## 7. Chat only, or files too?
+
+**Question:** Is a conversational answer on screen sufficient, or do users also need to export results — a CSV of matching parts, a report they can send on?
+
+**Why we're asking:** Straightforward to build, but it's an additional deliverable and we'd rather price it in than discover it later.
+
+## 8. Where does the assistant live?
+
+**Question:** You mentioned embedding the chat inside NetSuite. Do you have a preference for **where** it appears — its own item in the NetSuite menu, a panel on the dashboard, or alongside specific record pages?
+
+**Why we're asking:** NetSuite supports all three; they differ in effort and in how naturally the tool fits into people's existing work.
+
+---
+
+## What we'll do with the answers
+
+Once we have 1, 2, and 3, we can validate the technical approach directly against your environment and come back with a concrete architecture and a phased estimate. Questions 4 and 5 are the ones we'd most like to talk through live on next week's call rather than over email — they're judgement calls about scope, not facts to look up.

@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[wg-henschen]]"
 related_to: "[[wg-henschen-netsuite-integration-options]]"
 status: Draft
+_width: wide
 ---
 
 # WG Henschen — Preliminary Architecture (RAG over NetSuite)

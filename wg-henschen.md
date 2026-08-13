@@ -3,6 +3,7 @@ type: Project
 status: Active
 has:
   - "[[wg-henschen-rag-scope-call-notes]]"
+  - "[[wg-henschen-netsuite-integration-options]]"
 ---
 
 # WG Henschen
@@ -14,3 +15,4 @@ Current opportunity: a RAG-based chat tool over NetSuite data, embedded in NetSu
 ## Related
 
 - [[wg-henschen-rag-scope-call-notes]] — scope call notes, architecture direction, open questions, next steps.
+- [[wg-henschen-netsuite-integration-options]] — NetSuite extraction surfaces, permission model, embedded-UI options, AWS-side connector gaps.

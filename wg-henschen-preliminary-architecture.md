@@ -12,22 +12,22 @@ Draft for the Friday 14 Aug send to David, ahead of the call next week. High-lev
 
 Evidence base is [[wg-henschen-netsuite-integration-options]]; the constraints cited below are from Oracle and AWS documentation, not estimates. Scope context in [[wg-henschen-rag-scope-call-notes]].
 
-## The decision this document exists to surface
+## The constraint that shapes everything
 
-Everything else here is fairly settled. This is not.
+**Decided (Dualboot, 13 Aug):** the assistant must respect each user's existing NetSuite permissions. Two people asking the same question get different answers if NetSuite says they should. This is a requirement, not a preference, and it is not traded against cost or schedule.
 
-NetSuite enforces data access through roles — subsidiary, department, location, employee. When we query NetSuite directly, those restrictions apply automatically and correctly. **When we copy data into a warehouse to make it fast, they do not.** A data lake has no concept of a NetSuite role.
+That decision belongs first because of what follows from it.
 
-So there is a genuine fork, and it belongs to WG Henschen rather than to us:
+NetSuite enforces data access through roles — subsidiary, department, location, class, employee. When we query NetSuite directly, those restrictions apply automatically and correctly. **When we copy data into a warehouse to make it fast, they do not.** A data lake has no concept of a NetSuite role.
 
 | | Freshness | Permissions | Query cost | Aggregates |
 |---|---|---|---|---|
 | **Query NetSuite live** | Real-time | **Inherited automatically** | Slow; consumes a shared account-wide concurrency budget | Poor |
 | **Replicate to a warehouse** | Batch — hourly or nightly | **Must be rebuilt** | Fast and cheap | Strong |
 
-The architecture below does both and routes between them, because the two shapes of question genuinely want different answers. *"What is our total on-hand value by category this quarter"* is a warehouse question. *"How many of part 47-A do we have right now, and is any of it allocated"* is a live question — and it comes back correctly scoped to the asker without us writing any permission code at all.
+So the architecture below does both and routes between them. *"How many of part 47-A do we have right now, and is any of it allocated"* goes live and comes back correctly scoped with no permission code on our side. *"What is our total on-hand value by category this quarter"* needs the warehouse — and every row that lands there is a row whose access rules we now own.
 
-What WG Henschen decides is **how much of their data goes into the warehouse**, because that determines how much of their permission model we have to reproduce. See *Permission model* below — it is the single largest cost variable in the engagement.
+The open question is no longer *whether* to reproduce their permission model. It is *how faithfully we can do it cheaply*, and that depends entirely on the shape of their restrictions — which we have not seen. See **Permission model** below.
 
 ## Architecture at a glance
 
@@ -42,13 +42,14 @@ flowchart TB
     AUTH["API Gateway + Lambda authorizer<br/>validate token · resolve data scope"]
     ROUTE["Router / agent<br/>AgentCore"]
     LIVE["Live query tool<br/>Lambda"]
-    KB["Structured KB<br/>natural language to SQL"]
+    KB["Structured KB<br/>GenerateQuery — SQL only"]
+    SCOPE["Permission wrapper<br/>inject predicates · scoped session"]
     RS["Redshift"]
     GUARD["Guardrails<br/>grounding · refusal"]
     EXT["Extractor<br/>windowed SuiteQL"]
     B["Bronze<br/>raw extracts"]
     S["Silver<br/>conformed · deletes applied"]
-    G["Gold<br/>curated mart, max 10 tables"]
+    G["Gold<br/>curated mart + restriction keys"]
   end
   SPA -->|1 · auth code + PKCE| OIDC
   OIDC -->|2 · ID token, role;entity| SPA
@@ -57,7 +58,8 @@ flowchart TB
   ROUTE -->|5a · point-in-time| LIVE
   LIVE --> SQL
   ROUTE -->|5b · aggregate| KB
-  KB --> RS
+  KB --> SCOPE
+  SCOPE --> RS
   RS --> G
   ROUTE -->|6 · draft answer| GUARD
   GUARD -->|7 · grounded answer or refusal| SPA
@@ -85,9 +87,11 @@ Two viable issuers, and the choice is not cosmetic.
 
 **Their corporate IdP** (Entra ID, Okta) if one already federates into NetSuite.
 
-The deciding criterion: a corporate IdP tells us *who someone is*; the NetSuite token tells us *what they are permitted to see*. Since NetSuite roles are where the data restrictions actually live, the NetSuite token is the one that does downstream work. If they want corporate SSO as well, use both — corporate IdP for authentication, NetSuite role for authorization.
+Given the permission requirement this is now settled rather than a preference: a corporate IdP tells us *who someone is*; the NetSuite token tells us *what they are permitted to see*. The `role;entity` claim is the input to every access decision downstream. If they want corporate SSO as well, use both — corporate IdP for authentication, NetSuite role for authorization.
 
-**Explicitly ruled out:** OAuth 2.0 client credentials. It binds to one fixed entity-plus-role pair, which would collapse every user into a single service identity. Same hazard with the `Execute as Role` field on SuiteScript deployments — set to anything but the current user, and the whole per-user permission story fails silently, with no error. This needs to be a written architectural constraint carried into delivery, not tribal knowledge.
+**Explicitly ruled out:** OAuth 2.0 client credentials. It binds to one fixed entity-plus-role pair, which would collapse every user into a single service identity. Same hazard with the `Execute as Role` field on SuiteScript deployments — set to anything but the current user, and the whole per-user permission story fails silently, with no error. Given the requirement, this belongs in the contract as an architectural constraint, not in tribal knowledge.
+
+**Role switching is a live hazard.** NetSuite users commonly hold several roles and can change role mid-session via *Choose Another Role*; the token is bound to the role selected at authorization time. A chat session must be re-scoped when the role changes, not only at login, and conversation history from a prior role must not carry into the new one. Cheap to handle if designed in, awkward to retrofit.
 
 ### 3. Access control — Lambda in front of Bedrock
 
@@ -103,7 +107,9 @@ The user should never choose a domain or a data source. The router classifies ea
 
 A Lambda tool that issues a windowed SuiteQL query against NetSuite's REST endpoint under the calling user's token. Oracle documents that *"SuiteQL enforces the same role-based access restrictions used in SuiteAnalytics Workbook"* — so results are already filtered to what this user could see in NetSuite's own UI.
 
-Constraint to design around: NetSuite governs API access by **concurrency, not rate**, from a single account-wide pool shared by every integration. The tier limits are 5 (Standard), 15 (Premium), 20 (Enterprise/Ultimate), plus 10 per SuiteCloud Plus license. On a Standard-tier account that is five concurrent requests for the entire company. The live path must therefore be queued and bounded, or it will degrade WG Henschen's other integrations. Their tier is an open question and it materially affects this design.
+Given the permission requirement, this path is worth more than it first appeared: it is the only one where correctness is guaranteed by NetSuite rather than by us. Where a question can be answered live within acceptable latency, prefer live.
+
+Constraint to design around: NetSuite governs API access by **concurrency, not rate**, from a single account-wide pool shared by every integration. The tier limits are 5 (Standard), 15 (Premium), 20 (Enterprise/Ultimate), plus 10 per SuiteCloud Plus license. On a Standard-tier account that is five concurrent requests for the entire company. The live path must therefore be queued and bounded, or it will degrade WG Henschen's other integrations. Their tier is an open question and it now matters more, because it caps how much load we can push down the path that gets permissions for free.
 
 ### 5b. Mart path — aggregates and trends
 
@@ -116,6 +122,8 @@ A NetSuite instance has hundreds of tables. Ten is not a target to model toward,
 
 Accuracy levers documented by AWS: per-table and per-column semantic descriptions, and curated natural-language/SQL example pairs.
 
+Permission enforcement on this path is covered below — it is why the diagram shows a wrapper between the knowledge base and Redshift rather than a direct connection.
+
 ### 6. Data platform — bronze, silver, gold
 
 Standard medallion layering on S3, orchestrated by Glue.
@@ -124,19 +132,23 @@ Standard medallion layering on S3, orchestrated by Glue.
 
 Every extract must be **windowed** regardless of method: SuiteQL returns at most 100,000 rows per query (1,000,000 if SuiteAnalytics Connect is licensed).
 
+A consequence of the permission decision: the extractor runs under a **broad role** to capture everything, and the serving layer narrows it afterwards. That is the correct design, but it means the extraction credential is privileged — separate integration record, no interactive login, audited.
+
 **Silver — conformed.** Typed, deduplicated, deletes applied. The documented change-detection contract is a hybrid and needs to be built as one:
 
 - watermark on `last_modified_date` / `date_last_modified` for most tables;
 - tombstones from the `deleted_records` table;
 - and full reload every cycle for tables that support neither — Oracle names mapping tables specifically. That category is unbounded until we see their actual schema, which is the main argument for a sandbox spike before the number is final.
 
-**Gold — the curated mart.** Wide, denormalized, at most 10 tables. Designed jointly with the client, because its shape defines the assistant's answerable surface.
+**Gold — the curated mart.** Wide, denormalized, at most 10 tables. Every gold table must carry the **restriction keys** — subsidiary, location, department, class, and the employee/sales-rep fields — even where they are of no interest to the user. Those columns are what makes filtering possible at query time. Dropping them for tidiness would be an expensive mistake, which is why it is written down here.
 
 ### 7. Guardrails — the "I don't have that information" requirement
 
 Bedrock Guardrails supports this natively through **contextual grounding checks**: independent grounding and relevance scores, thresholds configurable between 0 and 0.99, and a configurable blocked-message string that becomes the refusal text. Denied topics and PII filters layer on top, on both inbound and outbound.
 
 **Caveat to raise with the client now rather than in UAT.** AWS documents contextual grounding as supported for summarization, paraphrasing and question answering, and states explicitly that *"Conversational QA / Chatbot use cases are not supported."* WG Henschen described a multi-turn chat assistant. The workable approach is per-turn, largely stateless grounding evaluation, and we should set that expectation in writing. Limits: 100,000 characters of grounding source, 1,000-character query, 5,000-character response. There is also a streaming caveat — an irrelevant answer can stream to the user in full before being flagged.
+
+One interaction with the permission requirement worth designing deliberately: **"you are not allowed to see that" and "that data does not exist" must read identically to the user.** Otherwise the refusal itself leaks — someone learns a customer or a subsidiary exists by being denied it. One refusal message covers both cases.
 
 ### 8. Data handling
 
@@ -146,28 +158,43 @@ Given the prior engagement's entire rationale was keeping patented drawings insi
 - Pin **zero data retention** (`data_retention_mode: none`) and verify it per model ID — some newer models require a provider-data-share mode that retains prompts up to 30 days.
 - Claude Opus 5 and Sonnet 5 are both available on Bedrock.
 
-## Permission model — the cost variable
+## Permission model
 
-Three options, cheapest first. This is the conversation to have with them.
+The requirement is fixed: per-user fidelity to NetSuite. What is open is the mechanism, and the cost difference between mechanisms is large.
 
-**A. Scope phase one to broadly-visible data.** If inventory levels are visible to everyone who would use the tool, the problem is deferred entirely. Phase one covers inventory; accounting and customer data wait for phase two. Cheapest by a wide margin and the fastest route to something real in front of users.
+### The non-negotiable principle
 
-**B. Tiered gold views.** A small number of security tiers, each with its own set of gold views; the Lambda routes the user to the right one based on their NetSuite role. Practical when the access pattern is coarse — a handful of tiers rather than per-user variation.
+**The model is never the enforcement point.** Bedrock's own documentation states that the include/exclude lists on a structured knowledge base are *"non-deterministic and intended for improving accuracy, not security."* Prompt instructions are not access control either. Enforcement has to sit in a deterministic layer the model cannot talk its way around.
 
-**C. Full restriction mirroring.** Reproduce NetSuite's restriction axes as row-level security in Redshift, keyed on the role and entity from the token. Faithful, and considerably more expensive to build and to keep correct as their roles change.
+That is why the diagram routes the mart path through a wrapper. The mechanism: use the knowledge base's **`GenerateQuery`** operation, which returns the generated SQL rather than executing it, then execute it ourselves against a connection whose visibility is already constrained. The model proposes; our layer disposes.
 
-One escape route is closed: Bedrock's own documentation states that the include/exclude lists on a structured knowledge base are *"non-deterministic and intended for improving accuracy, not security."* They cannot be used as an access control. Enforcement must sit in the warehouse or in the Lambda.
+### Three mechanisms, cheapest first
 
-**Recommendation:** open with A, design gold so that B remains reachable without rework, and treat C as a distinct phase with its own scope. That sequencing lets them see value before committing to the expensive part.
+**1. Live-only for restricted domains.** Any domain where restrictions are fine-grained gets answered by SuiteQL against NetSuite, where correctness is free. Costs latency and concurrency, buys perfect fidelity at zero permission-engineering cost. Good for point lookups, poor for aggregates over large ranges.
+
+**2. Tiered gold views.** A small number of security tiers, each with its own set of gold views; the wrapper picks the view set from the user's role. Practical only if their access pattern is coarse — a handful of groups rather than per-person variation. Cheap when it fits, and it fits more often than people expect.
+
+**3. Row-level enforcement in Redshift.** Restriction keys carried into gold, and either native row-level security keyed on a session context set per user, or predicates injected by the wrapper into the generated SQL. Faithful to arbitrary restriction shapes, and materially more expensive — both to build and to keep correct as their roles change.
+
+**Which one applies is not ours to guess.** It depends on which of NetSuite's five restriction axes WG Henschen actually uses and how many distinct effective scopes exist. If restrictions run by subsidiary and location, mechanism 2 probably covers it. If they run by employee or sales rep, tiers collapse toward one-per-person and mechanism 3 is the honest answer.
+
+**Recommendation:** design gold with restriction keys present from day one so all three stay reachable, start with 1 and 2, and scope 3 as its own phase if their model demands it. Do not commit to a mechanism before seeing the sandbox.
+
+### Second-order risks to carry
+
+- **Aggregate leakage.** Row filtering makes totals correct per user, but someone who can compute a filtered total and knows the unfiltered one can infer the difference. Rarely material at this scale — worth a conscious decision rather than an accident.
+- **Ongoing drift.** Their roles will change after we ship. Whatever mechanism we choose needs a defined way to stay in sync with NetSuite, and an owner on their side. That is an operational commitment, not just a build task.
+- **Testing burden.** Per-user permissions make the test matrix roles × domains × question types, not just question types. Budget for it explicitly rather than absorbing it.
 
 ## Verification spikes — before any of this is a commitment
 
 Roughly a day of work total. Each one is cheap now and expensive to discover later.
 
-1. **CSP and CORS from inside a NetSuite SPA.** Nothing in NetSuite's documentation describes a content security policy — but absence of documentation is not absence of enforcement. A SPA making cross-origin calls to our API Gateway is the entire front-end architecture. Check the actual `Content-Security-Policy` and `X-Frame-Options` response headers on a rendered SPA page in a sandbox.
-2. **The JWKS endpoint on their account.** The discovery document should expose `jwks_uri`; the validation procedure is not spelled out in the docs. Confirm against a real account before designing token validation.
-3. **Whether REST record endpoints filter by role restrictions.** Documented for SuiteQL, not stated for record CRUD. Test empirically rather than assuming.
-4. **Schema reconnaissance.** Custom record and custom field volume, and how many tables lack `last_modified_date`. This is what makes the sync estimate real rather than notional.
+1. **Restriction shape.** Which of the five axes are in use, and how many distinct effective scopes result. Now the highest-value thing we can learn: it selects the permission mechanism, and therefore most of the cost.
+2. **CSP and CORS from inside a NetSuite SPA.** Nothing in NetSuite's documentation describes a content security policy — but absence of documentation is not absence of enforcement. A SPA making cross-origin calls to our API Gateway is the entire front-end architecture. Check the actual `Content-Security-Policy` and `X-Frame-Options` response headers on a rendered SPA page in a sandbox.
+3. **The JWKS endpoint on their account.** The discovery document should expose `jwks_uri`; the validation procedure is not spelled out in the docs. Confirm against a real account before designing token validation.
+4. **Whether REST record endpoints filter by role restrictions.** Documented for SuiteQL, not stated for record CRUD. Test empirically rather than assuming.
+5. **Schema reconnaissance.** Custom record and custom field volume, and how many tables lack `last_modified_date`. This is what makes the sync estimate real rather than notional.
 
 ## Open questions — internal view
 
@@ -175,18 +202,19 @@ Why each one matters to us, ordered by how much it moves the design. The client-
 
 1. **Who owns NetSuite internally?** Still unidentified, and it is the critical-path dependency — every question below needs an owner who can answer it. Internal administrator, or an outside NetSuite partner?
 2. **A sandbox account with an integration role.** Not production. Half a day in a sandbox answers more than another two calls.
-3. **Service tier, SuiteCloud Plus license count, and whether SuiteAnalytics Connect is licensed.** All three visible on one screen: Setup > Integration > Integration Management > Integration Governance. Sets the throughput ceiling for the live path.
-4. **Which permission option — A, B, or C?** The largest single cost variable.
+3. **The shape of their restrictions.** Which axes, how many effective scopes, how often they change. Selects mechanism 1, 2, or 3 and therefore most of the permission cost. Top technical unknown now that per-user fidelity is fixed.
+4. **Service tier, SuiteCloud Plus license count, and whether SuiteAnalytics Connect is licensed.** All three visible on one screen: Setup > Integration > Integration Management > Integration Governance. Caps how much load the live path can carry — which matters more now that live is the fidelity-guaranteed path.
 5. **Which modules beyond inventory, and how heavily customized?** Drives the gold mart design against the 10-table ceiling. Aerospace normally implies serialized and lot traceability, which is a different data shape than plain distribution.
 6. **Is any part data export-controlled (ITAR/EAR)?** Aerospace. If yes, it constrains region, model selection, and data retention before anything else does. Not raised on the call; it should have been.
-7. **Chat-only, or exportable output (CSV) as well?** Raised on the call, still open. Adds a deliverable if yes.
+7. **Chat-only, or exportable output (CSV) as well?** Raised on the call, still open. Adds a deliverable if yes — and an export inherits the same permission obligations as the chat answer.
 8. **OneWorld?** Determines whether subsidiary restrictions are in play — a whole axis of the permission model.
 
 ## Deliberately not decided here
 
+- Which permission mechanism. Requires the sandbox.
 - Sync frequency for the mart. Depends on how stale they can tolerate inventory being, which is a business answer.
 - Gold mart table design. Requires their schema.
-- Whether the live path needs its own caching layer. Depends on the tier answer in question 3.
+- Whether the live path needs its own caching layer. Depends on the tier answer.
 
 ---
 
@@ -195,6 +223,8 @@ Why each one matters to us, ordered by how much it moves the design. The client-
 Copy-ready. Written to be forwarded to WG Henschen as-is.
 
 Before we can put a credible shape and number on this, there are a handful of things we need from your side. Most are quick to answer; two need someone with NetSuite administrator access. We've grouped them and noted why each one matters, so you can route them to the right person.
+
+One thing we've already settled on our side, so you know where we're starting from: **the assistant will respect each person's existing NetSuite permissions.** If someone can't see a subsidiary, a customer, or a set of transactions in NetSuite today, they won't see it through the assistant either. We're not treating that as optional. Several of the questions below are about getting it right.
 
 ## 1. Who owns NetSuite on your side?
 
@@ -208,7 +238,30 @@ Before we can put a credible shape and number on this, there are a handful of th
 
 **Why we're asking:** Half a day looking at the actual data model tells us more than several more calls. We need to see how much of your setup is standard NetSuite versus custom fields and custom records — that difference is one of the larger swings in effort, and we would rather measure it than guess at it.
 
-## 3. Three numbers from one screen
+## 3. How is access to data restricted today?
+
+The most important question in this list, and the one we'd most like to walk through live.
+
+**Question:** How do you control who sees what in NetSuite today? Specifically:
+
+- Which of these do you actually use to restrict records: **subsidiary, location, department, class, or employee/sales rep**?
+- Roughly how many distinct access situations exist? A handful of groups — warehouse, sales, finance, leadership — or does it vary meaningfully person by person?
+- Are there fields only some people can see, such as cost, margin, or customer financials?
+- How often do these restrictions change, and who maintains them?
+
+**Why we're asking:** When the assistant puts a question straight to NetSuite, your permissions apply automatically and we get that correctness for free. But some questions — totals, trends, anything spanning a lot of history — can't be answered that way fast enough, so that data has to be prepared in a reporting layer first. In that layer your NetSuite permissions don't come along automatically, and we have to reproduce them faithfully.
+
+How much work that is depends almost entirely on the shape of your rules. If access breaks into a few clear groups, it's straightforward. If it genuinely varies person by person, it's a substantially larger piece of work. Both are doable and we'll build whichever is true — but it's one of the biggest single factors in the estimate, so we'd rather understand it now than discover it mid-build.
+
+## 4. What should it be able to answer?
+
+**Question:** Beyond inventory, which areas are in scope — accounting, customer data, purchasing, something else? And which NetSuite modules are you running (Advanced Inventory, WMS, Manufacturing, Demand Planning, Quality Management, others)?
+
+If you can give us **ten to fifteen real questions** you'd want to ask the assistant on day one, in your own words, that would be the most useful single input we could get.
+
+**Why we're asking:** The AWS service that handles numeric and aggregate questions has a hard limit on how many tables it can reason over, so we have to design a focused data model rather than exposing all of NetSuite. Real example questions are how we make sure the right things are in it. It's also how we'll measure whether the finished tool is actually good.
+
+## 5. Three numbers from one screen
 
 **Question:** From **Setup > Integration > Integration Management > Integration Governance**, could your administrator send us a screenshot or the values for:
 
@@ -218,25 +271,7 @@ Before we can put a credible shape and number on this, there are a handful of th
 
 Also useful: is the account **OneWorld** (multiple subsidiaries)?
 
-**Why we're asking:** NetSuite limits how many API requests can run at once, and that budget is shared across every integration you already have. It sets how fast the assistant can answer live questions, and it tells us whether we risk slowing down your existing integrations. The Connect licence, if you have it, meaningfully simplifies the data extraction.
-
-## 4. Who should see what?
-
-**Question:** Should the assistant show every user the same data, or should it respect each person's existing NetSuite permissions? Concretely: if a warehouse user and a controller both ask "what's our inventory value this quarter," should they get the same answer?
-
-Related: roughly how many distinct levels of data access do you have? A handful of broad groups, or fine-grained restrictions per person, subsidiary, location, or department?
-
-**Why we're asking:** This is the biggest single driver of cost and timeline in the project, so it's worth answering carefully. When the assistant queries NetSuite directly, your permissions apply automatically — we get that for free. When we copy data into a reporting layer to make the assistant fast and good at totals and trends, those permissions don't come with it and have to be rebuilt.
-
-There's a sensible middle path: start with data that's broadly visible anyway (typically inventory), prove the tool works, and take on the stricter domains as a second phase. But we'd rather you make that call knowingly than have us assume it.
-
-## 5. What should it be able to answer?
-
-**Question:** Beyond inventory, which areas are in scope — accounting, customer data, purchasing, something else? And which NetSuite modules are you running (Advanced Inventory, WMS, Manufacturing, Demand Planning, Quality Management, others)?
-
-If you can give us **ten to fifteen real questions** you'd want to ask the assistant on day one, in your own words, that would be the most useful single input we could get.
-
-**Why we're asking:** The AWS service that handles numeric and aggregate questions has a hard limit on how many tables it can reason over, so we have to design a focused data model rather than exposing all of NetSuite. Real example questions are how we make sure the right things are in it. It's also how we'll measure whether the finished tool is actually good.
+**Why we're asking:** NetSuite limits how many requests can run against it at once, and that budget is shared across every integration you already have. Since we're routing permission-sensitive questions directly to NetSuite, this sets how much the assistant can do that way — and it tells us whether we'd risk slowing down your existing integrations. The Connect licence, if you have it, meaningfully simplifies the data extraction.
 
 ## 6. Is any of your part data export-controlled?
 
@@ -248,7 +283,7 @@ If you can give us **ten to fifteen real questions** you'd want to ask the assis
 
 **Question:** Is a conversational answer on screen sufficient, or do users also need to export results — a CSV of matching parts, a report they can send on?
 
-**Why we're asking:** Straightforward to build, but it's an additional deliverable and we'd rather price it in than discover it later.
+**Why we're asking:** Straightforward to build, but it's an additional deliverable. It also inherits the same permission rules as the chat itself, so an export shows only what that person is entitled to see.
 
 ## 8. Where does the assistant live?
 
@@ -260,4 +295,6 @@ If you can give us **ten to fifteen real questions** you'd want to ask the assis
 
 ## What we'll do with the answers
 
-Once we have 1, 2, and 3, we can validate the technical approach directly against your environment and come back with a concrete architecture and a phased estimate. Questions 4 and 5 are the ones we'd most like to talk through live on next week's call rather than over email — they're judgement calls about scope, not facts to look up.
+Once we have 1, 2, and 5, we can validate the approach directly against your environment and come back with a concrete architecture and a phased estimate.
+
+Questions 3 and 4 are the ones we'd most like to talk through live on next week's call rather than over email. They're judgement calls about how your business works, not facts to look up, and between them they account for most of the variation in what this project costs.

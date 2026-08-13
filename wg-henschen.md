@@ -4,6 +4,7 @@ status: Active
 has:
   - "[[wg-henschen-rag-scope-call-notes]]"
   - "[[wg-henschen-netsuite-integration-options]]"
+  - "[[wg-henschen-preliminary-architecture]]"
 ---
 
 # WG Henschen
@@ -12,7 +13,10 @@ Aerospace parts supplier with a large, complex inventory of components and part 
 
 Current opportunity: a RAG-based chat tool over NetSuite data, embedded in NetSuite, covering inventory, accounting, and customer domains. In pre-estimate discovery.
 
+**Next deadline:** preliminary architecture and clarifying questions to David by Fri 14 Aug 2026. Client call the following week. No pricing yet.
+
 ## Related
 
 - [[wg-henschen-rag-scope-call-notes]] — scope call notes, architecture direction, open questions, next steps.
 - [[wg-henschen-netsuite-integration-options]] — NetSuite extraction surfaces, permission model, embedded-UI options, AWS-side connector gaps.
+- [[wg-henschen-preliminary-architecture]] — draft architecture for the Friday send: SPA + OIDC + Lambda + dual retrieval paths over a bronze/silver/gold lakehouse.

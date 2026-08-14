@@ -1,11 +1,7 @@
 ---
-_organized: true
-type: Note
-belongs_to: "[[sales-engineering-role]]"
-related_to: "[[sales-engineering-role]]"
+type: Person
 ---
-
-# Introduction — Rodrigo Fernandez
+# Rodrigo Fernandez
 
 I'm Rodrigo Fernandez, based in Montevideo, Uruguay.
 

@@ -1,5 +1,6 @@
 ---
 type: Person
+_width: wide
 ---
 # Rodrigo Fernandez
 

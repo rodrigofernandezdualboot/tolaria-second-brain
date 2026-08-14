@@ -4,6 +4,7 @@ belongs_to: "[[wg-henschen]]"
 related_to: "[[wg-henschen-netsuite-integration-options]]"
 status: Draft
 _width: wide
+_organized: true
 ---
 
 # WG Henschen — Preliminary Architecture (RAG over NetSuite)

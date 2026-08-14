@@ -6,6 +6,7 @@ has:
   - "[[wg-henschen-netsuite-integration-options]]"
   - "[[wg-henschen-preliminary-architecture]]"
   - "[[wg-henschen-message-to-david]]"
+_organized: true
 ---
 
 # WG Henschen

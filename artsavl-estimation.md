@@ -3,6 +3,7 @@ type: Note
 related_to: "[[artsavl]]"
 status: Active
 _width: wide
+_organized: true
 ---
 
 # ArtsAVL — Effort Estimation & Budget Gap

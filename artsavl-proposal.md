@@ -3,6 +3,7 @@ type: Note
 related_to: "[[artsavl]]"
 status: Draft
 _width: wide
+_organized: true
 ---
 # ArtsAVL Proposal
 

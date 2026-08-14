@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[artsavl]]"
 status: Active
+_organized: true
 ---
 
 # ArtsAVL — Client Questions (RFP Q&A and Aug 11 Meeting)

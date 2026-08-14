@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[wg-henschen]]"
 status: Active
+_organized: true
 ---
 
 # WG Henschen — RAG Scope Call Notes

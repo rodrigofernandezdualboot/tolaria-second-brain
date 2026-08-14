@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[artsavl]]"
 status: Active
+_organized: true
 ---
 
 # ArtsAVL — Solution Architecture (Schema-per-Tenant)

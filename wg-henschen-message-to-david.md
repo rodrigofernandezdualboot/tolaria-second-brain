@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[wg-henschen]]"
 related_to: "[[wg-henschen-preliminary-architecture]]"
 status: Draft
+_organized: true
 ---
 
 # WG Henschen — Internal Message to David

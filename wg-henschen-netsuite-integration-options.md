@@ -4,6 +4,7 @@ belongs_to: "[[wg-henschen]]"
 related_to: "[[wg-henschen-rag-scope-call-notes]]"
 status: Active
 _width: wide
+_organized: true
 ---
 
 # WG Henschen — NetSuite Integration Options

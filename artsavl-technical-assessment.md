@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[artsavl]]"
 status: Active
+_organized: true
 ---
 # ArtsAVL — Technical Assessment (Phases 1–5)
 

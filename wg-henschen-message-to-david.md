@@ -4,6 +4,7 @@ belongs_to: "[[wg-henschen]]"
 related_to: "[[wg-henschen-preliminary-architecture]]"
 status: Draft
 _organized: true
+_width: wide
 ---
 
 # WG Henschen — Internal Message to David

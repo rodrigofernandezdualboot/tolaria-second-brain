@@ -1,6 +1,6 @@
 ---
-type: Note
 _width: wide
+type: Project
 ---
 # Roofr
 

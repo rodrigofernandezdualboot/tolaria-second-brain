@@ -1,6 +1,7 @@
 ---
 type: Note
 _width: wide
+_organized: true
 ---
 
 # Run With Hal — Target Architecture

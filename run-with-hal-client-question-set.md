@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[run-with-hal]]"
 related_to: "[[run-with-hal]]"
 _width: wide
+_organized: true
 ---
 
 # Run With Hal — Client Question Set

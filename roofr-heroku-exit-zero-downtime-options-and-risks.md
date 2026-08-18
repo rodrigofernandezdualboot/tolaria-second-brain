@@ -8,7 +8,7 @@ _width: wide
 # Roofr — Heroku Exit: Zero-Downtime Options and Risks
 
 Prepared for the follow-up technical call (Roofr / Dualboot / AWS).
-**Revision 2, 17 Aug 2026** — rewritten after reading #roofr-dealteam-sales and the 8/11 intro-call notes. Revision 1 was built only on the Tolaria summary note and got the seasonality backwards; see §2.
+**Revision 3, 18 Aug 2026** — the stack question is settled: Roofr run a **LAMP stack, so MySQL**. Every Postgres/MySQL fork in revision 2 has collapsed to the MySQL case, and the constraint argument is now sharper rather than weaker. Revision 2 corrected revision 1's seasonality error; see §2.
 
 Sources: `roofr.md` (Tolaria), #roofr-dealteam-sales (Slack), "Roofr Meeting Notes 8/11" (Roofr - Sales Drive folder), plus vendor documentation. Claims marked **[open]** are still unverified with Roofr.
 
@@ -69,42 +69,48 @@ Their architecture is a Laravel monolith with a separated SPA front end, plus on
 
 - **True zero downtime** — no failed requests, no read-only period. Needs forward change replication plus a reversible flip.
 - **Zero data loss, brief write-pause** — reads served throughout, writes paused or queued for a bounded window measured in seconds to a few minutes.
-- **Announced maintenance window** — 10 to 30 minutes. This is what Heroku's own documented database procedures require (~10 min in-place `pg_upgrade`, 20–30 min follower failover, ~3 min/GB copy). Roofr has ruled this out in substance by ruling out dump-and-load.
+- **Announced maintenance window** — 10 to 30 minutes, which is what a dump-and-restore of a database of any real size actually costs. Roofr has ruled this out in substance by ruling out dump-and-load.
 
 Recommendation: **contract the second, engineer toward the first, and price the gap as an explicit option.** Kevin will respect a precise commitment more than an ambitious one — his complaint about the market is exactly that people oversell this.
 
 ---
 
-## 4. Why Heroku can't give them replication — the evidence
+## 4. Why no replication is available to them — the evidence
 
 Roofr stated this. We verified it independently, which is worth demonstrating because it establishes that we understand the constraint rather than just repeating their words.
 
-**If the source is Heroku Postgres:**
+They run LAMP, so the database is MySQL — and the first consequence is that **Heroku has no first-party MySQL.** Their database is a third-party add-on (JawsDB, ClearDB) or MySQL hosted outside Heroku. Establish which before anything else: JawsDB already runs on AWS infrastructure, and if their instance is already RDS-backed, the database half of this project could be materially shorter than anyone is currently assuming.
 
-- Heroku's supported-extension list excludes `pglogical`, `wal2json`, and `test_decoding`, and Heroku states only listed extensions are available. PostGIS **is** supported.
-- AWS DMS PostgreSQL CDC requires superuser (self-managed) or `rds_superuser` + `rds_replication` + `rds.logical_replication = 1` (AWS-managed). Heroku documents granting none of these.
-- Heroku followers are physical streaming replicas, Heroku-add-on-only. No external database can follow a Heroku leader. There is no supported path to attach an AWS replica.
-- The documented export paths — `pg_dump`/`pg_restore` and `pg:backups` — are point-in-time snapshots, not streams. PGBackups is documented for databases up to 20 GB.
+**Why DMS change data capture is unavailable either way:**
 
-**If the source is MySQL via an add-on:** DMS MySQL CDC needs `binlog_format=ROW`, `binlog_row_image=FULL`, retained binary logs, and `REPLICATION SLAVE`/`REPLICATION CLIENT` grants. JawsDB documents a restricted-privilege service with SUPER limitations and no binlog access; shared plans also cap hourly query volume, which a full-load read would breach. ClearDB: assume no binlog access at all.
+- DMS MySQL CDC requires `binlog_format = ROW`, `binlog_row_image = FULL`, retained binary logs, and `REPLICATION SLAVE` plus `REPLICATION CLIENT` grants.
+- JawsDB documents a restricted-privilege managed service, notes SUPER-permission errors on restore, and does not document binlog access or external replication. Shared plans additionally cap hourly query volume, which a full-load read would breach. Single-tenant plans are the only plausible candidates.
+- If it is ClearDB, assume no binlog access at all.
+- Those grants are **server-scoped**. That is precisely why a managed provider will not hand them over — it is a product boundary, not an oversight anyone can escalate around.
 
-**Given their view that "Salesforce's public stance on Heroku doesn't match what's happening behind the scenes," do not build the plan on Heroku's cooperation.** They may already have asked and been refused. Confirm what was asked and what the answer was, then design as if the answer is no. Treat any privilege grant as upside.
+**The asymmetry that makes Option A work:** the trigger mechanism needs `TRIGGER` on their own schema plus ordinary DML. `TRIGGER` is *schema*-scoped, and every managed provider grants it. Server-scoped privileges are withheld; schema-scoped privileges are granted. That single distinction is the technical heart of the recommendation, and it is the thing to say out loud in the room.
+
+**Given their view that "Salesforce's public stance on Heroku doesn't match what's happening behind the scenes," do not build the plan on their provider's cooperation.** They may already have asked and been refused. Confirm what was asked and what the answer was, then design as if the answer is no. Treat any privilege grant as upside.
 
 ### The spatial-data constraint layered on top
 
 Roofr said "large GeoJSON in DB tables." Two very different problems hide behind that phrase:
 
-- **PostGIS `geometry`/`geography` columns** — DMS supports PostGIS types (POINT, LINESTRING, POLYGON, MULTI\*, GEOMETRYCOLLECTION) **for homogeneous PostgreSQL-to-PostgreSQL migrations only**, with the plugin enabled globally. For MySQL sources, DMS maps spatial types **to BLOB** — silent corruption, not an error.
-- **`json`/`jsonb`/`text` blobs** — no type-mapping risk at all. The problem reduces to volume: large row payloads, LOB-mode handling, and throughput.
+- **A native MySQL spatial column** (`GEOMETRY`, `POINT`, `POLYGON`) — AWS DMS maps MySQL spatial types **to `BLOB`** on a heterogeneous target. Silent corruption, not an error. This is a strong argument for keeping the migration homogeneous MySQL-to-MySQL, and for verifying spatial values as bytes rather than as re-parsed text.
+- **A `JSON` or `LONGTEXT` column** — no type-mapping risk at all. The problem reduces to volume: large row payloads, LOB handling, and throughput.
+
+One more thing worth knowing before anyone writes target DDL: MySQL applies SRID 4326's declared (lat, long) axis order where PostGIS uses (long, lat). It only bites on a cross-engine move, but it bites silently.
 
 **[open] Which is it?** Their new AI lead — a founding engineer with deep codebase context — can answer this in one message. It is the highest-value question on the list and the fastest to close.
 
 ### Other DMS constraints that will bite this specific workload
 
 - Every captured table needs a primary key, or DMS silently drops UPDATE and DELETE on it. Laravel pivot tables are the usual offenders.
-- **Sequences and `AUTO_INCREMENT` values are not migrated.** A sequence left at 1 produces duplicate-key errors minutes after cutover, under production write load.
-- `ENUM`, `INET`, `TSVECTOR`, `RANGE`, composite types, materialized views, and deferred constraints do not migrate. A Laravel schema using `enum` columns needs a look.
-- Transactions over 4 MB spill replication-slot changes to disk and hold back `restart_lsn`. "Large GeoJSON" makes this likely.
+- **`AUTO_INCREMENT` values are not migrated** by any tool. A counter left at 1 produces duplicate-key errors minutes after cutover under production write load. MySQL does advance `AUTO_INCREMENT` when you insert an explicit higher id, so it partly self-corrects — do not rely on that; set it explicitly and verify.
+- **Native `ENUM` columns are not migrated** by DMS at all. A Laravel schema using `enum` needs a look.
+- **Changes to `GENERATED` columns are not captured** during CDC. Check whether their schema uses any.
+- Indexes on partial columns are not migrated; partitioned tables are created as plain tables on the target.
+- Binary logs over 4 GB cause failures, and large transactions need breaking up. "Large GeoJSON" makes big transactions likely.
 - **Several DDL forms are not captured during CDC, and some suspend the affected table's replication entirely.** See R2 — with ~70 engineers in the codebase daily, this is the constraint that shapes the whole design.
 
 ---
@@ -173,10 +179,10 @@ Ranked by expected damage.
 
 ### Critical
 
-**R1 — GeoJSON turns out to be PostGIS geometry in a heterogeneous path.**
-Types get mapped or dropped, queries return wrong answers rather than errors, and wrong roof measurements is a customer-trust event rather than a bug ticket.
-*Signal:* nobody on the call can say whether the column type is `geometry` or `jsonb`.
-*Mitigation:* keep the migration homogeneous; pin the PostGIS version on the target; verify spatially — compare `ST_AsGeoJSON` output or geometry hashes on a sample, not just row counts.
+**R1 — the GeoJSON turns out to be a native spatial column on a heterogeneous path.**
+DMS maps MySQL spatial types to `BLOB`. Queries return wrong answers rather than errors, and wrong roof measurements is a customer-trust event rather than a bug ticket.
+*Signal:* nobody on the call can say whether the column type is `JSON`/`LONGTEXT` or `GEOMETRY`.
+*Mitigation:* keep the migration homogeneous MySQL-to-MySQL; transport spatial values as byte-exact WKB rather than re-parsed text; verify spatially — compare `ST_AsGeoJSON` output *and* WKB bytes on a sample, not just row counts. The POC does exactly this and reports both.
 
 **R2 — A schema freeze is impossible, and the plan needs one.**
 DMS does not capture several DDL forms during CDC and suspends replication on affected tables. Trigger-based capture has its own coupling to schema shape. **~70 engineers in the codebase daily means migrations ship constantly**, and a multi-week freeze across a 100-engineer org during their busiest quarter is not going to happen.
@@ -209,7 +215,7 @@ The preparation work falls in Sept–Nov, when the platform is busiest and Roofr
 **R10 — Queue and scheduler double-execution.** Workers on both platforms against the same queue run jobs twice. Heroku Scheduler plus a new EventBridge schedule means duplicate invoices, emails, and outbound API calls. The Node PDF service is a third moving part.
 *Mitigation:* an ownership matrix — for each worker and scheduled job, which platform runs it at each stage — plus idempotency on anything with external side effects.
 
-**R11 — Connection handling changes.** Heroku Postgres plans cap connections (200 on smaller Standard/Premium, 500 above). Laravel's per-request model plus a new pooler on AWS changes behaviour under load, and transaction-mode pooling breaks session state and prepared statements.
+**R11 — Connection handling changes.** Managed MySQL add-ons cap connections by plan, and JawsDB shared plans additionally cap hourly query volume. Laravel's per-request connection model plus a new pooler on AWS (RDS Proxy or ProxySQL) changes behaviour under load, and transaction-mode pooling breaks anything relying on session state, temporary tables, or `LAST_INSERT_ID()` across statements.
 *Mitigation:* load-test the target at projected peak concurrency before cutover; choose pooling mode deliberately.
 
 **R12 — Trigger write-amplification at peak.** Option A adds write cost to the source. If the measurement happens after the design is committed, it is not a measurement.
@@ -273,10 +279,10 @@ Ordered by how much they unblock. The first two are answerable by their new AI l
 
 **Blocking the design**
 
-1. Heroku Postgres, or MySQL through an add-on? Which add-on, which plan?
-2. Is the GeoJSON in PostGIS `geometry`/`geography` columns or in `json`/`jsonb`/`text`? Do you run spatial queries and spatial indexes in the database? How large are the largest payloads?
-3. Database size, peak write rate, and rows-per-second on the heaviest tables.
-4. Exactly what did you ask Heroku about replication, and what did they say? Who asked, and how recently?
+1. **Who hosts your MySQL today — JawsDB, ClearDB, or somewhere else? Which plan?** If it is JawsDB it already runs on AWS, which could materially shorten the database half of this project.
+2. Is the GeoJSON in a `JSON`/`LONGTEXT` column or a native MySQL spatial column? Do you run spatial queries and spatial indexes in the database? How large are the largest payloads?
+3. Database size, peak write rate, and rows-per-second on the heaviest tables. **Backfill wall-clock is a direct function of these and it is the single biggest input to the schedule.**
+4. Exactly what did you ask your database provider about replication and binlog access, and what did they say? Who asked, and how recently?
 
 **Platform**
 
@@ -317,17 +323,21 @@ Ordered by how much they unblock. The first two are answerable by their new AI l
 - #roofr-dealteam-sales (Slack, C0BPG0Z1M2A) — Blaine Wagner's deal brief 11 Aug; Camila Lopez's HubSpot deal post; Mike Dennis's Dataplor artifacts and TD Synnex note.
 - [Roofr Meeting Notes 8/11](https://docs.google.com/document/d/13A3iuChF65fSjkYWYi70b4dh0GSMFFqnzm-KybsGlIU/edit) — intro call, 11 Aug 2026 (Kevin Prince / Roofr, AWS, Mike Dennis). Transcript linked in the doc.
 - [Roofr - Sales Drive folder](https://drive.google.com/drive/folders/17PSpG3xxEasEjF3LHga7Je6Vjm2I8ziq)
-- [computer://Users/rodrigo/Dualboot/Tolaria/Personal/roofr.md](computer://Users/rodrigo/Dualboot/Tolaria/Personal/roofr.md) — the Tolaria summary. Note it says "manufacturing technology company" (HubSpot has Industry: Manufacturing) and asserts MySQL/LAMP, neither of which is corroborated by the call notes. Do not quote it.
+- [computer://Users/rodrigo/Dualboot/Tolaria/Personal/roofr.md](computer://Users/rodrigo/Dualboot/Tolaria/Personal/roofr.md) — the Tolaria note, rewritten 18 Aug 2026 and now the accurate internal summary. Its LAMP/MySQL claim is confirmed; its earlier "manufacturing technology company" line came from the HubSpot Industry field and has been removed.
+- `engagements/roofr-heroku-exit/poc/` — the working proof of concept and its run report. MySQL, backfill plus change stream, 245 ms measured write pause, zero divergence.
 
-**Vendor documentation**
+**Vendor documentation — MySQL, their stack**
 
-- [AWS DMS — PostgreSQL as a source](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html) — PostGIS homogeneous-only, unsupported types, primary-key requirement, sequences not migrated, DDL-during-CDC limits, 4 MB transaction spill, CDC privilege prerequisites.
-- [AWS DMS — MySQL as a source](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html) — binlog requirements, replication grants, spatial types mapped to BLOB, `AUTO_INCREMENT` not migrated.
-- [Heroku Postgres Extensions](https://devcenter.heroku.com/articles/heroku-postgres-extensions) — only listed extensions available; PostGIS yes; pglogical/wal2json/test_decoding absent.
-- [Heroku Postgres Follower Databases](https://devcenter.heroku.com/articles/heroku-postgres-follower-databases) — physical, Heroku-only, no external followers.
-- [Upgrading Heroku Postgres Databases](https://devcenter.heroku.com/articles/upgrading-heroku-postgres-databases) — documented downtime: ~10 min direct, 20–30 min follower failover, ~3 min/GB copy (under 10 GB).
-- [Heroku Postgres Import/Export](https://devcenter.heroku.com/articles/heroku-postgres-import-export) — snapshot-only export paths; PGBackups up to 20 GB.
-- [Choosing a Heroku Postgres Plan](https://devcenter.heroku.com/articles/heroku-postgres-plans) — connection limits 200/500, fork-and-follow by tier.
-- [Private Space VPC Peering](https://devcenter.heroku.com/articles/private-space-peering) — Common Runtime unsupported; Fir-generation unsupported; peered VPCs cannot reach in-space data services.
-- [JawsDB](https://devcenter.heroku.com/articles/jawsdb) — restricted privileges, SUPER limitations, no documented binlog or external replication.
+- [AWS DMS — MySQL as a source](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html) — binlog requirements (`ROW`, `FULL`, retention), `REPLICATION SLAVE`/`REPLICATION CLIENT` grants, spatial types mapped to BLOB, `AUTO_INCREMENT` not migrated, `GENERATED` column changes not captured, partial DDL support during CDC, 4 GB binlog limit.
+- [JawsDB](https://devcenter.heroku.com/articles/jawsdb) — hosted on AWS; restricted privileges; SUPER limitations; hourly query caps on shared plans; no documented binlog access or external replication.
+- [Private Space VPC Peering](https://devcenter.heroku.com/articles/private-space-peering) — Common Runtime unsupported; Fir-generation unsupported; peered VPCs cannot reach in-space data services. Relevant to Option F regardless of engine.
 - [Bedrock application inference profiles](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-create.html) — per-profile usage/cost tracking, tagging for cost allocation.
+
+**Vendor documentation — Postgres, retained for context only**
+
+These informed revision 2, when the engine was still open. Kept because the POC still ships an optional Postgres path and because the contrast is occasionally useful, but none of it describes Roofr's stack.
+
+- [AWS DMS — PostgreSQL as a source](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html) — PostGIS homogeneous-only; CDC privilege prerequisites.
+- [Heroku Postgres Extensions](https://devcenter.heroku.com/articles/heroku-postgres-extensions) — pglogical/wal2json/test_decoding absent.
+- [Heroku Postgres Follower Databases](https://devcenter.heroku.com/articles/heroku-postgres-follower-databases) — physical, Heroku-only, no external followers.
+- [Upgrading Heroku Postgres Databases](https://devcenter.heroku.com/articles/upgrading-heroku-postgres-databases) — documented downtime figures.

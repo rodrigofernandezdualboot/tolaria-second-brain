@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[roofr]]"
 related_to: "[[roofr]]"
 _width: wide
+_organized: true
 ---
 
 # Roofr — Heroku Exit: Zero-Downtime Options and Risks

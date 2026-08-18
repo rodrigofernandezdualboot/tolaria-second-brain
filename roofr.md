@@ -1,3 +1,6 @@
+---
+_organized: true
+---
 # Roofr
 
 > **Status:** pre-discovery, updated 18 Aug 2026. Stack assumption **settled: LAMP / MySQL**.

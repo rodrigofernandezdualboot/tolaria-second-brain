@@ -4,6 +4,7 @@ status: Active
 has:
   - "[[hippoclinic-call-questions-2026-08-19]]"
 related_to: "[[rodrigo-fernandez]]"
+_width: wide
 ---
 
 # HippoClinic

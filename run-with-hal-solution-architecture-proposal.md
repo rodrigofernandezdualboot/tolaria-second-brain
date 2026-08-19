@@ -6,6 +6,7 @@ related_to:
   - "[[run-with-hal-client-question-set]]"
 status: Draft
 _width: wide
+_organized: true
 ---
 
 # Run With Hal — Solution Architecture Proposal (Pre-Sales)

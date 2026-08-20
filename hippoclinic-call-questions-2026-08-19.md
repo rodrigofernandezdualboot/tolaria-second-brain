@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[hippoclinic]]"
 related_to: "[[hippoclinic]]"
 _width: wide
+_organized: true
 ---
 
 # HippoClinic — Question Set for the 30-Minute AWS Sync (19 Aug 2026)

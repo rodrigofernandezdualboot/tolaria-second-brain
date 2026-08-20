@@ -3,6 +3,7 @@ type: Project
 status: Active
 has:
   - "[[hippoclinic-call-questions-2026-08-19]]"
+  - "[[hippoclinic-hipaa-self-assessment]]"
 related_to: "[[rodrigo-fernandez]]"
 _width: wide
 ---
@@ -59,13 +60,15 @@ The most useful line in the recap is that the team "is actively following intern
 
 ## Our read — where the diagnosis differs from the ask
 
+**The backup is not optional, and that collapses the cost objection.** The HIPAA Security Rule marks **data backup plan** and **disaster recovery plan** as *Required* implementation specifications — retrievable exact copies of ePHI, and procedures to restore lost data. Required means no risk-based opt-out, unlike Addressable specs where a documented alternative is acceptable. A single copy of patient data with no documented backup procedure is closer to an unmet obligation than a deferred expense. **Audit controls** are Required too, which is where the CloudTrail finding below lands. Mapping in [[hippoclinic-hipaa-self-assessment]]. This is the strongest lever in the deal: the thing they believe they cannot afford is the thing they are already required to have, and the archive-tier version costs a fraction of what they are imagining.
+
 **They are asking the wrong durability question.** S3 Standard does not lose objects to hardware failure; it stores redundantly across at least three Availability Zones. What it does do is delete an object when something holding valid credentials tells it to. Given they have already had a credential compromise, their real exposure is **blast radius, not disk failure** — accidental or malicious deletion, a lifecycle rule pointed at the wrong prefix, a bucket policy change. The controls that answer that are versioning, Object Lock, MFA delete and an isolated backup account, not a second copy of everything. Reframing this is the single most useful thing we can do in the room.
 
-**A two-account estate has no room for the separation this needs.** 6043 is the payer, 6269 is the workload account. So there is no separate log-archive account and, more importantly, **no separate backup account** — which means whatever can reach the data can also reach any copy of it. The concrete, tailored recommendation they asked AWS for and did not get is a third account whose only job is holding backups: Object Lock in compliance mode, and a role the workload account cannot assume. That is cheap, it is specific to their incident, and it is the kind of answer they said general support never gave them.
+**A two-account estate has no room for the separation this needs.** 6043 is the payer, 6269 is the workload account. So there is no separate log-archive account and, more importantly, **no separate backup account** — which means whatever can reach the data can also reach any copy of it. The concrete, tailored recommendation they asked AWS for and did not get is a third account whose only job is holding backups: Object Lock in compliance mode, and a role the workload account cannot assume. Cheap, specific to their incident, and it satisfies two Required specs at once.
 
 **Durability and cost are not actually in tension.** Raw brain signal is write-once and almost certainly cold after the diagnosis is delivered. Archive tiering on cold data is roughly an order of magnitude cheaper than S3 Standard, so the saving plausibly funds the redundancy they believe they cannot afford. Whether that saving is worth $3K or $300K a year depends entirely on the unknown total footprint — ask before promising.
 
-**The SNS incident has an unexamined second half.** A credential that could call SNS may have been able to call S3. Unless S3 **data events** were enabled in CloudTrail — they are off by default, only management events are logged — they cannot prove PHI was not read during the compromise window. Under the HIPAA Breach Notification Rule an incident of unknown scope requires a documented risk assessment, and "we had no logs" is the wrong answer to be holding. This is a serious point and it appears in neither their list of asks nor the AWS recap.
+**The SNS incident has an unexamined second half.** A credential that could call SNS may have been able to call S3. Unless S3 **data events** were enabled in CloudTrail — they are off by default, only management events are logged — they cannot prove PHI was not read during the compromise window. Under the Breach Notification Rule an incident of unknown scope requires a documented four-factor risk assessment, and one of those factors is whether PHI was actually acquired or viewed. Without data events that factor is unanswerable. This appears in neither their list of asks nor the AWS recap.
 
 **Credits are a bridge, not a fix.** The Nvidia Inception credits may not be spendable against an AWS bill at all — Inception credits generally apply to Nvidia's own programs. Worth confirming before anyone counts $100K against their infrastructure cost. And a credit that offsets a cost driven by per-patient data growth buys time without changing the trajectory; tiering changes the trajectory.
 
@@ -85,8 +88,10 @@ Our wedge is a **bounded, paid review scoped to durability posture and HIPAA sec
 
 - Rodrigo has **no access** to the sales Drive folder shared by Camila Lopez (`drive.google.com/drive/folders/1inJAQLav6bg…`) — a search returns nothing. There is also a NotebookLM notebook. Ask Camila for access.
 - Blaine posted the long brief on 12 Aug and separately said "intro meeting is on Tuesday with AWS and HippoClinic." The AWS recap is clearly a report of a meeting that already happened, so the sequence is still unclear — worth 30 seconds with Blaine before the call.
+- **Unsettled and important:** is HippoClinic a Covered Entity or a Business Associate? It changes who is directly liable and which BAAs must exist in both directions. First question in the self-assessment.
 - No BD assigned. No estimate, no scope, no budget signal.
 
 ## Related
 
 - [[hippoclinic-call-questions-2026-08-19]] — question set for the 30-minute AWS sync, tiered by what fits in the room.
+- [[hippoclinic-hipaa-self-assessment]] — the HIPAA checks HippoClinic should run on themselves, mapped to their estate. Holds the Required-spec argument that reframes the cost objection.

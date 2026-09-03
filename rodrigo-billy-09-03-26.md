@@ -49,4 +49,9 @@ What we know
 - VmWare to EC2
 - MSSQL server with tons of SP and undocumented code in them
 
-AWS Transform
+## AWS Transform
+
+1. VmWare to EC2 → [https://aws.amazon.com/transform/vmware/](https://aws.amazon.com/transform/vmware/)
+2. 
+
+##

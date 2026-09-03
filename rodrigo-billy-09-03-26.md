@@ -6,12 +6,31 @@ belongs_to: "[[aixle-flow]]"
 
 ## Aixle Flow
 
-My experiment was to automate the code review with a set of orchestrated agents that perform the assessment from different optics.
+The POC was to automate the code review with a set of orchestrated agents that perform the assessment from different optics.
+
+1. Manage securely client source code
+2. Download NVD DB → Run vulnerabilities assessment
+3. Create ephimeral SonarQube → Run assessment
+4. Call 5 agents to answer the questionaire → 5 Assessments
+5. Consolidate all that in our templated report
+
+### Some challenges
+
+- Access to ECR
+- Carry over work from previous workflows and sessions
+- Ephimeral environments
+- Custom software needed for specific tasks
+
+### Two different approaches
+
+1. Multi-staged board and workflows
+2. Multi-session workflow
 
 ### Gain points
 
 - The MCP - It helped a lot to configure board, tasks, worflows, sessions. Without it, it would be way more challenging than it is.
 - Fixes - How responsive is Artem and team about the errors I've found and the recommendations I made about the UI.
+- Secrets and assets managemt - It was resolved really well and there was never an issuer with that. Perhaps having a MCP tool to update/read them would be nice.
 
 ### Pain points
 

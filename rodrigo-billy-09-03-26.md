@@ -46,4 +46,7 @@ What we know
 
 - Full Micrsoft (ASP.NET Web Forms, C# and C++)
 - What is C++? It's used for low-level or performance-sensitive components 
-- VM
+- VmWare to EC2
+- MSSQL server with tons of SP and undocumented code in them
+
+AWS Transform

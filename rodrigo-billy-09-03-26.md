@@ -44,4 +44,6 @@ The POC was to automate the code review with a set of orchestrated agents that p
 
 What we know
 
-- Full Micrsoft (ASP.NET Web Forms, C# and C++
+- Full Micrsoft (ASP.NET Web Forms, C# and C++)
+- What is C++? It's used for low-level or performance-sensitive components 
+- VM

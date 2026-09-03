@@ -55,4 +55,4 @@ What we know
 2. SQL to Aurora → [https://aws.amazon.com/transform/windows/sql-server/](https://aws.amazon.com/transform/windows/sql-server/)
 3. .NET migration → [https://aws.amazon.com/transform/windows/net/](https://aws.amazon.com/transform/windows/net/)
 
-##
+## Workshops

@@ -42,17 +42,21 @@ The POC was to automate the code review with a set of orchestrated agents that p
 
 ## Infios
 
-What we know
+### What we know
 
 - Full Micrsoft (ASP.NET Web Forms, C# and C++)
 - What is C++? It's used for low-level or performance-sensitive components 
 - VmWare to EC2
 - MSSQL server with tons of SP and undocumented code in them
 
-## AWS Transform
+### AWS Transform
 
 1. VmWare to EC2 → [https://aws.amazon.com/transform/vmware/](https://aws.amazon.com/transform/vmware/)
 2. SQL to Aurora → [https://aws.amazon.com/transform/windows/sql-server/](https://aws.amazon.com/transform/windows/sql-server/)
 3. .NET migration → [https://aws.amazon.com/transform/windows/net/](https://aws.amazon.com/transform/windows/net/)
 
-## Workshops
+### Workshops
+
+- AWS Transform for VMware - Sep 10th 
+- AWS Transform for .NET - Sep 14th
+- Mainframe to Microservices - Sep 15th

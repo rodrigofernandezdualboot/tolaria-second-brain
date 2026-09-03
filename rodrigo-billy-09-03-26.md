@@ -17,9 +17,9 @@ The POC was to automate the code review with a set of orchestrated agents that p
 ### Some challenges
 
 - Access to ECR
-- Carry over work from previous workflows and sessions
 - Ephimeral environments
 - Custom software needed for specific tasks
+- Carry over work from previous workflows and sessions
 
 ### Two different approaches
 

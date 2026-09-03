@@ -39,3 +39,9 @@ The POC was to automate the code review with a set of orchestrated agents that p
 - Never-ending sessions - Even calling the finish\_session.rb tool, session didn't gracefully ended, making then to take over 30 minutes to complete.
 - Cheatsheet - There are too many hiden features, MCP, Ruby tool, simultaneous sessions that are not documented or available to the end-user.
 - HW limitations - For some tasks I was limited by the max amount of memory that the Pod has. There is no recommendation or remediation for that.
+
+## Infios
+
+What we know
+
+- Full Micrsoft (ASP.NET Web Forms, C# and C++

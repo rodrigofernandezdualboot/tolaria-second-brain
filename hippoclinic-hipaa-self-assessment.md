@@ -3,6 +3,7 @@ type: Note
 belongs_to: "[[hippoclinic]]"
 related_to: "[[hippoclinic]]"
 _width: wide
+_organized: true
 ---
 
 # HippoClinic — HIPAA Self-Assessment Checks

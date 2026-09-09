@@ -1,6 +1,7 @@
 ---
 type: Note
 belongs_to: "[[aixle-flow]]"
+_organized: true
 ---
 # Rodrigo - Billy 09/03/26
 

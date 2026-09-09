@@ -6,6 +6,7 @@ has:
   - "[[hippoclinic-hipaa-self-assessment]]"
 related_to: "[[rodrigo-fernandez]]"
 _width: wide
+_organized: true
 ---
 
 # HippoClinic

@@ -13,3 +13,5 @@ related_to: "[[rodrigo-fernandez]]"
 ## Open questions
 
 ## Related
+
+- [[trooh-discovery-call-notes|Trooh — Discovery Call Notes]]

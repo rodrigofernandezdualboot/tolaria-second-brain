@@ -7,9 +7,10 @@ related_to: "[[run-with-hal]]"
 
 # Run With Hal — Target Architecture
 
-**Scope:** new application (Flutter, iOS + Android), backend API, third-party integrations, payments, minimal admin dashboard.
+**Scope:** new application (Flutter, iOS + Android), two backend APIs (App API and Admin API), third-party integrations, payments, web admin dashboard.
 **Design constraints from the engagement:** hostile-handoff survivability, Apple-first data strategy, budget concentrated on the app rather than internal tooling.
 **Revised 4 Oct 2026:** identity provider decided — AWS Cognito (§2.2a). Flow D rewritten: Apple's `transfer_sub` gives a real identity-matching path that this note previously assumed did not exist.
+**Revised 6 Oct 2026:** the admin dashboard becomes its own web app with its own **Admin API**, signed in through a separate Cognito staff sign-in with roles. Responsibilities are isolated per API: the App API serves runners only, the Admin API serves staff only (§2.2b, §2.6). This replaces the earlier "point Metabase at the replica" approach.
 
 ---
 
@@ -25,15 +26,18 @@ graph TB
         GCM[Garmin Connect Mobile<br/>Garmin's own app]
     end
 
-    subgraph Identity["Identity — AWS Cognito user pool"]
-        CUP["Cognito user pool<br/>managed login · JWT<br/>AdminCreateUser<br/>AdminLinkProviderForUser"]
+    subgraph Identity["Identity — AWS Cognito"]
+        CUP["Runner user pool<br/>managed login · JWT<br/>AdminCreateUser<br/>AdminLinkProviderForUser"]
         SIWA["Sign in with Apple<br/>sub is TEAM-SCOPED ⚠<br/>transfer_sub · 60-day window"]
         GSI["Google<br/>sub stable across projects ✅"]
         EMAIL["Email + password<br/>temp passwords for migration"]
+        STAFF["Staff sign-in<br/>invite-only · MFA required<br/>groups: owner · support · content · analyst"]
     end
 
-    subgraph Backend["Our backend (single deployable, modular)"]
-        GW[API Gateway / BFF<br/>validates Cognito JWT,<br/>rate limiting]
+    subgraph Backend["Our backend (two API deployables + workers, shared domain modules)"]
+        GW[App API / BFF<br/>runner JWT only,<br/>own data only, rate limiting]
+        AGW[Admin API / BFF<br/>staff JWT only,<br/>role check per request,<br/>every action audited]
+        AUD[(Audit log)]
         CORE[Core domain<br/>users, plans, workouts,<br/>plan engine, adjustments]
         INT[Integration module<br/>adapter per provider]
         WH[Webhook receiver<br/>public, thin, idempotent]
@@ -63,8 +67,8 @@ graph TB
         STRIPE[Stripe<br/>web checkout only]
     end
 
-    subgraph Admin["Admin & analytics (minimal v1)"]
-        MB[Metabase / Retool<br/>reads a replica]
+    subgraph Admin["Admin & analytics"]
+        DASH[Admin dashboard<br/>web app · your team]
         REP[(Read replica)]
     end
 
@@ -72,8 +76,16 @@ graph TB
     SIWA --> CUP
     GSI --> CUP
     EMAIL --> CUP
-    CUP -- "JWT" --> GW
+    CUP -- "runner JWT" --> GW
     FL <--> GW
+    DASH <--> STAFF
+    DASH <--> AGW
+    STAFF -- "staff JWT + groups" --> AGW
+    AGW --> CORE
+    AGW --> ENT
+    AGW --> MIG
+    AGW --> AUD
+    AGW --> REP
     HK --> FL
     HC --> FL
     AW <--> FL
@@ -97,7 +109,7 @@ graph TB
     STRIPE --> RC
     GCM -.bluetooth.-> Device
     PG --> REP
-    REP --> MB
+    AUD --> PG
     CORE <--> CACHE
 ```
 
@@ -122,7 +134,7 @@ One codebase, iOS and Android, as you specified. Three places where Flutter alon
 
 ### 2.2 Backend API
 
-**Shape: modular monolith, single deployable.** Not microservices. The team is small, the domain is one bounded product, and the budget priority you stated is the app. Modules with hard internal boundaries (core domain / integrations / entitlements) so anything can be split out later if scale demands it. It won't for a long time — this is a marathon-training app, not a social network; write volume is a few activities per user per day, heavily morning-clustered.
+**Shape: two thin API deployables over one modular domain codebase.** Not microservices. The team is small and the domain is one bounded product, so the core domain, integrations and entitlements stay as modules with hard internal boundaries in one codebase. What is deployed separately is the edge: the **App API** for the runner app and watch, the **Admin API** for the staff dashboard, and the workers. Each API exposes only the features its users may reach (§2.2b). Write volume stays small — a few activities per user per day, heavily morning-clustered — so nothing here needs splitting further for a long time.
 
 **Stack: your call stands — any of .NET, Node/TypeScript, Ruby, Java carries this.** The workload is ordinary: REST, OAuth token management, webhook processing, background jobs. Pick by bench availability. Given DBP's LATAM bench, .NET or Node/TypeScript are the pragmatic picks; both have first-class Stripe, RevenueCat and queue tooling. The one genuinely stack-sensitive component is FIT-file parsing (Garmin's binary activity format) — mature parsers exist for Java/Kotlin, .NET, JS and Python, so no stack is eliminated. Decide by who you can staff, not by benchmark charts.
 
@@ -132,7 +144,39 @@ One codebase, iOS and Android, as you specified. Three places where Flutter alon
 - **Adjustment engine**: the rebuilt "Hal Says" logic, now fed by observed training data instead of guessed inputs. Keep it a separate internal service boundary from day one — it's the component most likely to iterate.
 - Workouts, completed activities, plan history — the "album" Tom cares about, modeled explicitly so it never again lives only as incidental state.
 
-**API gateway / BFF**: single entry point for the Flutter app and the watch app. Validates the Cognito JWT, rate limiting, versioned REST. Nothing exotic.
+**App API / BFF**: single entry point for the Flutter app and the watch app. Validates the runner Cognito JWT, rate limiting, versioned REST. Every request is scoped to the signed-in runner's own data. Nothing exotic.
+
+**Admin API / BFF**: single entry point for the staff dashboard. See §2.2b.
+
+### 2.2b Two APIs, isolated responsibilities
+
+**Decided 6 Oct 2026 (Rodrigo).** The dashboard gets its own API rather than reading a replica directly or sharing the app's API. The reason is isolation: each client is exposed only to the features and data its users are allowed, through its own API.
+
+| | App API | Admin API |
+|---|---|---|
+| Clients | Flutter app, watchOS app (via the phone) | Admin dashboard web app |
+| Accepts | Runner tokens from the runner user pool only | Staff tokens from the staff sign-in only |
+| Authorisation | The runner can reach their own account only | Role (Cognito group claim) checked on every endpoint |
+| Exposes | Plan, workouts, activities, coach explanations, entitlement status, own data export, account deletion | Runner lookup for support, subscription status, migration progress and invite resend, account-recovery tools, integration health, reports from the read replica, staff management (owner only) |
+| Records | Standard request logs | **Audit log of every staff action**: who, what, which runner, when |
+| Deployed | Separately | Separately |
+
+**Token isolation is the guarantee.** A runner token presented to the Admin API is rejected, and a staff token presented to the App API is rejected, because each API trusts a different issuer or audience. A defect or a leaked credential on one side cannot reach the other's capabilities.
+
+**Staff sign-in.** Invite-only (no self-registration), multi-factor required, no social providers. Roles carried as Cognito groups in the token:
+
+| Role | Can do |
+|---|---|
+| Owner | Everything, including inviting staff and assigning roles |
+| Support | Look up a runner; see connections, entitlement and last sync; resend a migration invitation; run account recovery |
+| Content | Review and publish content changes (Phase 2, when the editing tool arrives) |
+| Analyst | Read reports and export aggregate data; no access to individual runner accounts |
+
+Open for kickoff: a separate Cognito user pool for staff versus groups in a shared pool. A separate pool is the stronger isolation and is the recommendation; either satisfies the token rule above as long as each API pins its issuer and audience.
+
+**What both APIs share.** The domain modules. "Who has premium" is answered by the entitlement module whichever API asks. What differs is who may ask, what they may ask for, and what is recorded.
+
+**What neither API handles.** Garmin, Strava and RevenueCat webhooks land on the webhook receiver and the entitlement module directly, not through either API.
 
 ### 2.2a Identity — AWS Cognito
 
@@ -191,7 +235,7 @@ Why the ceremony: Strava rewrote its terms with 30 days' notice; Garmin bought t
 
 **Redis** for session/cache and as the queue backing (or SQS/equivalent if on AWS — either is fine; don't build a Kafka cluster for this workload).
 
-**Read replica** feeds the dashboard so analytics queries never touch the production write path.
+**Read replica** feeds the Admin API's reporting endpoints so analytics queries never touch the production write path. The dashboard never connects to a database directly.
 
 One schema decision with contractual weight: **make data export a first-class feature** — per-user export (GDPR/CCPA anyway) and full-account export. Write it into our own engagement terms with the Higdon family. We should be contractually incapable of doing to them what Peaksware is doing now. That's also a differentiator no other bidder will offer unprompted.
 

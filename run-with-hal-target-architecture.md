@@ -253,17 +253,20 @@ Three rails, one truth:
 
 (US-only note: post-*Epic* rules allow linking out to web payment from the iOS app. Treat as an optimization to evaluate later, not a v1 dependency.)
 
-### 2.6 Admin dashboard — deliberately minimal
+### 2.6 Admin dashboard — its own app, its own API
 
-Per your budget instruction: **don't build one.** Point **Metabase** (self-hosted, free) or **Retool** at the read replica.
+**Changed 6 Oct 2026.** This section previously recommended not building a dashboard and pointing Metabase or Retool at the read replica. That is superseded: RFP §4.3 makes the web dashboard a Day 0 requirement, and a BI tool connected straight to the replica bypasses the permission model and the audit trail. The dashboard is now a web app that talks only to the Admin API (§2.2b).
 
-v1 contents, one afternoon of query-writing:
-- Active users, new signups, plan starts by distance/level
-- Subscription state (from RevenueCat's own dashboard, embedded or linked — don't rebuild it)
-- Integration health: Garmin webhook success rate, backfill queue depth, Strava post failures
-- Support lookup: find user → connections, entitlement, last sync (Ruth's two-minute answer)
+Keep it focused. v1 contents:
+- Active users, new signups, plan starts by distance/level, free-to-premium conversion
+- Subscription state (from RevenueCat via the entitlement module — don't rebuild RevenueCat's own billing views)
+- Migration progress: invited, arrived, re-linked, needing support
+- Integration health: Garmin webhook success rate, backfill queue depth, Strava import and post failures
+- Support lookup: find user → connections, entitlement, last sync (Ruth's two-minute answer), behind the Support role
+- Account-recovery tools for migration failures, behind the Support role, every action audited
+- Staff management, Owner role only
 
-A custom admin app is a v2 conversation the client has to ask for. Every hour spent there is an hour not spent on the funnel that's costing them ratings.
+Charts can still come from an embedded BI component if that is faster to build, as long as it is served through the Admin API's permissions and never connects to the database on its own. Every hour beyond this list remains an hour not spent on the funnel that's costing them ratings.
 
 ### 2.7 Notifications
 
@@ -297,7 +300,7 @@ Store event → RevenueCat webhook → entitlement module updates Postgres → a
 
 ## 4. What v1 explicitly excludes
 
-Social/community features, web app for runners (web is checkout only), custom admin UI, COROS/Polar/Suunto adapters (stubs only), the audio/podcast content platform, race-registry integration (Tier 2), any ML-based coaching beyond the deterministic adjustment rules. Each is a named later, not a hidden never.
+Social/community features, web app for runners (web is checkout only), admin content-editing tools (Phase 2; the Content role exists from day one but has nothing to edit yet), COROS/Polar/Suunto adapters (stubs only), the audio/podcast content platform, race-registry integration (Tier 2), any ML-based coaching beyond the deterministic adjustment rules. Each is a named later, not a hidden never.
 
 ---
 
@@ -309,3 +312,4 @@ Social/community features, web app for runners (web is checkout only), custom ad
 4. **Whether the plan/adjustment engine needs its own service boundary at deploy time** or stays an internal module — start internal, split only when iteration speed demands it.
 5. **Analytics eventing** (Amplitude/PostHog) — cheap to add at v1, painful to retrofit; recommend deciding before first release even if dashboards wait.
 6. **When the App Store transfer happens** — the 60-day `transfer_sub` window forces "close to launch" rather than "at contract signature". This is a negotiation and scheduling decision, not a technical one.
+7. **Staff identity** — separate Cognito user pool (recommended) or groups in the runner pool; and confirmation of the four staff roles with the client (§2.2b).

@@ -13,6 +13,7 @@ _organized: true
 
 **Produced:** 19 Aug 2026 · Sol pre-sales assessment (phases 1–6 complete, Gate 6 PASS)
 **Revised:** 4 Oct 2026 — identity provider decided (AWS Cognito, §6a)
+**Revised:** 6 Oct 2026 — two isolated APIs: App API for runners, Admin API for the staff dashboard, each with its own Cognito sign-in (§2a)
 **Source of record:** `engagements/run-with-hal/solution-architecture.md` in the Sol — Sales Engineer workspace
 **Estimate:** ~4,710 h (App Store transfer granted) / ~4,985 h (denied) — AI_CALIBRATED, 21.1% reserve
 
@@ -33,7 +34,7 @@ Locked 19 Aug 2026:
 - **Design system + redesign of ~39 screens included.** The brand exists in Figma and has never been applied.
 - **Activity providers behind a pluggable connector.**
 
-**Stack:** Flutter client · Node.js API · relational database, engine open · **AWS Cognito for identity** · RevenueCat for entitlements.
+**Stack:** Flutter client · **two Node.js APIs (App API, Admin API)** over shared domain modules · web admin dashboard · relational database, engine open · **AWS Cognito for identity (runner and staff sign-in)** · RevenueCat for entitlements.
 
 ---
 
@@ -48,15 +49,23 @@ graph TB
         HK[(Apple Health /<br/>Google Health Connect)]
     end
 
-    subgraph IdP["C3 Identity — AWS Cognito user pool"]
-        CUP["Cognito User Pool<br/>hosted / managed login<br/>AdminCreateUser · AdminLinkProviderForUser"]
+    DASH["Admin dashboard<br/>web app · your team"]
+
+    subgraph IdP["C3 Identity — AWS Cognito"]
+        CUP["Runner user pool<br/>hosted / managed login<br/>AdminCreateUser · AdminLinkProviderForUser"]
         GOO["Google OAuth<br/>sub stable across projects ✅"]
         APL["Apple SSO<br/>sub is TEAM-SCOPED ⚠ §6a"]
         EML["Email + password<br/>native registration<br/>temporary passwords"]
+        STF["Staff sign-in<br/>invite-only · MFA<br/>groups: owner · support · content · analyst"]
     end
 
-    subgraph Backend["Node.js API (BFF)"]
-        PE["C4 Plan Engine<br/>incumbent IP — full rebuild"]
+    subgraph Edge["APIs — deployed separately"]
+        APPAPI["App API<br/>runner JWT only · own data only"]
+        ADMAPI["Admin API<br/>staff JWT only · role per request<br/>every action audited"]
+    end
+
+    subgraph Backend["Shared domain modules (Node.js)"]
+        PE["C4 Plan Engine<br/>Hal's programs as data"]
         AE["C5 Adaptation Engine<br/>incumbent IP — full rebuild"]
         SC[C6 Scoring<br/>exertion · fatigue · volume]
         CT[C7 Content service]
@@ -64,11 +73,13 @@ graph TB
         CONN["C8b Provider Connectors<br/>pluggable"]
         ENT[C9 Entitlement broker]
         MIG["C11 Migration subsystem<br/>two modes · three identity cohorts"]
+        AUD["Audit log<br/>staff actions"]
     end
 
     subgraph Data["Data layer"]
         DB[(Relational DB<br/>engine TBD)]
         OBJ[(Object store + CDN<br/>workout media)]
+        REP[(Reporting copy)]
     end
 
     subgraph Providers["ACTIVITY PROVIDERS (cloud)"]
@@ -88,11 +99,26 @@ graph TB
     GOO --> CUP
     APL --> CUP
     EML --> CUP
-    CUP -- "JWT" --> ING
+    CUP -. "runner JWT" .-> APPAPI
+    FL <--> APPAPI
+    DASH <--> STF
+    DASH <--> ADMAPI
+    STF -. "staff JWT + groups" .-> ADMAPI
     HA --> FL
     HK --> HA
     AW --> HK
-    FL --> ING
+    APPAPI --> PE
+    APPAPI --> AE
+    APPAPI --> CT
+    APPAPI --> ING
+    APPAPI --> ENT
+    ADMAPI --> ENT
+    ADMAPI --> MIG
+    ADMAPI --> ING
+    ADMAPI --> AUD
+    ADMAPI --> REP
+    DB --> REP
+    AUD --> DB
     ING --> CONN
     CONN <--> GAR
     CONN <--> STR
@@ -111,6 +137,17 @@ graph TB
 ```
 
 **The provider box is deliberately generic.** Garmin and Strava are named for launch; adding Coros or Polar later is a connector, not a re-architecture. Everything downstream of C8b sees one canonical activity shape.
+
+## 2a. Two APIs, isolated responsibilities
+
+**Decided 6 Oct 2026 (Rodrigo).** The web dashboard has its own API, connected to Cognito for staff sign-in and permissions. Each client reaches only the features its users are allowed, through its own API.
+
+- **App API.** Serves the Flutter app and, through the phone, the watch. Accepts runner tokens from the runner user pool only. Every request is scoped to the signed-in runner's own data.
+- **Admin API.** Serves the admin dashboard. Accepts staff tokens only. Checks the person's role (Cognito group claim) on every endpoint, and writes every staff action to the audit log: who, what, which runner, when. Reports come from the reporting copy through this API; the dashboard never connects to a database.
+- **Token isolation.** Each API pins its own issuer and audience, so a runner token is rejected by the Admin API and a staff token by the App API. A defect or a leaked credential on one side cannot reach the other.
+- **Staff sign-in.** Invite-only, multi-factor required, no social providers. Four proposed roles: Owner (everything, manages staff), Support (runner lookup, migration resend, account recovery), Content (Phase 2 editing), Analyst (reports only, no individual accounts). Separate staff pool recommended over groups in the runner pool; decide at kickoff.
+- **Shared, not duplicated.** Both APIs call the same domain modules, so a rule like "who has premium" exists once. The APIs are deployed separately, so an admin-side change or outage cannot touch the app.
+- **Neither API takes webhooks.** Garmin, Strava and RevenueCat updates land on the connectors and the entitlement module directly.
 
 ---
 
@@ -232,7 +269,7 @@ That note is later, richer, and better informed. Reconciliation:
 | Incumbent identity | Unnamed (NDA at time of call) | **Peaksware; Garmin acquired them** | Vault note current. Update the assessment. |
 | Database | Relational, engine TBD | PostgreSQL system of record + object storage for **raw FIT files** | Adopt. FIT storage is a real requirement we did not model. |
 | **FIT-file parsing** | Not sized | Named, stack-sensitive component | **Gap in our estimate.** Not costed anywhere. |
-| **Admin dashboard** | Out of scope | Metabase/Retool on a read replica, minimal by design | **Gap in our estimate.** Cheap, but not zero, and not in the WBS. |
+| **Admin dashboard** | Out of scope (Aug) → **web app with its own Admin API, staff sign-in and roles (6 Oct, §2a)** | Metabase/Retool on a read replica, minimal by design | **Resolved toward this note's §2a**; the Target Architecture note has been updated to match. Still a **gap in the August estimate**: the Admin API, staff roles and audit log are not in the WBS. |
 | Backend stack | Node.js (Dualboot constraint) | .NET or Node, decided by staffing | Compatible |
 | **Identity** | **AWS Cognito (decided 4 Oct, §6a)** | "Users, auth (Sign in with Apple / Google / email — with the returning-user detection flow)" | Compatible — Cognito is the mechanism for the returning-user detection that note describes |
 | Web checkout | US-storefront link-out (D6) | Stripe on halhigdon.com | Compatible — ours adds the storefront constraint |
@@ -257,6 +294,7 @@ That note is later, richer, and better informed. Reconciliation:
 | D7 | Billing engine | RevenueCat Billing / Stripe Billing | Kickoff |
 | D8 | **Strava at launch or fast-follow** | Fast-follow / launch dependency | **Recommend fast-follow** |
 | **D9** | **When the App Store transfer happens** | **At contract signature / close to launch** | **Peter + Spence. The 60-day `transfer_sub` window forces "close to launch" — see §6a** |
+| **D10** | **Staff identity** | Separate Cognito user pool for staff (recommended) / groups in the runner pool | Kickoff. Either works if each API pins its issuer and audience (§2a). Confirm the four staff roles with the client. |
 
 ---
 

@@ -312,4 +312,4 @@ Social/community features, web app for runners (web is checkout only), admin con
 4. **Whether the plan/adjustment engine needs its own service boundary at deploy time** or stays an internal module — start internal, split only when iteration speed demands it.
 5. **Analytics eventing** (Amplitude/PostHog) — cheap to add at v1, painful to retrofit; recommend deciding before first release even if dashboards wait.
 6. **When the App Store transfer happens** — the 60-day `transfer_sub` window forces "close to launch" rather than "at contract signature". This is a negotiation and scheduling decision, not a technical one.
-7. **Staff identity** — separate Cognito user pool (recommended) or groups in the runner pool; and confirmation of the four staff roles with the client (§2.2b).
+7. ~~**Staff identity**~~ — **resolved 13 Oct 2026: separate Cognito user pool for staff.** The four roles (owner, support, content, analyst) are confirmed.

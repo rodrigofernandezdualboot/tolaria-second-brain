@@ -294,7 +294,7 @@ That note is later, richer, and better informed. Reconciliation:
 | D7 | Billing engine | RevenueCat Billing / Stripe Billing | Kickoff |
 | D8 | **Strava at launch or fast-follow** | Fast-follow / launch dependency | **Recommend fast-follow** |
 | **D9** | **When the App Store transfer happens** | **At contract signature / close to launch** | **Peter + Spence. The 60-day `transfer_sub` window forces "close to launch" — see §6a** |
-| **D10** | **Staff identity** | Separate Cognito user pool for staff (recommended) / groups in the runner pool | Kickoff. Either works if each API pins its issuer and audience (§2a). Confirm the four staff roles with the client. |
+| ~~D10~~ | ~~Staff identity~~ | **RESOLVED 13 Oct 2026 — separate Cognito user pool for staff; four roles confirmed** | — |
 
 ---
 

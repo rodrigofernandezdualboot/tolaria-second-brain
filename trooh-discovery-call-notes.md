@@ -2,6 +2,7 @@
 type: Note
 related_to: "[[trooh]]"
 status: Active
+_organized: true
 ---
 
 # Trooh — Discovery Call Notes

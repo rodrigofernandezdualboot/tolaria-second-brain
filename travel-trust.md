@@ -5,6 +5,7 @@ related_to:
   - "[[rodrigo-fernandez]]"
   - "[[aixle-flow]]"
 url: https://www.traveltrust.com
+_organized: true
 ---
 
 # Travel Trust

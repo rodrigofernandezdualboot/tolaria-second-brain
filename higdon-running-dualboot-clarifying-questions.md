@@ -2,6 +2,7 @@
 type: Note
 belongs_to: "[[run-with-hal]]"
 related_to: "[[run-with-hal]]"
+_organized: true
 ---
 # Higdon Running <> Dualboot Clarifying Questions
 

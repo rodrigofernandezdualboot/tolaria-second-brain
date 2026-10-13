@@ -2,6 +2,7 @@
 type: Project
 status: Active
 related_to: "[[rodrigo-fernandez]]"
+_organized: true
 ---
 
 # Trooh

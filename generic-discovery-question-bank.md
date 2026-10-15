@@ -11,6 +11,9 @@ related_to:
   - "[[park-road]]"
   - "[[wg-henschen-netsuite-integration-options]]"
 status: Active
+_favorite: true
+_favorite_index: 2
+_organized: true
 ---
 
 # Generic Discovery Question Bank

@@ -2,7 +2,7 @@
 type: Person
 _width: wide
 _favorite: true
-_favorite_index: 2
+_favorite_index: 0
 _organized: true
 ---
 # Rodrigo Fernandez
